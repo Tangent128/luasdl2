@@ -1,3 +1,7 @@
+--
+-- font.lua -- show SDL_ttf module with UTF-8 string
+--
+
 local SDL	= require "SDL"
 local font	= require "SDL.ttf"
 

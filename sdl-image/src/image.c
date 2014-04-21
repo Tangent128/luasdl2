@@ -31,7 +31,7 @@ typedef int		(*TypeFunction)(SDL_RWops *);
  * Image.flags
  */
 static const CommonEnum ImageFlags[] = {
-	{ "JPEG",			IMG_INIT_JPG			},
+	{ "JPG",			IMG_INIT_JPG			},
 	{ "PNG",			IMG_INIT_PNG			},
 	{ "TIF",			IMG_INIT_TIF,			},
 	{ "All",			IMG_INIT_JPG |
@@ -84,13 +84,14 @@ l_image_init(lua_State *L)
 		commonPushEnum(L, ret, ImageFlags);
 		(void)commonPush(L, "n s", IMG_GetError());
 
-		return 2;
+		return 3;
 	}
 
 	/* Push the same table as passed so user can test equality */
 	lua_pushvalue(L, 1);
+	lua_pushboolean(L, 1);
 
-	return 1;
+	return 2;
 }
 
 /*
@@ -130,10 +131,11 @@ l_image_load(lua_State *L)
 }
 
 /*
- * Image.loadRW(rwops | func)
+ * Image.load_RW(rwops, name)
  *
  * Arguments:
- *	rwops | func the rwops or the loading function
+ *	rwops the RWops
+ *	name (optional) the type name
  *
  * Returns:
  *	The surface or nil
@@ -146,8 +148,8 @@ l_image_load_RW(lua_State *L)
 	SDL_Surface *surf;
 
 	/* If name is specified we use a specific function */
-	if (lua_gettop(L) >= 3) {
-		const char *name = luaL_checkstring(L, 3);
+	if (lua_gettop(L) >= 2) {
+		const char *name = luaL_checkstring(L, 2);
 		const struct ImgInfo *info;
 
 		for (info = loaders; info->name != NULL; ++info) {
@@ -173,6 +175,7 @@ l_image_load_RW(lua_State *L)
  * Image.is(rwops, type)
  *
  * Arguments:
+ *	rwops the RWops
  *	type the type
  *
  * Returns:

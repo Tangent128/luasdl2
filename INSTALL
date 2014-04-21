@@ -1,0 +1,72 @@
+Lua-SDL2 INSTALL
+================
+
+Lua-SDL2 installation guide.
+
+Requirements
+============
+
+* Lua 5.2 (http://lua.org), mandatory
+* SDL 2.0 (http://libsdl.org), mandatory
+* CMake (http://cmake.org), for building only
+
+And optional libraries for the official SDL modules:
+
+* SDL_mixer (http://www.libsdl.org/projects/SDL_mixer)
+* SDL_ttf (http://www.libsdl.org/projects/SDL_ttf)
+* SDL_net (http://www.libsdl.org/projects/SDL_net)
+* SDL_image (http://www.libsdl.org/projects/SDL_image)
+
+Installation
+============
+
+Take care to substitute version with the current Lua-SDL2 version.
+
+$ tar xvzf Lua-SDL2-version.tar.gz
+$ cd Lua-SDL2-version
+$ mkdir _build_
+$ cd _build_
+$ cmake ..
+$ make
+# make install
+
+Customizing the build
+=====================
+
+Several options are available. The following commands are expected to be ran in
+the _build_ directory created above.
+
+Disable SDL_mixer
+-----------------
+
+$ cmake .. -DWITH_MIXER=Off
+
+Disable SDL_ttf
+---------------
+
+$ cmake .. -DWITH_TTF=Off
+
+Disable SDL_net
+---------------
+
+$ cmake .. -DWITH_NET=Off
+
+Disable SDL_image
+-----------------
+
+$ cmake .. -DWITH_IMAGE=Off
+
+Disable installation of examples
+--------------------------------
+
+$ cmake .. -DWITH_DOCS=Off
+
+Change the installation of libraries
+--------------------------------------
+
+$ cmake .. -DWITH_LIBDIR=/path/to/install/libraries
+
+Change the installation directory of examples
+---------------------------------------------
+
+$ cmake .. -DWITH_DOCSDIR=/path/to/install/examples

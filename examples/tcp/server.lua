@@ -1,5 +1,5 @@
 --
--- Echo server using SDL_net
+-- server.lua -- echo server using SDL_net
 --
 
 local net	= require "SDL.net"

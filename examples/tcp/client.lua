@@ -1,5 +1,5 @@
 --
--- Send "Hello" to a server
+-- client.lua -- send "Hello" to a server using SDL_net
 --
 
 local net	= require "SDL.net"

@@ -30,8 +30,6 @@ return function (length)
 		length = sound.len
 	end
 
-	print(string.format("pos: %d, len: %d", sound.pos, sound.len))
-
 	local s = sound.buf:sub(sound.pos + 1, sound.pos + 1 + length)
 
 	sound.pos = sound.pos + length

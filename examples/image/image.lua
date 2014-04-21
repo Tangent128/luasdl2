@@ -1,3 +1,7 @@
+--
+-- image.lua -- shows SDL_image module for Lua
+--
+
 local SDL	= require "SDL"
 local image	= require "SDL.image"
 
@@ -13,8 +17,8 @@ end
 
 local win, err = SDL.createWindow {
 	title	= "Image",
-	height	= 100,
-	width	= 100
+	height	= 256,
+	width	= 256
 }
 
 if not win then
@@ -26,7 +30,7 @@ if not rdr then
 	error(err)
 end
 
-local img, ret = image.load("urban-terror.png")
+local img, ret = image.load("Lua-SDL2.png")
 if not img then
 	error(err)
 end

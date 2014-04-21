@@ -227,7 +227,7 @@ l_joystick_getButton(lua_State *L)
 	SDL_Joystick *j = commonGetAs(L, 1, JoystickName, SDL_Joystick *);
 	int button	= luaL_checkinteger(L, 2);
 
-	return commonPush(L, "i", SDL_JoystickGetButton(j, button));
+	return commonPush(L, "b", SDL_JoystickGetButton(j, button));
 }
 
 /*

@@ -27,6 +27,7 @@ if not wav then
 	error(err)
 end
 
+-- Pass the wav file to the audio-processor
 channel:push(wav)
 
 local dev, err = SDL.openAudioDevice(spec)

@@ -1,5 +1,5 @@
 --
--- UDP server
+-- server.lua -- UDP server
 --
 
 local net	= require "SDL.net"
