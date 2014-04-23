@@ -138,6 +138,8 @@ fontRender(lua_State *L, enum TextType type)
 	/* background is only for "shaded" */
 	if (strcmp(style, "shaded") == 0)
 		bg = videoGetColorRGB(L, 5);
+	else
+		memset(&bg, 0, sizeof (SDL_Color));
 
 	switch (type) {
 	case Ascii:
@@ -405,8 +407,12 @@ static int
 l_font_faceFamilyName(lua_State *L)
 {
 	TTF_Font *f = commonGetAs(L, 1, FontName, TTF_Font *);
+	const char *s = TTF_FontFaceFamilyName(f);
 
-	return commonPush(L, "s", TTF_FontFaceFamilyName(f));
+	if (s == NULL)
+		return commonPush(L, "n");
+
+	return commonPush(L, "s", s);
 }
 
 /*
@@ -485,7 +491,7 @@ l_font_sizeText(lua_State *L)
 }
 
 static int
-l_font_sizeUTF8(lua_State *L)
+l_font_sizeUtf8(lua_State *L)
 {
 	return fontSize(L, Utf8);
 }
@@ -545,7 +551,7 @@ static const luaL_Reg FontMethods[] = {
 	{ "glyphIsProvided",		l_font_glyphIsProvided	},
 	{ "glyphMetrics",		l_font_glyphMetrics	},
 	{ "sizeText",			l_font_sizeText		},
-	{ "sizeUTF8",			l_font_sizeUTF8		},
+	{ "sizeUtf8",			l_font_sizeUtf8		},
 	{ "sizeUnicode",		l_font_sizeUnicode	},
 	{ "renderText",			l_font_renderText	},
 	{ "renderUtf8",			l_font_renderUtf8	},
