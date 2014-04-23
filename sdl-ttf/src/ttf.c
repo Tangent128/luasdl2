@@ -197,6 +197,16 @@ l_font_getStyle(lua_State *L)
 	return 1;
 }
 
+/* ---------------------------------------------------------
+ * Font methods
+ * --------------------------------------------------------- */
+
+/*
+ * Font:setStyle(style)
+ *
+ * Arguments:
+ *	style the style (ttf.fontStyle)
+ */
 static int
 l_font_setStyle(lua_State *L)
 {
@@ -208,6 +218,12 @@ l_font_setStyle(lua_State *L)
 	return 0;
 }
 
+/*
+ * Font:getOutline()
+ *
+ * Returns:
+ *	The outline
+ */
 static int
 l_font_getOutline(lua_State *L)
 {
@@ -216,6 +232,12 @@ l_font_getOutline(lua_State *L)
 	return commonPush(L, "i", TTF_GetFontOutline(f));
 }
 
+/*
+ * Font:setOutline(outline)
+ *
+ * Arguments:
+ *	outline the outline value
+ */
 static int
 l_font_setOutline(lua_State *L)
 {
@@ -227,6 +249,12 @@ l_font_setOutline(lua_State *L)
 	return 0;
 }
 
+/*
+ * Font:getHinting()
+ *
+ * Returns:
+ *	The hinting
+ */
 static int
 l_font_getHinting(lua_State *L)
 {
@@ -235,6 +263,12 @@ l_font_getHinting(lua_State *L)
 	return commonPush(L, "i", TTF_GetFontOutline(f));
 }
 
+/*
+ * Font:setHinting(hinting)
+ *
+ * Arguments:
+ *	hinting the value (ttf.fontHinting)
+ */
 static int
 l_font_setHinting(lua_State *L)
 {
@@ -246,6 +280,12 @@ l_font_setHinting(lua_State *L)
 	return 0;
 }
 
+/*
+ * Font:getKerning()
+ *
+ * Returns:
+ *	The status as boolean
+ */
 static int
 l_font_getKerning(lua_State *L)
 {
@@ -254,6 +294,12 @@ l_font_getKerning(lua_State *L)
 	return commonPush(L, "b", TTF_GetFontKerning(f) > 0);
 }
 
+/*
+ * Font:setKerning(mode)
+ *
+ * Arguments:
+ *	mode true or false
+ */
 static int
 l_font_setKerning(lua_State *L)
 {
@@ -265,6 +311,12 @@ l_font_setKerning(lua_State *L)
 	return 0;
 }
 
+/*
+ * Font:height()
+ *
+ * Returns:
+ *	The font height
+ */
 static int
 l_font_height(lua_State *L)
 {
@@ -273,6 +325,12 @@ l_font_height(lua_State *L)
 	return commonPush(L, "i", TTF_FontHeight(f));
 }
 
+/*
+ * Font:ascent()
+ *
+ * Returns:
+ *	The value
+ */
 static int
 l_font_ascent(lua_State *L)
 {
@@ -281,6 +339,12 @@ l_font_ascent(lua_State *L)
 	return commonPush(L, "i", TTF_FontAscent(f));
 }
 
+/*
+ * Font:descent()
+ *
+ * Returns:
+ *	The value
+ */
 static int
 l_font_descent(lua_State *L)
 {
@@ -289,6 +353,12 @@ l_font_descent(lua_State *L)
 	return commonPush(L, "i", TTF_FontDescent(f));
 }
 
+/*
+ * Font:lineSkip()
+ *
+ * Returns:
+ *	The value
+ */
 static int
 l_font_lineSkip(lua_State *L)
 {
@@ -297,22 +367,40 @@ l_font_lineSkip(lua_State *L)
 	return commonPush(L, "i", TTF_FontLineSkip(f));
 }
 
+/*
+ * Font:faces()
+ *
+ * Returns:
+ *	The number of faces
+ */
 static int
 l_font_faces(lua_State *L)
 {
 	TTF_Font *f = commonGetAs(L, 1, FontName, TTF_Font *);
 
-	return commonPush(L, "i", (int)TTF_FontFaces(f));
+	return commonPush(L, "", (int)TTF_FontFaces(f));
 }
 
+/*
+ * Font:faceIsFixedWidth()
+ *
+ * Returns:
+ *	True if fixed width
+ */
 static int
 l_font_faceIsFixedWidth(lua_State *L)
 {
 	TTF_Font *f = commonGetAs(L, 1, FontName, TTF_Font *);
 
-	return commonPush(L, "i", TTF_FontFaceIsFixedWidth(f));
+	return commonPush(L, "b", TTF_FontFaceIsFixedWidth(f));
 }
 
+/*
+ * Font:faceFamilyName()
+ *
+ * Returns:
+ *	The name
+ */
 static int
 l_font_faceFamilyName(lua_State *L)
 {
@@ -321,6 +409,12 @@ l_font_faceFamilyName(lua_State *L)
 	return commonPush(L, "s", TTF_FontFaceFamilyName(f));
 }
 
+/*
+ * Font:faceStyleName()
+ *
+ * Returns:
+ *	The name
+ */
 static int
 l_font_faceStyleName(lua_State *L)
 {
@@ -329,15 +423,41 @@ l_font_faceStyleName(lua_State *L)
 	return commonPush(L, "s", TTF_FontFaceStyleName(f));
 }
 
+/*
+ * Font:glyphIsProvided(ch)
+ *
+ * Arguments:
+ *	ch the glyph to check
+ *
+ * Returns:
+ *	True if provided
+ */
 static int
 l_font_glyphIsProvided(lua_State *L)
 {
 	TTF_Font *f = commonGetAs(L, 1, FontName, TTF_Font *);
 	int ch = luaL_checkinteger(L, 2);
 
-	return commonPush(L, "i", TTF_GlyphIsProvided(f, ch));
+	return commonPush(L, "b", TTF_GlyphIsProvided(f, ch));
 }
 
+/*
+ * Font:glyphMetrics(ch)
+ *
+ * Table returned with the following fields:
+ *	minx, the minimum x
+ *	maxx, the maximum x
+ *	miny, the minimum y
+ *	maxy, the maximum y
+ *	advance, the advance
+ *
+ * Arguments:
+ *	ch the unicode character
+ *
+ * Returns:
+ *	The table or nil
+ *	The error message
+ */
 static int
 l_font_glyphMetrics(lua_State *L)
 {
@@ -448,6 +568,13 @@ static const CommonObject Font = {
  * SDL_ttf functions
  * --------------------------------------------------------- */
 
+/*
+ * ttf.init()
+ *
+ * Returns
+ *	True on success or false
+ *	The error message
+ */
 static int
 l_init(lua_State *L)
 {
@@ -457,6 +584,17 @@ l_init(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * ttf.open(path | rwops, size)
+ *
+ * Arguments:
+ *	path | rwops the path to the font or rwops
+ *	size the font size
+ *
+ * Returns:
+ *	The font ojbect or nil on failure
+ *	The error message
+ */
 static int
 l_open(lua_State *L)
 {
@@ -478,6 +616,9 @@ l_open(lua_State *L)
 	return commonPush(L, "p", FontName, f);
 }
 
+/*
+ * ttf.quit()
+ */
 static int
 l_quit(lua_State *L)
 {
