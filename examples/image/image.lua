@@ -37,6 +37,7 @@ end
 
 img = rdr:createTextureFromSurface(img)
 
+rdr:setDrawColor(0xFFFFFF)
 rdr:clear()
 rdr:copy(img)
 rdr:present()

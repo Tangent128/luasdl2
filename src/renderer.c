@@ -324,11 +324,11 @@ l_renderer_copy(lua_State *L)
 	SDL_Rect *srcptr = NULL;
 	SDL_Rect *dstptr = NULL;
 
-	if (lua_gettop(L) >= 3) {
+	if (lua_gettop(L) >= 3 && lua_type(L, 3) == LUA_TTABLE) {
 		videoGetRect(L, 3, &srcr);
 		srcptr = &srcr;
 	}
-	if (lua_gettop(L) >= 4) {
+	if (lua_gettop(L) >= 4 && lua_type(L, 4) == LUA_TTABLE) {
 		videoGetRect(L, 4, &dstr);
 		dstptr = &dstr;
 	}
