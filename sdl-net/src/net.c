@@ -162,19 +162,16 @@ static int
 l_tcp_send(lua_State *L)
 {
 	TCPsocket s = commonGetAs(L, 1, TcpName, TCPsocket);
-	const char *data = luaL_checkstring(L, 2);
-	int length, sent, ret = 1;
+	size_t length;
+	int sent, ret = 1;
+	const char *data = luaL_checklstring(L, 2, &length);
 
 	assertNotClosed(L, 1);
-
-	lua_len(L, 2);
-	length = (int)lua_tonumber(L, -1);
-	lua_pop(L, 1);
 
 	sent = SDLNet_TCP_Send(s, data, length);
 
 	lua_pushinteger(L, sent);
-	if (sent < length) {
+	if (sent < (int)length) {
 		lua_pushstring(L, SDLNet_GetError());
 		++ ret;
 	}
@@ -304,8 +301,6 @@ l_udp_getPeerAddress(lua_State *L)
 		return commonPushSDLError(L, 1);
 
 	return pushAddress(L, addr);
-
-	return 0;
 }
 
 static int
@@ -316,13 +311,8 @@ l_udp_send(lua_State *L)
 	int ret;
 
 	assertNotClosed(L, 1);
-	p.data = (Uint8 *)luaL_checkstring(L, 2);
+	p.data = (Uint8 *)luaL_checklstring(L, 2, (size_t *)&p.len);
 
-	/* Compute the length */
-	lua_len(L, 2);
-	p.len = p.maxlen = lua_tointeger(L, -1);
-	lua_pop(L, 1);
-	
 	/*
 	 * If next argument is a table, we parse the address fields, otherwise
 	 * we use a channel.
@@ -417,11 +407,15 @@ l_set_add(lua_State *L)
 {
 	SDLNet_SocketSet set = commonGetAs(L, 1, SetName, SDLNet_SocketSet);
 	SDLNet_GenericSocket s;
+	int length;
 
 	if (!luaL_testudata(L, 2, TcpName) && !luaL_testudata(L, 2, UdpName))
 		return luaL_error(L, "TcpSocket or UdpSocket expected");
 
 	s = ((CommonUserdata *)lua_touserdata(L, 2))->data;
+
+	if ((length = SDLNet_AddSocket(set, s)) < 0)
+		return commonPushSDLError(L, 1);
 
 	/* Store a copy to the registry so the set owns a copy */
 	lua_getfield(L, LUA_REGISTRYINDEX, REGISTRY);
@@ -429,7 +423,7 @@ l_set_add(lua_State *L)
 	lua_rawsetp(L, -2, s);
 	lua_pop(L, 1);
 
-	return commonPush(L, "i", SDLNet_AddSocket(set, s));
+	return commonPush(L, "i", length);
 }
 
 static int
@@ -437,11 +431,15 @@ l_set_del(lua_State *L)
 {
 	SDLNet_SocketSet set = commonGetAs(L, 1, SetName, SDLNet_SocketSet);
 	SDLNet_GenericSocket s;
+	int length;
 
 	if (!luaL_testudata(L, 2, TcpName) && !luaL_testudata(L, 2, UdpName))
 		return luaL_error(L, "TcpSocket or UdpSocket expected");
 
 	s = ((CommonUserdata *)lua_touserdata(L, 2))->data;
+
+	if ((length = SDLNet_DelSocket(set, s)) < 0)
+		return commonPushSDLError(L, 1);
 
 	/* Remove from the registry so the set does not own anymore */
 	lua_getfield(L, LUA_REGISTRYINDEX, REGISTRY);
@@ -449,7 +447,7 @@ l_set_del(lua_State *L)
 	lua_rawsetp(L, -2, s);
 	lua_pop(L, 1);
 
-	return commonPush(L, "i", SDLNet_DelSocket(set, s));
+	return commonPush(L, "i", length);
 }
 
 static int
@@ -459,8 +457,14 @@ l_set_checkSockets(lua_State *L)
 	int timeout = luaL_checkinteger(L, 2);
 	int ret;
 
-	if ((ret = SDLNet_CheckSockets(set, timeout)) < 0)
-		return commonPushSDLError(L, 1);
+	ret = SDLNet_CheckSockets(set, timeout);
+
+	/*
+	 * SDL_net documentation says that error is not meaningful so just
+	 * returns 0 to tell no sockets are ready.
+	 */
+	if (ret < 0)
+		ret = 0;
 
 	return commonPush(L, "i", ret);
 }
