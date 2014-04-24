@@ -284,6 +284,27 @@ static const CommonObject Music = {
 };
 
 /* ---------------------------------------------------------
+ * Private helpers
+ * --------------------------------------------------------- */
+
+typedef int (*GroupFunction)(int);
+
+/*
+ * Some group functions have exactly the same signature. Use this function which
+ * return the integer value.
+ */
+static int
+groupFunction(lua_State *L, GroupFunction func)
+{
+	int tag = -1;
+
+	if (lua_gettop(L) >= 1)
+		tag = luaL_checkinteger(L, 1);
+
+	return commonPush(L, "i", func(tag));
+}
+
+/* ---------------------------------------------------------
  * SDL_mixer functions
  * --------------------------------------------------------- */
 
@@ -305,23 +326,6 @@ static const CommonEnum MixerFading[] = {
 	{ "In",				MIX_FADING_IN			},
 	{ NULL,				-1				}
 };
-
-typedef int (*GroupFunction)(int);
-
-/*
- * Some group functions have exactly the same signature. Use this function which
- * return the integer value.
- */
-static int
-groupFunction(lua_State *L, GroupFunction func)
-{
-	int tag = -1;
-
-	if (lua_gettop(L) >= 1)
-		tag = luaL_checkinteger(L, 1);
-
-	return commonPush(L, "i", func(tag));
-}
 
 static int
 l_mixer_init(lua_State *L)
@@ -438,7 +442,7 @@ l_mixer_haltChannel(lua_State *L)
 }
 
 static int
- l_mixer_expireChannel(lua_State *L)
+l_mixer_expireChannel(lua_State *L)
 {
 	int channel	= luaL_checkinteger(L, 1);
 	int ticks	= luaL_checkinteger(L, 2);
@@ -447,7 +451,7 @@ static int
 }
 
 static int
- l_mixer_fadeOutChannel(lua_State *L)
+l_mixer_fadeOutChannel(lua_State *L)
 {
 	int channel	= luaL_checkinteger(L, 1);
 	int ms		= luaL_checkinteger(L, 2);
