@@ -1,7 +1,7 @@
 /*
  * display.c -- basic display functions
  *
- * Copyright (c) 2013 David Demelier <markand@malikania.fr>
+ * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
