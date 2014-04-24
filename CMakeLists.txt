@@ -37,6 +37,8 @@ set(
 	src/events.h
 	src/gamecontroller.c
 	src/gamecontroller.h
+	src/gl.c
+	src/gl.h
 	src/haptic.c
 	src/haptic.h
 	src/joystick.c

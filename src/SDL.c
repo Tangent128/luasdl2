@@ -31,6 +31,7 @@
 #include "display.h"
 #include "events.h"
 #include "gamecontroller.h"
+#include "gl.h"
 #include "haptic.h"
 #include "joystick.h"
 #include "keyboard.h"
@@ -318,6 +319,9 @@ static const struct {
 
 	/* Timer */
 	{ TimerFunctions				},
+
+	/* OpenGL */
+	{ GlFunctions					},
 	{ NULL						}
 };
 
@@ -333,7 +337,6 @@ static const struct {
 	{ "powerState",		PowerState			},
 
 	/* Hints */
-	/* { "hints",		hints				}, */
 	{ "hintPriority",	HintPriority			},
 
 	/* RW operations */
@@ -379,6 +382,11 @@ static const struct {
 	/* Haptic */
 	{ "hapticType",		HapticType			},
 	{ "hapticDirection",	HapticDirection			},
+
+	/* OpenGL */
+	{ "glAttr",		GlAttr				},
+	{ "glProfile",		GlProfile			},
+	{ "glFlags",		GlContextFlags			},
 	{ NULL,			NULL				}
 };
 
@@ -398,6 +406,7 @@ static const struct {
 	{ &AudioObject						},
 	{ &Haptic						},
 	{ &TimerObject						},
+	{ &GlObject						},
 	{ NULL							}
 };
 
