@@ -296,12 +296,7 @@ typedef int (*GroupFunction)(int);
 static int
 groupFunction(lua_State *L, GroupFunction func)
 {
-	int tag = -1;
-
-	if (lua_gettop(L) >= 1)
-		tag = luaL_checkinteger(L, 1);
-
-	return commonPush(L, "i", func(tag));
+	return commonPush(L, "i", func(luaL_optint(L, 1, -1)));
 }
 
 /* ---------------------------------------------------------
@@ -338,11 +333,12 @@ l_mixer_init(lua_State *L)
 		commonPushEnum(L, ret, MixerFlags);
 		(void)commonPush(L, "n s", Mix_GetError());
 
-		return 2;
+		return 3;
 	}
 
 	/* Push the same table as passed so user can test equality */
 	lua_pushvalue(L, 1);
+	lua_pushboolean(L, 1);
 
 	return 1;
 }
@@ -430,7 +426,7 @@ l_mixer_pause(lua_State *L)
 static int
 l_mixer_resume(lua_State *L)
 {
-	Mix_Resume(luaL_checkinteger(L, 2));
+	Mix_Resume(luaL_checkinteger(L, 1));
 
 	return 0;
 }
@@ -447,7 +443,7 @@ l_mixer_expireChannel(lua_State *L)
 	int channel	= luaL_checkinteger(L, 1);
 	int ticks	= luaL_checkinteger(L, 2);
 
-	return commonPush(L, "s", Mix_ExpireChannel(channel, ticks));
+	return commonPush(L, "i", Mix_ExpireChannel(channel, ticks));
 }
 
 static int
@@ -462,23 +458,13 @@ l_mixer_fadeOutChannel(lua_State *L)
 static int
 l_mixer_playing(lua_State *L)
 {
-	int channel = -1;
-
-	if (lua_gettop(L) >= 1)
-		channel = luaL_checkinteger(L, 1);
-
-	return commonPush(L, "i", Mix_Playing(channel));
+	return commonPush(L, "i", Mix_Playing(luaL_optint(L, 1, -1)));
 }
 
 static int
 l_mixer_paused(lua_State *L)
 {
-	int channel = -1;
-
-	if (lua_gettop(L) >= 1)
-		channel = luaL_checkinteger(L, 1);
-
-	return commonPush(L, "i", Mix_Paused(channel));
+	return commonPush(L, "i", Mix_Paused(luaL_optint(L, 1, -1)));
 }
 
 static int
@@ -495,19 +481,14 @@ l_mixer_fadingChannel(lua_State *L)
 static int
 l_mixer_reserveChannels(lua_State *L)
 {
-	int num = luaL_checkinteger(L, 1);
-
-	return commonPush(L, "i", Mix_ReserveChannels(num));
+	return commonPush(L, "i", Mix_ReserveChannels(luaL_checkinteger(L, 1)));
 }
 
 static int
 l_mixer_groupChannel(lua_State *L)
 {
-	int which = luaL_checkinteger(L, 1);
-	int tag = -1;
-
-	if (lua_gettop(L) >= 2)
-		tag = luaL_checkinteger(L, 2);
+	int which	= luaL_checkinteger(L, 1);
+	int tag		= luaL_optint(L, 2, -1);
 
 	return commonPush(L, "b", Mix_GroupChannel(which, tag));
 }
@@ -517,10 +498,7 @@ l_mixer_groupChannels(lua_State *L)
 {
 	int from	= luaL_checkinteger(L, 1);
 	int to		= luaL_checkinteger(L, 2);
-	int tag		= -1;
-
-	if (lua_gettop(L) >= 3)
-		tag = luaL_checkinteger(L, 3);
+	int tag		= luaL_optint(L, 3, -1);
 
 	return commonPush(L, "i", Mix_GroupChannels(from, to, tag));
 }
