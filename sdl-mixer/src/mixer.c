@@ -114,11 +114,11 @@ static const CommonObject	MixMusic;
 
 static const CommonEnum MusicType[] = {
 	{ "None",		MUS_NONE				},
-	{ "Wav",		MUS_WAV					},
-	{ "Mod",		MUS_MOD					},
-	{ "Mid",		MUS_MID					},
-	{ "Ogg",		MUS_OGG					},
-	{ "Mp3",		MUS_MP3					},
+	{ "WAV",		MUS_WAV					},
+	{ "MOD",		MUS_MOD					},
+	{ "MID",		MUS_MID					},
+	{ "OGG",		MUS_OGG					},
+	{ "MP3",		MUS_MP3					},
 	{ NULL,			-1					}
 };
 
