@@ -29,6 +29,15 @@
 
 static const CommonObject MixChunkObject;
 
+/*
+ * Chunk:volume(volume)
+ *
+ * Arguments:
+ *	volume the volume
+ *
+ * Returns:
+ *	The previous volume
+ */
 static int
 l_chunk_volume(lua_State *L)
 {
@@ -38,18 +47,25 @@ l_chunk_volume(lua_State *L)
 	return commonPush(L, "i", Mix_VolumeChunk(c, volume));
 }
 
+/*
+ * Chunk:playChannel(channel, loops, ticks)
+ *
+ * Arguments:
+ *	channel the channel
+ *	loops the number of iterations
+ *	ticks the delay in milliseconds
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_chunk_playChannel(lua_State *L)
 {
 	Mix_Chunk *c	= commonGetAs(L, 1, MixChunk, Mix_Chunk *);
 	int channel	= luaL_checkinteger(L, 2);
-	int loops	= -1;
-	int ticks	= -1;
-
-	if (lua_gettop(L) >= 3)
-		loops = luaL_checkinteger(L, 3);
-	if (lua_gettop(L) >= 4)
-		ticks = luaL_checkinteger(L, 4);
+	int loops	= luaL_optint(L, 3, -1);
+	int ticks	= luaL_optint(L, 4, -1);
 
 	if (Mix_PlayChannelTimed(channel, c, loops, ticks) < 0)
 		return commonPushSDLError(L, 1);
@@ -57,6 +73,19 @@ l_chunk_playChannel(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * Chunk:fadeInChannel(channel, loops, delay, ticks)
+ *
+ * Arguments:
+ *	channel the channel
+ *	loops the number of loops
+ *	delay the delay in milliseconds
+ *	ticks (optional) the milliseconds limits, default: -1
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_chunk_fadeInChannel(lua_State *L)
 {
@@ -64,10 +93,7 @@ l_chunk_fadeInChannel(lua_State *L)
 	int channel	= luaL_checkinteger(L, 2);
 	int loops	= luaL_checkinteger(L, 3);
 	int ms		= luaL_checkinteger(L, 4);
-	int ticks	= -1;
-
-	if (lua_gettop(L) >= 5)
-		ticks = luaL_checkinteger(L, 5);
+	int ticks	= luaL_optint(L, 5, -1);
 
 	if (Mix_FadeInChannelTimed(channel, c, loops, ms, ticks) < 0)
 		return commonPushSDLError(L, 1);
@@ -75,6 +101,9 @@ l_chunk_fadeInChannel(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * Chunk:__gc()
+ */
 static int
 l_chunk_gc(lua_State *L)
 {
@@ -112,6 +141,9 @@ static const CommonObject MixChunkObject = {
 
 static const CommonObject	MixMusic;
 
+/*
+ * mixer.type
+ */
 static const CommonEnum MusicType[] = {
 	{ "None",		MUS_NONE				},
 	{ "WAV",		MUS_WAV					},
@@ -122,31 +154,40 @@ static const CommonEnum MusicType[] = {
 	{ NULL,			-1					}
 };
 
+/*
+ * Music:play(loops)
+ *
+ * Arguments:
+ *	loops (optional) the number of loops, default: -1
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_music_play(lua_State *L)
 {
 	Mix_Music *m = commonGetAs(L, 1, MixMusicName, Mix_Music *);
-	int loops = -1;
+	int loops = luaL_optint(L, 2, -1);
 
-	if (lua_gettop(L) >= 2)
-		loops = luaL_checkinteger(L, 2);
 	if (Mix_PlayMusic(m, loops) < 0)
 		return commonPushSDLError(L, 1);
 
 	return commonPush(L, "b", 1);
 }
 
-static int
-l_music_gc(lua_State *L)
-{
-	CommonUserdata *udata = commonGetUserdata(L, 1, MixMusicName);
-
-	if (udata->mustdelete)
-		Mix_FreeMusic(udata->data);
-
-	return 0;
-}
-
+/*
+ * Music:fadeIn(loops, delay, position)
+ *
+ * Arguments:
+ *	loops number of iterations
+ *	delay the delay in milliseconds
+ *	position (optional) the position
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_music_fadeIn(lua_State *L)
 {
@@ -167,14 +208,24 @@ l_music_fadeIn(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * Music:volume(volume)
+ *
+ * Arguments:
+ *	volume the volume
+ *
+ * Returns
+ *	The previous volume
+ */
 static int
 l_music_volume(lua_State *L)
 {
-	int volume = luaL_checkinteger(L, 2);
-
-	return commonPush(L, "i", Mix_VolumeMusic(volume));
+	return commonPush(L, "i", Mix_VolumeMusic(luaL_checkinteger(L, 1)));
 }
 
+/*
+ * Music:resume()
+ */
 static int
 l_music_resume(lua_State *L)
 {
@@ -185,6 +236,9 @@ l_music_resume(lua_State *L)
 	return 0;
 }
 
+/*
+ * Music:rewind()
+ */
 static int
 l_music_rewind(lua_State *L)
 {
@@ -195,6 +249,16 @@ l_music_rewind(lua_State *L)
 	return 0;
 }
 
+/*
+ * Music:setPosition(pos)
+ *
+ * Arguments:
+ *	pos the position
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_music_setPosition(lua_State *L)
 {
@@ -208,6 +272,9 @@ l_music_setPosition(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * Music:halt()
+ */
 static int
 l_music_halt(lua_State *L)
 {
@@ -218,6 +285,16 @@ l_music_halt(lua_State *L)
 	return 0;
 }
 
+/*
+ * Music:fadeOut(delay)
+ *
+ * Arguments:
+ *	delay the delay in milliseconds
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_music_fadeOut(lua_State *L)
 {
@@ -226,34 +303,71 @@ l_music_fadeOut(lua_State *L)
 	if (Mix_FadeOutMusic(ms) < 0)
 		return commonPushSDLError(L, 1);
 
-	return 0;
+	return commonPush(L, "b", 1);
 }
 
+/*
+ * Music:type()
+ *
+ * Returns:
+ *	The music type (mixer.type)
+ */
 static int
 l_music_getType(lua_State *L)
 {
 	Mix_Music *m = commonGetAs(L, 1, MixMusicName, Mix_Music *);
-	Mix_MusicType t = Mix_GetMusicType(m);
 
-	return commonPush(L, "i", t);
+	return commonPush(L, "i", Mix_GetMusicType(m));
 }
 
+/*
+ * Music:playing()
+ *
+ * Returns:
+ *	True if playing
+ */
 static int
 l_music_playing(lua_State *L)
 {
-	return commonPush(L, "i", Mix_PlayingMusic());
+	return commonPush(L, "b", Mix_PlayingMusic());
 }
 
+/*
+ * Music:paused()
+ *
+ * Returns:
+ *	True if paused
+ */
 static int
 l_music_paused(lua_State *L)
 {
-	return commonPush(L, "i", Mix_PausedMusic());
+	return commonPush(L, "b", Mix_PausedMusic());
 }
 
+/*
+ * Music:fading()
+ *
+ * Returns:
+ *	The fading status
+ */
 static int
 l_music_fading(lua_State *L)
 {
 	return commonPush(L, "i", Mix_FadingMusic());
+}
+
+/*
+ * Music:__gc()
+ */
+static int
+l_music_gc(lua_State *L)
+{
+	CommonUserdata *udata = commonGetUserdata(L, 1, MixMusicName);
+
+	if (udata->mustdelete)
+		Mix_FreeMusic(udata->data);
+
+	return 0;
 }
 
 static const luaL_Reg MusicMethods[] = {
@@ -303,6 +417,9 @@ groupFunction(lua_State *L, GroupFunction func)
  * SDL_mixer functions
  * --------------------------------------------------------- */
 
+/*
+ * mixer.flags
+ */
 static const CommonEnum MixerFlags[] = {
 	{ "FLAC",			MIX_INIT_FLAC			},
 	{ "MOD",			MIX_INIT_MOD			},
@@ -315,6 +432,9 @@ static const CommonEnum MixerFlags[] = {
 	{ NULL,				-1				}
 };
 
+/*
+ * mixer.fading
+ */
 static const CommonEnum MixerFading[] = {
 	{ "None",			MIX_NO_FADING			},
 	{ "Out",			MIX_FADING_OUT			},
@@ -322,6 +442,17 @@ static const CommonEnum MixerFading[] = {
 	{ NULL,				-1				}
 };
 
+/*
+ * mixer.init(flags)
+ *
+ * Arguments:
+ *	flags the flags (mixer.flags)
+ *
+ * Returns:
+ *	The same table or the new one
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_mixer_init(lua_State *L)
 {
@@ -343,6 +474,19 @@ l_mixer_init(lua_State *L)
 	return 1;
 }
 
+/*
+ * mixer.openAudio(frequency, format, channels, chksize)
+ *
+ * Arguments:
+ *	frequency the frequency
+ *	format the format (SDL.audioFormat)
+ *	channels the number of channels
+ *	chksize the chunk size
+ *
+ * Returns:
+ *	True on success or nil on failure
+ *	The error message
+ */
 static int
 l_mixer_openAudio(lua_State *L)
 {
@@ -357,23 +501,43 @@ l_mixer_openAudio(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * mixer.getNumChunkDecoders()
+ *
+ * Returns:
+ *	The number of chunk decoders
+ */
 static int
 l_mixer_getNumChunkDecoders(lua_State *L)
 {
 	return commonPush(L, "i", Mix_GetNumChunkDecoders());
 }
 
+/*
+ * mixer.getChunkDecoder(index)
+ *
+ * Arguments:
+ *	index (optional) the index, default: 0
+ *
+ * Returns:
+ *	The decoder name
+ */
 static int
 l_mixer_getChunkDecoder(lua_State *L)
 {
-	int index = 0;
-
-	if (lua_gettop(L) >= 1)
-		index = luaL_checkinteger(L, 1);
-
-	return commonPush(L, "s", Mix_GetChunkDecoder(index));
+	return commonPush(L, "s", Mix_GetChunkDecoder(luaL_optint(L, 1, 0)));
 }
 
+/*
+ * mixer.loadWAV(path)
+ *
+ * Arguments:
+ *	path the path
+ *
+ * Returns:
+ *	The chunk object or nil on failure
+ *	The error message
+ */
 static int
 l_mixer_loadWAV(lua_State *L)
 {
@@ -386,6 +550,16 @@ l_mixer_loadWAV(lua_State *L)
 	return commonPush(L, "p", MixChunk, c);
 }
 
+/*
+ * mixer.loadWAV_RW(rw)
+ *
+ * Arguments:
+ *	rw the RWops
+ *
+ * Returns:
+ *	The chunk object or nil on failure
+ *	The error message
+ */
 static int
 l_mixer_loadWAV_RW(lua_State *L)
 {
@@ -398,6 +572,15 @@ l_mixer_loadWAV_RW(lua_State *L)
 	return commonPush(L, "p", MixChunk, c);
 }
 
+/*
+ * mixer.allocateChannels(num)
+ *
+ * Arguments:
+ *	num the number to allocate
+ *
+ * Returns:
+ *	The number allocated
+ */
 static int
 l_mixer_allocateChannels(lua_State *L)
 {
@@ -406,6 +589,16 @@ l_mixer_allocateChannels(lua_State *L)
 	return commonPush(L, "i", Mix_AllocateChannels(num));
 }
 
+/*
+ * mixer.volume(channel, volume)
+ *
+ * Arguments:
+ *	channel the channel
+ *	volume the volume
+ *
+ * Returns:
+ *	The current volume
+ */
 static int
 l_mixer_volume(lua_State *L)
 {
@@ -415,6 +608,12 @@ l_mixer_volume(lua_State *L)
 	return commonPush(L, "i", Mix_Volume(channel, volume));
 }
 
+/*
+ * mixer.pause(channel)
+ *
+ * Arguments:
+ *	channel the channel
+ */
 static int
 l_mixer_pause(lua_State *L)
 {
@@ -423,6 +622,12 @@ l_mixer_pause(lua_State *L)
 	return 0;
 }
 
+/*
+ * mixer.resume(channel)
+ *
+ * Arguments:
+ *	channel the channel
+ */
 static int
 l_mixer_resume(lua_State *L)
 {
@@ -431,12 +636,31 @@ l_mixer_resume(lua_State *L)
 	return 0;
 }
 
+/*
+ * mixer.haltChannel(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_haltChannel(lua_State *L)
 {
 	return commonPush(L, "i", Mix_HaltChannel(luaL_checkinteger(L, 1)));
 }
 
+/*
+ * mixer.expireChannel(channel, delay)
+ *
+ * Arguments:
+ *	channel the channel
+ *	delay the delay in milliseconds
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_expireChannel(lua_State *L)
 {
@@ -446,6 +670,16 @@ l_mixer_expireChannel(lua_State *L)
 	return commonPush(L, "i", Mix_ExpireChannel(channel, ticks));
 }
 
+/*
+ * mixer.fadeOutChannels(channel, ms)
+ *
+ * Arguments:
+ *	channel the channel
+ *	ms the number in milliseconds
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_fadeOutChannel(lua_State *L)
 {
@@ -455,18 +689,45 @@ l_mixer_fadeOutChannel(lua_State *L)
 	return commonPush(L, "i", Mix_FadeOutChannel(channel, ms));
 }
 
+/*
+ * mixer.playing(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_playing(lua_State *L)
 {
 	return commonPush(L, "i", Mix_Playing(luaL_optint(L, 1, -1)));
 }
 
+/*
+ * mixer.paused(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_paused(lua_State *L)
 {
 	return commonPush(L, "i", Mix_Paused(luaL_optint(L, 1, -1)));
 }
 
+/*
+ * mixer.fadingChannel(channel)
+ *
+ * Arguments:
+ *	channel the channel
+ *
+ * Returns:
+ *	The status
+ */
 static int
 l_mixer_fadingChannel(lua_State *L)
 {
@@ -478,12 +739,31 @@ l_mixer_fadingChannel(lua_State *L)
 	return commonPush(L, "i", Mix_FadingChannel(channel));
 }
 
+/*
+ * mixer.reserveChannels(num)
+ *
+ * Arguments:
+ *	num the number of channels to allocate
+ *
+ * Returns:
+ *	The number allocated
+ */
 static int
 l_mixer_reserveChannels(lua_State *L)
 {
 	return commonPush(L, "i", Mix_ReserveChannels(luaL_checkinteger(L, 1)));
 }
 
+/*
+ * mixer.groupChannel(channel, tag)
+ *
+ * Arguments:
+ *	channel the channel number
+ *	tag (optional) the tag number, default: -1
+ *
+ * Returns:
+ *	True on success
+ */
 static int
 l_mixer_groupChannel(lua_State *L)
 {
@@ -493,6 +773,17 @@ l_mixer_groupChannel(lua_State *L)
 	return commonPush(L, "b", Mix_GroupChannel(which, tag));
 }
 
+/*
+ * mixer.groupChannels(from, to, tag)
+ *
+ * Arguments:
+ *	from the minimum
+ *	to the maximum
+ *	tag the tag number
+ *
+ * Returns:
+ *	The number affected
+ */
 static int
 l_mixer_groupChannels(lua_State *L)
 {
@@ -503,30 +794,76 @@ l_mixer_groupChannels(lua_State *L)
 	return commonPush(L, "i", Mix_GroupChannels(from, to, tag));
 }
 
+/*
+ * mixer.groupCount(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_groupCount(lua_State *L)
 {
 	return groupFunction(L, Mix_GroupCount);
 }
 
+/*
+ * mixer.groupAvailable(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_groupAvailable(lua_State *L)
 {
 	return groupFunction(L, Mix_GroupAvailable);
 }
 
+/*
+ * mixer.groupOldest(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_groupOldest(lua_State *L)
 {
 	return groupFunction(L, Mix_GroupOldest);
 }
 
+/*
+ * mixer.groupNewer(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_groupNewer(lua_State *L)
 {
 	return groupFunction(L, Mix_GroupNewer);
 }
 
+/*
+ * mixer.fadeOutGroup(tag, ms)
+ *
+ * Arguments:
+ *	tag the group number
+ *	ms the number of milliseconds
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_fadeOutGroup(lua_State *L)
 {
@@ -536,24 +873,55 @@ l_mixer_fadeOutGroup(lua_State *L)
 	return commonPush(L, "i", Mix_FadeOutGroup(tag, ms));
 }
 
+/*
+ * mixer.haltGroup(channel)
+ *
+ * Arguments:
+ *	channel (optional) the channel, default: -1
+ *
+ * Returns:
+ *	The number of channels affected
+ */
 static int
 l_mixer_haltGroup(lua_State *L)
 {
 	return groupFunction(L, Mix_HaltGroup);
 }
 
+/*
+ * mixer.getNumMusicDecoders()
+ *
+ * Returns:
+ *	The number of music decoders
+ */
 static int
 l_mixer_getNumMusicDecoders(lua_State *L)
 {
 	return commonPush(L, "i", Mix_GetNumMusicDecoders());
 }
 
+/*
+ * mixer.getMusicDecoder()
+ *
+ * Returns:
+ *	The music decoder name
+ */
 static int
 l_mixer_getMusicDecoder(lua_State *L)
 {
 	return commonPush(L, "s", Mix_GetMusicDecoder(luaL_checkinteger(L, 1)));
 }
 
+/*
+ * mixer.loadMUS(path)
+ *
+ * Arguments:
+ *	path the path to the sound
+ *
+ * Returns:
+ *	The music object or nil on failure
+ *	The error message
+ */
 static int
 l_mixer_loadMUS(lua_State *L)
 {
@@ -568,6 +936,9 @@ l_mixer_loadMUS(lua_State *L)
 	return commonPush(L, "p", MixMusicName, music);
 }
 
+/*
+ * mixer.closeAudio()
+ */
 static int
 l_mixer_closeAudio(lua_State *L)
 {
@@ -578,6 +949,9 @@ l_mixer_closeAudio(lua_State *L)
 	return 0;
 }
 
+/*
+ * mixer.quit()
+ */
 static int
 l_mixer_quit(lua_State *L)
 {
