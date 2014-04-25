@@ -34,9 +34,6 @@ static const CommonEnum ImageFlags[] = {
 	{ "JPG",			IMG_INIT_JPG			},
 	{ "PNG",			IMG_INIT_PNG			},
 	{ "TIF",			IMG_INIT_TIF,			},
-	{ "All",			IMG_INIT_JPG |
-					IMG_INIT_PNG |
-					IMG_INIT_TIF			},
 	{ NULL,				-1				}
 };
 
@@ -80,18 +77,12 @@ l_image_init(lua_State *L)
 	int ret;
 
 	ret = IMG_Init(flags);
-	if ((ret & flags) != flags) {
-		commonPushEnum(L, ret, ImageFlags);
-		(void)commonPush(L, "n s", IMG_GetError());
+	commonPushEnum(L, ret, ImageFlags);
 
-		return 3;
-	}
+	if ((ret & flags) != flags)
+		return commonPush(L, "n s", IMG_GetError()) + 1;
 
-	/* Push the same table as passed so user can test equality */
-	lua_pushvalue(L, 1);
-	lua_pushboolean(L, 1);
-
-	return 2;
+	return commonPush(L, "b", 1) + 1;
 }
 
 /*

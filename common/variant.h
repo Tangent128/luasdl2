@@ -30,7 +30,7 @@ typedef struct variant_pair {
 	STAILQ_ENTRY(variant_pair) link;
 } VariantPair;
 
-typedef STAILQ_HEAD(, variant_pair) VariantPairs;
+typedef STAILQ_HEAD(variant_pairs, variant_pair) VariantPairs;
 
 typedef struct variant {
 	int type;
@@ -46,7 +46,7 @@ typedef struct variant {
 		} string;
 	} data;
 
-	// Link for list
+	/* Link for list */
 	STAILQ_ENTRY(variant)	 link;
 } Variant;
 

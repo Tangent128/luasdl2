@@ -21,6 +21,10 @@ project(LuaSDL C)
 
 set(CMAKE_MODULE_PATH "${LuaSDL_SOURCE_DIR}/cmake")
 
+# Path where to install docs
+set(WITH_DOCSDIR "share/docs/Lua-SDL2"
+    CACHE STRING "Path to install examples")
+
 set(
 	SOURCES
 	src/audio.c
@@ -143,5 +147,6 @@ if (WITH_NET)
 	add_subdirectory(sdl-net)
 endif ()
 
-# For the examples
+# For the examples and tutorials
 add_subdirectory(examples)
+add_subdirectory(tutorials)

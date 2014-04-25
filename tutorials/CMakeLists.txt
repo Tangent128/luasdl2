@@ -16,27 +16,25 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-project(examples)
+project(tutorials)
 
 # Option to enable / disable examples installation
-option(WITH_DOCS "Installation of documentation and examples" On)
+option(WITH_DOCS "Installation of tutorials" On)
 
 set(
 	DIRECTORIES
-	audio
-	font
-	image
-	joystick
-	keyboard
-	rwops
-	tcp
-	threads
-	udp
+	01-initialization
+	02-window
+	03-events
+	04-drawing
+	05-sound
+	06-text
+	07-bouncing
 )
 
 if (WITH_DOCS)
 	install(
 		DIRECTORY ${DIRECTORIES}
-		DESTINATION ${WITH_DOCSDIR}/examples
+		DESTINATION ${WITH_DOCSDIR}/tutorials
 	)
 endif ()

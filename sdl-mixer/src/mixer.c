@@ -417,10 +417,6 @@ static const CommonEnum MixerFlags[] = {
 	{ "MOD",			MIX_INIT_MOD			},
 	{ "MP3",			MIX_INIT_MP3			},
 	{ "OGG",			MIX_INIT_OGG			},
-	{ "All",			MIX_INIT_FLAC |
-					MIX_INIT_MOD  |
-					MIX_INIT_MP3  |
-					MIX_INIT_OGG			},
 	{ NULL,				-1				}
 };
 
@@ -452,18 +448,12 @@ l_mixer_init(lua_State *L)
 	int ret;
 
 	ret = Mix_Init(flags);
-	if ((ret & flags) != flags) {
-		commonPushEnum(L, ret, MixerFlags);
-		(void)commonPush(L, "n s", Mix_GetError());
+	commonPushEnum(L, ret, MixerFlags);
 
-		return 3;
-	}
+	if ((ret & flags) != flags)
+		return commonPush(L, "n s", Mix_GetError()) + 1;
 
-	/* Push the same table as passed so user can test equality */
-	lua_pushvalue(L, 1);
-	lua_pushboolean(L, 1);
-
-	return 1;
+	return commonPush(L, "b", 1) + 1;
 }
 
 /*

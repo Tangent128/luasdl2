@@ -10,7 +10,7 @@ if not ret then
 	error(err)
 end
 
-local ret, err = image.init { image.flags.JPEG }
+local formats, ret, err = image.init { image.flags.PNG }
 if not ret then
 	error(err)
 end
@@ -37,9 +37,11 @@ end
 
 img = rdr:createTextureFromSurface(img)
 
-rdr:setDrawColor(0xFFFFFF)
-rdr:clear()
-rdr:copy(img)
-rdr:present()
+for i = 1, 50 do
+	rdr:setDrawColor(0xFFFFFF)
+	rdr:clear()
+	rdr:copy(img)
+	rdr:present()
 
-SDL.delay(2000)
+	SDL.delay(100)
+end

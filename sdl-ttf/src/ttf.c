@@ -628,7 +628,14 @@ l_open(lua_State *L)
 static int
 l_quit(lua_State *L)
 {
+#if 0
+	/*
+	 * If user quits SDL_ttf before fonts are closed, the program
+	 * segfaults. Disable quit function temporarily until we find a
+	 * proper correct solution.
+	 */
 	TTF_Quit();
+#endif
 
 	(void)L;
 
