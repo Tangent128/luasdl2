@@ -262,12 +262,8 @@ l_music_rewind(lua_State *L)
 static int
 l_music_setPosition(lua_State *L)
 {
-	double pos = luaL_checknumber(L, 1);
-
-	if (Mix_SetMusicPosition(pos) < 0)
+	if (Mix_SetMusicPosition(luaL_checknumber(L, 1)) < 0)
 		return commonPushSDLError(L, 1);
-
-	(void)L;
 
 	return commonPush(L, "b", 1);
 }
@@ -298,9 +294,7 @@ l_music_halt(lua_State *L)
 static int
 l_music_fadeOut(lua_State *L)
 {
-	int ms = luaL_checkinteger(L, 1);
-
-	if (Mix_FadeOutMusic(ms) < 0)
+	if (Mix_FadeOutMusic(luaL_checkinteger(L, 1)) < 0)
 		return commonPushSDLError(L, 1);
 
 	return commonPush(L, "b", 1);
@@ -315,9 +309,7 @@ l_music_fadeOut(lua_State *L)
 static int
 l_music_getType(lua_State *L)
 {
-	Mix_Music *m = commonGetAs(L, 1, MixMusicName, Mix_Music *);
-
-	return commonPush(L, "i", Mix_GetMusicType(m));
+	return commonPush(L, "i", Mix_GetMusicType(commonGetAs(L, 1, MixMusicName, Mix_Music *)));
 }
 
 /*
@@ -795,10 +787,10 @@ l_mixer_groupChannels(lua_State *L)
 }
 
 /*
- * mixer.groupCount(channel)
+ * mixer.groupCount(tag)
  *
  * Arguments:
- *	channel (optional) the channel, default: -1
+ *	tag (optional) the tag, default: -1
  *
  * Returns:
  *	The number of channels affected
@@ -810,10 +802,10 @@ l_mixer_groupCount(lua_State *L)
 }
 
 /*
- * mixer.groupAvailable(channel)
+ * mixer.groupAvailable(tag)
  *
  * Arguments:
- *	channel (optional) the channel, default: -1
+ *	tag (optional) the tag, default: -1
  *
  * Returns:
  *	The number of channels affected
@@ -825,10 +817,10 @@ l_mixer_groupAvailable(lua_State *L)
 }
 
 /*
- * mixer.groupOldest(channel)
+ * mixer.groupOldest(tag)
  *
  * Arguments:
- *	channel (optional) the channel, default: -1
+ *	tag (optional) the tag, default: -1
  *
  * Returns:
  *	The number of channels affected
@@ -840,10 +832,10 @@ l_mixer_groupOldest(lua_State *L)
 }
 
 /*
- * mixer.groupNewer(channel)
+ * mixer.groupNewer(tag)
  *
  * Arguments:
- *	channel (optional) the channel, default: -1
+ *	tag (optional) the tag, default: -1
  *
  * Returns:
  *	The number of channels affected
@@ -874,10 +866,10 @@ l_mixer_fadeOutGroup(lua_State *L)
 }
 
 /*
- * mixer.haltGroup(channel)
+ * mixer.haltGroup(tag)
  *
  * Arguments:
- *	channel (optional) the channel, default: -1
+ *	tag (optional) the tag, default: -1
  *
  * Returns:
  *	The number of channels affected
@@ -901,7 +893,10 @@ l_mixer_getNumMusicDecoders(lua_State *L)
 }
 
 /*
- * mixer.getMusicDecoder()
+ * mixer.getMusicDecoder(index)
+ *
+ * Arguments:
+ *	index the decoder index
  *
  * Returns:
  *	The music decoder name

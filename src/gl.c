@@ -133,7 +133,7 @@ static int
 l_glMakeCurrent(lua_State *L)
 {
 	SDL_Window *w		= commonGetAs(L, 1, WindowName, SDL_Window *);
-	SDL_GLContext *ctx	= commonGetAs(L, 1, GlName, SDL_GLContext);
+	SDL_GLContext ctx	= commonGetAs(L, 2, GlName, SDL_GLContext);
 
 	if (SDL_GL_MakeCurrent(w, ctx) < 0)
 		return commonPushSDLError(L, 1);
@@ -291,7 +291,7 @@ const CommonEnum GlAttr[] = {
 	{ "AccumGreenSize",		SDL_GL_ACCUM_GREEN_SIZE			},
 	{ "AccumBlueSize",		SDL_GL_ACCUM_BLUE_SIZE			},
 	{ "AccumAlphaSize",		SDL_GL_ACCUM_ALPHA_SIZE			},
-	{ "Stero",			SDL_GL_STEREO				},
+	{ "Stereo",			SDL_GL_STEREO				},
 	{ "MultiSampleBuffers",		SDL_GL_MULTISAMPLEBUFFERS		},
 	{ "MultiSampleSamples",		SDL_GL_MULTISAMPLESAMPLES		},
 	{ "AcceleratedVisual",		SDL_GL_ACCELERATED_VISUAL		},
