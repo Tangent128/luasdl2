@@ -19,6 +19,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(LuaSDL C)
 
+# Project information
+set(VERSION "2.0.3-rc1")
+set(MAJOR "2")
+set(MINOR "0")
+set(PATCH "3")
+
 set(CMAKE_MODULE_PATH "${LuaSDL_SOURCE_DIR}/cmake")
 
 # Path where to install docs
@@ -150,3 +156,50 @@ endif ()
 # For the examples and tutorials
 add_subdirectory(examples)
 add_subdirectory(tutorials)
+
+# CPack configuration
+if (WIN32)
+	set(CPACK_PACKAGE_NAME "Lua-SDL2")
+	set(CPACK_NSIS_PACKAGE_NAME "Lua-SDL2")
+
+	if (CMAKE_CL_64)
+		set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+		set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (x64)")
+	else ()
+		set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
+		set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION}")
+	endif ()
+
+	# This determine the *target* architecture
+	if (CMAKE_SIZEOF_VOID_P MATCHES "8")
+		set(WINARCH "amd64")
+	else ()
+		set(WINARCH "x86")
+	endif ()
+
+	set(CPACK_GENERATOR "NSIS")
+	set(CPACK_MONOLITHIC_INSTALL FALSE)
+
+	set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+	set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README")
+
+	set(CPACK_NSIS_DISPLAY_NAME "Lua-SDL2")
+	set(CPACK_NSIS_EXECUTABLES_DIRECTORY "bin")
+	set(CPACK_NSIS_CONTACT "markand@malikania.fr")
+
+	set(CPACK_PACKAGE_VENDOR "Malikania")
+	set(CPACK_PACKAGE_VERSION "${VERSION}")
+	set(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR})
+	set(CPACK_PACKAGE_VERSION_MINOR ${MINOR})
+	set(CPACK_PACKAGE_FILE_NAME "Lua-SDL2-${VERSION}-${CMAKE_SYSTEM_NAME}-${WINARCH}")
+	set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README")
+	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Lua-SDL2")
+else ()
+	set(CPACK_GENERATOR "TGZ")
+endif ()
+
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "Lua-SDL2-${VERSION}-source")
+set(CPACK_SOURCE_GENERATOR "ZIP;TGZ")
+set(CPACK_SOURCE_IGNORE_FILES ".hg;_build_")
+
+include(CPack)
