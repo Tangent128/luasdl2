@@ -76,7 +76,9 @@ getDirection(lua_State *L, int hindex, int index, SDL_HapticDirection *direction
 	lua_getfield(L, index, "direction");
 
 	if (lua_type(L, -1) == LUA_TTABLE) {
-		for (int i = 0; i < 3; ++i) {
+		int i;
+
+		for (i = 0; i < 3; ++i) {
 			lua_rawgeti(L, -1, i + 1);
 
 			if (lua_type(L, -1) == LUA_TNUMBER)
