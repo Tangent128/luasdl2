@@ -157,6 +157,11 @@ endif ()
 add_subdirectory(examples)
 add_subdirectory(tutorials)
 
+# For Windows DLL
+if (WIN32)
+	add_subdirectory(windows)
+endif ()
+
 # CPack configuration
 if (WIN32)
 	set(CPACK_PACKAGE_NAME "Lua-SDL2")
@@ -177,7 +182,7 @@ if (WIN32)
 		set(WINARCH "x86")
 	endif ()
 
-	set(CPACK_GENERATOR "NSIS")
+	set(CPACK_GENERATOR "NSIS;ZIP")
 	set(CPACK_MONOLITHIC_INSTALL FALSE)
 
 	set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
