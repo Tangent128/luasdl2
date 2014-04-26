@@ -24,7 +24,7 @@ local function initialize()
 	end
 
 	local win, err = SDL.createWindow {
-		title	= "Tutorial Lua-SDL2 -- 03-Bouncing Logo",
+		title	= "07 - Bouncing logo",
 		width	= width,
 		height	= height
 	}

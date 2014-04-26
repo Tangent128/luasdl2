@@ -23,7 +23,7 @@ end
 
 return function (length)
 	if length == 0 then
-		return nil	
+		return nil
 	end
 
 	if length > sound.len then

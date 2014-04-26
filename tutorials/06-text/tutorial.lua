@@ -20,7 +20,7 @@ trySDL(ttf.init)
 
 -- Create the window
 local win = trySDL(SDL.createWindow, {
-	title	= "02 - Opening a window",	-- optional
+	title	= "06 - Drawing text",		-- optional
 	width	= 90,				-- optional
 	height	= 50,				-- optional
 })

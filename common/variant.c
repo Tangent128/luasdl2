@@ -139,6 +139,9 @@ variantFree(Variant *v)
 		return;
 
 	switch (v->type) {
+	case LUA_TSTRING:
+		free(v->data.string.data);
+		break;
 	case LUA_TTABLE:
 		STAILQ_FOREACH_SAFE(t, &v->data.table, link, tmp) {
 			variantFree(t->key);

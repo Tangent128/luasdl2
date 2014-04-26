@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <common/array.h>
+#include <common/variant.h>
 
 #include "thread.h"
 
@@ -91,7 +92,7 @@ callback(LuaThread *t)
 
 	SDL_AtomicIncRef(&t->ref);
 
-	if (lua_pcall(t->L, 0, 1, 0) != LUA_OK)
+	if (lua_pcall(t->L, lua_gettop(t->L) - 1, 1, 0) != LUA_OK)
 		SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, "%s", lua_tostring(t->L, -1));
 	else
 		ret = lua_tointeger(t->L, -1);
@@ -123,7 +124,7 @@ static int
 l_thread_create(lua_State *L)
 {
 	const char *name = luaL_checkstring(L, 1);
-	int ret;
+	int ret, iv;
 	LuaThread *thread;
 
 	if ((thread = calloc(1, sizeof (LuaThread))) == NULL)
@@ -137,6 +138,19 @@ l_thread_create(lua_State *L)
 	/* If return number is 2, it is nil and the error */
 	if (ret == 2)
 		goto failure;
+
+	/* Iterate over the arguments to pass to the callback */
+	for (iv = 3; iv <= lua_gettop(L); ++iv) {
+		Variant *v = variantGet(L, iv);
+
+		if (v == NULL) {
+			commonPushErrno(L, 1);
+			goto failure;
+		}
+
+		variantPush(thread->L, v);
+		variantFree(v);
+	}
 
 	thread->ptr = SDL_CreateThread((SDL_ThreadFunction)callback, name, thread);
 	if (thread->ptr == NULL) {
@@ -286,19 +300,23 @@ const CommonObject Thread = {
  * --------------------------------------------------------- */
 
 static int
-loadfunction(lua_State *owner, lua_State *thread)
+loadfunction(lua_State *owner, lua_State *thread, int index)
 {
 	LoadState state;
+	int ret = 0;
 
 	memset(&state, 0, sizeof (LoadState));
 
 	if (arrayInit(&state.buffer, sizeof (char), 32) < 0) {
-		commonPushErrno(owner, 1);
+		ret = commonPushErrno(owner, 1);
 		goto cleanup;
 	}
 
+	/* Copy the function at the top of the stack */
+	lua_pushvalue(owner, index);
+
 	if (lua_dump(owner, (lua_Writer)writer, &state) != LUA_OK) {
-		commonPush(owner, "ns", "failed to dump function");
+		ret = commonPush(owner, "ns", "failed to dump function");
 		goto cleanup;
 	}
 
@@ -307,16 +325,14 @@ loadfunction(lua_State *owner, lua_State *thread)
 	 * state.
 	 */
 	if (lua_load(thread, (lua_Reader)reader, &state, "thread", NULL) != LUA_OK) {
-		commonPush(owner, "ns", lua_tostring(thread, -1));
+		ret = commonPush(owner, "ns", lua_tostring(thread, -1));
 		goto cleanup;
 	}
-
-	return 0;
 
 cleanup:
 	arrayFree(&state.buffer);
 
-	return 2;
+	return ret;
 }
 
 static int
@@ -336,7 +352,7 @@ threadDump(lua_State *L, lua_State *th, int index)
 	if (lua_type(L, index) == LUA_TSTRING)
 		ret = loadfile(L, th, lua_tostring(L, index));
 	else if (lua_type(L, index) == LUA_TFUNCTION)
-		ret = loadfunction(L, th);
+		ret = loadfunction(L, th, index);
 	else
 		return luaL_error(L, "expected a file path or a function");
 

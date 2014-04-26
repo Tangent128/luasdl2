@@ -71,6 +71,15 @@ audioCallback(AudioDevice *device, Uint8 *stream, int length)
 	}
 }
 
+/*
+ * Returns a table with the following fields:
+ *	data, the raw buffer string
+ *	length, the data length
+ *	format, the format (SDL.audioFormat)
+ *	frequency, the frequency
+ *	channels, the number of channels
+ *	samples, the number of samples
+ */
 static int
 loadWAV(lua_State *L, int use_rw)
 {
@@ -132,6 +141,23 @@ mixAudio(lua_State *L, int use_format)
 	return 1;
 }
 
+/*
+ * The table params may or must have the following fields:
+ *	callback the function or file to call
+ *	iscapture (optional) request for capture
+ *	allowchanges (optional) set to true to allow  format changes
+ *	device (optional) the device name
+ *	frequency (optional) the frequency
+ *	format (optional) the format (SDL.audioFormat)
+ *	channels (optional) number of channels
+ *	samples (optional) number of samples
+ *
+ * The callback function must have the following signature:
+ *	func(length) -> return the stream
+ *
+ * NOTE: The callback function is running in a separate thread, you must use
+ *	 channels to share data.
+ */
 static int
 openAudio(lua_State *L, int isdevice)
 {
@@ -335,8 +361,8 @@ l_audioQuit(lua_State *L)
  *	rateIncrement	the frequency infrement
  *	lengthBuffer	the original length
  *	lengthConverted	the converted length
- *	LengthMult	the len_mult field
- *	LengthRatio	the len_ratio field
+ *	lengthMult	the len_mult field
+ *	lengthRatio	the len_ratio field
  *	data		the audio data
  *
  * Arguments:
@@ -369,7 +395,8 @@ l_convertAudio(lua_State *L)
  *	iscapture set to true for recording
  *
  * Returns:
- *	The name
+ *	The name or nil on failure
+ *	The error message
  */
 static int
 l_getAudioDeviceName(lua_State *L)
@@ -378,7 +405,8 @@ l_getAudioDeviceName(lua_State *L)
 	int iscapture	= lua_toboolean(L, 2);
 	const char *name;
 
-	name = SDL_GetAudioDeviceName(index, iscapture);
+	if ((name = SDL_GetAudioDeviceName(index, iscapture)))
+		return commonPushSDLError(L, 1);
 
 	return commonPush(L, "s", name);
 }
@@ -398,9 +426,8 @@ l_getAudioDriver(lua_State *L)
 {
 	int index = luaL_checkinteger(L, 1);
 	const char *name;
-
-	name = SDL_GetAudioDriver(index);
-	if (name == NULL)
+ 
+	if ((name = SDL_GetAudioDriver(index)) == NULL)
 		return commonPushSDLError(L, 1);
 
 	return commonPush(L, "s", name);
@@ -468,14 +495,6 @@ l_getNumAudioDrivers(lua_State *L)
 /*
  * SDL.loadWAV(path)
  *
- * Returns a table with the following fields:
- *	data, the raw buffer string
- *	length, the data length
- *	format, the format (SDL.audioFormat)
- *	frequency, the frequency
- *	channels, the number of channels
- *	samples, the number of samples
- *
  * Arguments:
  *	path the path to the file
  *
@@ -542,22 +561,6 @@ l_mixAudioFormat(lua_State *L)
 
 /*
  * SDL.openAudioDevice(params)
- *
- * The table params may or must have the following fields:
- *	callback the function or file to call
- *	iscapture (optional) request for capture
- *	allowchanges (optional) set to true to allow  format changes
- *	device (optional) the device name
- *	frequency (optional) the frequency
- *	format (optional) the format (SDL.audioFormat)
- *	channels (optional) number of channels
- *	samples (optional) number of samples
- *
- * The callback function must have the following signature:
- *	func(stream, length) -> return the stream
- *
- * NOTE: The callback function is running in a separate thread, you must use
- *	 channels to share data.
  *
  * Arguments:
  *	params the parameters

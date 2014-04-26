@@ -18,7 +18,7 @@ end
 trySDL(SDL.init, { SDL.flags.Video })
 
 local win = trySDL(SDL.createWindow, {
-	title	= "02 - Opening a window",	-- optional
+	title	= "05 - Playing sound",		-- optional
 	width	= 320,				-- optional
 	height	= 320,				-- optional
 })

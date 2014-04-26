@@ -149,6 +149,16 @@ channelClear(Channel *c)
 }
 
 static void
+channelPop(Channel *c)
+{
+	SDL_LockMutex(c->mutex);
+	STAILQ_REMOVE_HEAD(&c->queue, link);
+	SDL_UnlockMutex(c->mutex);
+
+	SDL_CondBroadcast(c->cond);
+}
+
+static void
 channelFree(Channel *c)
 {
 	channelClear(c);
@@ -324,9 +334,18 @@ l_channel_supply(lua_State *L)
 static int
 l_channel_clear(lua_State *L)
 {
-	Channel *c = commonGetAs(L, 1, ChannelName, Channel *);
+	channelClear(commonGetAs(L, 1, ChannelName, Channel *));
 
-	channelClear(c);
+	return 0;
+}
+
+/*
+ * Channel:pop()
+ */
+static int
+l_channel_pop(lua_State *L)
+{
+	channelPop(commonGetAs(L, 1, ChannelName, Channel *));
 
 	return 0;
 }
@@ -372,6 +391,7 @@ static const luaL_Reg ChannelMethods[] = {
 	{ "last",	l_channel_last		},
 	{ "push",	l_channel_push		},
 	{ "clear",	l_channel_clear		},
+	{ "pop",	l_channel_pop		},
 	{ "supply",	l_channel_supply	},
 	{ "wait",	l_channel_wait		},
 	{ NULL,		NULL			}
