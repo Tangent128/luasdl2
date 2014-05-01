@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 2.8)
 project(LuaSDL C)
 
 # Project information
-set(VERSION "2.0.3-rc1")
+set(VERSION "2.0.3-rc2")
 set(MAJOR "2")
 set(MINOR "0")
 set(PATCH "3")

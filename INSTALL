@@ -6,7 +6,7 @@ Lua-SDL2 installation guide.
 Requirements
 ============
 
-* Lua 5.2 (http://lua.org), mandatory
+* Lua 5.2 (http://lua.org), mandatory (or Lua 5.1, LuaJIT)
 * SDL 2.0 (http://libsdl.org), mandatory
 * CMake (http://cmake.org), for building only
 
@@ -62,7 +62,7 @@ Disable installation of examples
 $ cmake .. -DWITH_DOCS=Off
 
 Change the installation of libraries
---------------------------------------
+------------------------------------
 
 $ cmake .. -DWITH_LIBDIR=/path/to/install/libraries
 
@@ -70,3 +70,14 @@ Change the installation directory of examples
 ---------------------------------------------
 
 $ cmake .. -DWITH_DOCSDIR=/path/to/install/examples
+
+Changing the Lua version
+------------------------
+
+You can change the Lua version by setting the WITH_LUAVER CMake variable, supported values are:
+
+* 52, Lua 5.2 (default)
+* 51, Lua 5.1
+* JIT, LuaJIT
+
+$ cmake .. -DWITH_LUAVER=JIT
