@@ -50,5 +50,5 @@ target_link_libraries(
 
 install(
 	TARGETS mixer
-	DESTINATION ${WITH_LIBDIR}/SDL
+	DESTINATION ${LUA_LIBDIR}/SDL
 )

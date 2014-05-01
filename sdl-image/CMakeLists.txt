@@ -50,5 +50,5 @@ target_link_libraries(
 
 install(
 	TARGETS image
-	DESTINATION ${WITH_LIBDIR}/SDL
+	DESTINATION ${LUA_LIBDIR}/SDL
 )

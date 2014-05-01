@@ -983,7 +983,7 @@ static const luaL_Reg MixerFunctions[] = {
 int EXPORT
 luaopen_SDL_mixer(lua_State *L)
 {
-	luaL_newlib(L, MixerFunctions);
+	commonNewLibrary(L, MixerFunctions);
 
 	commonBindEnum(L, -1, "flags", MixerFlags);
 	commonBindEnum(L, -1, "fading", MixerFading);

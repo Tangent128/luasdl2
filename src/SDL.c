@@ -416,8 +416,10 @@ luaopen_SDL(lua_State *L)
 	int i;
 	SDL_version ver;
 
+	puts("HERE");
 	/* General functions */
-	luaL_newlib(L, functions);
+	commonNewLibrary(L, functions);
+	puts("END");
 
 	/* Library categories */
 	for (i = 0; libraries[i].functions != NULL; ++i)

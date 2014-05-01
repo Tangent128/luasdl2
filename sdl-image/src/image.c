@@ -200,7 +200,7 @@ int EXPORT
 luaopen_SDL_image(lua_State *L)
 {
 	/* New SDL.image library */
-	luaL_newlib(L, ImageFunctions);
+	commonNewLibrary(L, ImageFunctions);
 
 	/* Flags for IMG_Init() */
 	commonBindEnum(L, -1, "flags", ImageFlags);
