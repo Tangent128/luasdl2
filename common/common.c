@@ -257,8 +257,13 @@ commonPush(lua_State *L, const char *fmt, ...)
 			++ count;
 			break;
 		case 'p':
-			commonPushUserdata(L, va_arg(ap, const char *), va_arg(ap, void *));
+		{
+			const char *tname = va_arg(ap, const char *);
+			void *udata = va_arg(ap, void *);
+
+			commonPushUserdata(L, tname, udata);
 			++ count;
+		}
 			break;
 		default:
 			break;
