@@ -20,10 +20,11 @@ cmake_minimum_required(VERSION 2.8)
 project(LuaSDL C)
 
 # Project information
-set(VERSION "2.0.3-rc2")
 set(MAJOR "2")
 set(MINOR "0")
 set(PATCH "3")
+set(BINDING "1")
+set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}")
 
 set(CMAKE_MODULE_PATH "${LuaSDL_SOURCE_DIR}/cmake")
 
@@ -80,6 +81,13 @@ set(
 	src/window.c
 	src/window.h
 )
+
+configure_file(
+	${LuaSDL_SOURCE_DIR}/cmake/config.h.in
+	${LuaSDL_BINARY_DIR}/config.h
+)
+
+include_directories(${LuaSDL_BINARY_DIR})
 
 find_package(SDL2 REQUIRED)
 
