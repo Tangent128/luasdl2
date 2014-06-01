@@ -652,7 +652,7 @@ static const luaL_Reg functions[] = {
 int EXPORT
 luaopen_SDL_ttf(lua_State *L)
 {
-	luaL_newlib(L, functions);
+	commonNewLibrary(L, functions);
 
 	commonBindEnum(L, -1, "style", FontStyle);
 	commonBindEnum(L, -1, "hinting", FontHinting);

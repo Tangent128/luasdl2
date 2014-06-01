@@ -294,12 +294,18 @@ const CommonObject Texture = {
 	TextureMetamethods
 };
 
+/*
+ * SDL.textureAccess
+ */
 const CommonEnum TextureAccess[] = {
 	{ "Static",			SDL_TEXTUREACCESS_STATIC	},
 	{ "Streaming",			SDL_TEXTUREACCESS_STREAMING	},
 	{ NULL,				-1				}
 };
 
+/*
+ * SDL.textureModulate
+ */
 const CommonEnum TextureModulate[] = {
 	{ "None",			SDL_TEXTUREMODULATE_NONE	},
 	{ "Color",			SDL_TEXTUREMODULATE_COLOR	},

@@ -66,7 +66,7 @@ audioCallback(AudioDevice *device, Uint8 *stream, int length)
 			const char *str = lua_tolstring(device->L, -1, &strl);
 
 			/* Copy to stream */
-			memcpy(stream, str, (strl < (size_t)length) ? strl : length);
+			memcpy(stream, str, (strl >= (size_t)length) ? (size_t)length : strl);
 		}
 	}
 }

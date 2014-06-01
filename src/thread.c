@@ -77,7 +77,7 @@ reader(lua_State *L, LoadState *state, size_t *size)
 static void
 destroy(LuaThread *t)
 {
-	SDL_AtomicDecRef(&t->ref);
+	(void)SDL_AtomicDecRef(&t->ref);
 
 	if (SDL_AtomicGet(&t->ref) == 0) {
 		lua_close(t->L);

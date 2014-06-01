@@ -30,7 +30,6 @@ while true do
 				print("New client")
 				table.insert(clients, c)
 				set:add(c)
-
 			end
 		else
 			for i, c in ipairs(clients) do

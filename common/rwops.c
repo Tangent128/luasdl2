@@ -450,12 +450,9 @@ static int
 l_rw_write(lua_State *L)
 {
 	SDL_RWops *ops	= commonGetAs(L, 1, RWOpsName, SDL_RWops *);
-	const char *src	= luaL_checkstring(L, 2);
-	int length, nret, nwritten;
-
-	lua_len(L, 2);
-	length = lua_tointeger(L, -1);
-	lua_pop(L, 1);
+	size_t length;
+	const char *src	= luaL_checklstring(L, 2, &length);
+	int nret, nwritten;
 
 	nwritten = SDL_RWwrite(ops, src, length, 1);
 	if (nwritten == 0)

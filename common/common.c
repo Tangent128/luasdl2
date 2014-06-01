@@ -23,6 +23,41 @@
 
 #include "common.h"
 
+#if LUA_VERSION_NUM == 501
+
+void *
+luaL_testudata(lua_State *L, int index, const char *tname)
+{
+	void *p = lua_touserdata(L, index);
+
+	if (p != NULL) {
+		if (lua_getmetatable(L, index)) {
+			luaL_getmetatable(L, tname);
+
+			if (!lua_rawequal(L, -1, -2))
+				p = NULL;
+
+			lua_pop(L, 2);
+
+			return p;
+		}
+	}
+
+	return NULL;
+}
+
+void
+lua_rawsetp(lua_State *L, int index, void *p)
+{
+	int realindex = ((index) < 0) ? (index) - 1 : (index);
+
+	lua_pushlightuserdata(L, p);
+	lua_insert(L, -2);
+	lua_rawset(L, realindex);
+}
+
+#endif
+
 void
 commonBindEnum(lua_State *L,
 		 int tindex,
@@ -92,11 +127,21 @@ commonBindObject(lua_State *L, const CommonObject *def)
 {
 	luaL_newmetatable(L, def->name);
 
-	if (def->metamethods != NULL)
+	if (def->metamethods != NULL) {
+#if LUA_VERSION_NUM >= 502
 		luaL_setfuncs(L, def->metamethods, 0);
+#else
+		luaL_register(L, NULL, def->metamethods);
+#endif
+	}
+
 	if (def->methods != NULL) {
 		lua_createtable(L, 0, 0);
+#if LUA_VERSION_NUM >= 502
 		luaL_setfuncs(L, def->methods, 0);
+#else
+		luaL_register(L, NULL, def->methods);
+#endif
 		lua_setfield(L, -2, "__index");
 	}
 
@@ -113,6 +158,18 @@ commonBindLibrary(lua_State *L, const luaL_Reg *functions)
 #endif
 }
 
+void
+commonNewLibrary(lua_State *L, const luaL_Reg *functions)
+{
+#if LUA_VERSION_NUM >= 502
+	lua_createtable(L, 0, 0);
+	luaL_setfuncs(L, functions, 0);
+#else
+	lua_createtable(L, 0, 0);
+	luaL_register(L, NULL, functions);
+#endif
+}
+
 CommonUserdata *
 commonPushUserdata(lua_State *L, const char *tname, void *data)
 {
@@ -122,7 +179,12 @@ commonPushUserdata(lua_State *L, const char *tname, void *data)
 	ptr->mustdelete = 1;
 	ptr->data = data;
 
+#if LUA_VERSION_NUM >= 502
 	luaL_setmetatable(L, tname);
+#else
+	luaL_getmetatable(L, tname);
+	lua_setmetatable(L, -2);
+#endif
 
 	return ptr;
 }
@@ -195,8 +257,13 @@ commonPush(lua_State *L, const char *fmt, ...)
 			++ count;
 			break;
 		case 'p':
-			commonPushUserdata(L, va_arg(ap, const char *), va_arg(ap, void *));
+		{
+			const char *tname = va_arg(ap, const char *);
+			void *udata = va_arg(ap, void *);
+
+			commonPushUserdata(L, tname, udata);
 			++ count;
+		}
 			break;
 		default:
 			break;

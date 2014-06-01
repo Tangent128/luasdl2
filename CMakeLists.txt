@@ -20,16 +20,20 @@ cmake_minimum_required(VERSION 2.8)
 project(LuaSDL C)
 
 # Project information
-set(VERSION "2.0.3-rc1")
 set(MAJOR "2")
 set(MINOR "0")
 set(PATCH "3")
+set(BINDING "1")
+set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}")
 
 set(CMAKE_MODULE_PATH "${LuaSDL_SOURCE_DIR}/cmake")
 
 # Path where to install docs
 set(WITH_DOCSDIR "share/docs/Lua-SDL2"
     CACHE STRING "Path to install examples")
+# Lua version: JIT, 51 and 52, default: 5.2
+set(WITH_LUAVER "52"
+    CACHE STRING "Version of Lua to use")
 
 set(
 	SOURCES
@@ -78,13 +82,38 @@ set(
 	src/window.h
 )
 
+configure_file(
+	${LuaSDL_SOURCE_DIR}/cmake/config.h.in
+	${LuaSDL_BINARY_DIR}/config.h
+)
+
+include_directories(${LuaSDL_BINARY_DIR})
+
 find_package(SDL2 REQUIRED)
-find_package(Lua52 REQUIRED)
+
+if (WITH_LUAVER MATCHES "52")
+	find_package(Lua52 REQUIRED)
+	set(LUA_LIBRARIES ${LUA52_LIBRARIES})
+	set(LUA_INCLUDES ${LUA52_INCLUDE_DIR})
+	set(LUA_LIBDIR "lib/lua/5.2")
+elseif (WITH_LUAVER MATCHES "51")
+	find_package(Lua51 REQUIRED)
+	set(LUA_LIBRARIES ${LUA_LIBRARIES})
+	set(LUA_INCLUDES ${LUA_INCLUDE_DIR})
+	set(LUA_LIBDIR "lib/lua/5.1")
+elseif (WITH_LUAVER MATCHES "JIT")
+	find_package(LuaJIT REQUIRED)
+	set(LUA_LIBRARIES ${LUAJIT_LIBRARIES})
+	set(LUA_INCLUDES ${LUAJIT_INCLUDE_DIR})
+	set(LUA_LIBDIR "lib/lua/5.1")
+else ()
+	message(FATAL_ERROR "Unknown Lua version ${WITH_LUAVER}, must be 51, 52 or JIT")
+endif ()
 
 include_directories(
 	${SDL2_INCLUDE_DIR}
-	${LUA_INCLUDE_DIR}
 	${LuaSDL_SOURCE_DIR}
+	${LUA_INCLUDES}
 )
 
 if (WIN32)
@@ -124,11 +153,9 @@ target_link_libraries(
 	${SDL2_LIBRARY}
 )
 
-set(WITH_LIBDIR "lib/lua/5.2" CACHE STRING "Lua library directory")
-
 install(
 	TARGETS SDL
-	DESTINATION ${WITH_LIBDIR}
+	DESTINATION ${LUA_LIBDIR}
 )
 
 # Other libSDL sub modules

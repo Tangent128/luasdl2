@@ -59,9 +59,20 @@ checkAddress(lua_State *L, int index, IPaddress *addr)
 static void
 assertNotClosed(lua_State *L, int index)
 {
-	lua_getuservalue(L, index);
+	int type;
 
-	if (lua_type(L, -1) != LUA_TNIL)
+#if LUA_VERSION_NUM >= 502
+	lua_getuservalue(L, index);
+	type = lua_type(L, -1);
+	lua_pop(L, 1);
+#else
+	lua_getfenv(L, index);
+	lua_getfield(L, -1, "closed");
+	type = lua_type(L, -1);
+	lua_pop(L, 2);
+#endif
+
+	if (type != LUA_TNIL)
 		luaL_error(L, "attempt operation on closed socket");
 }
 
@@ -79,7 +90,15 @@ closeSocket(lua_State *L, enum SocketType type, const char *name)
 
 	// Waiting for Lua 5.3, just set a table as user value
 	lua_createtable(L, 0, 0);
+
+#if LUA_VERSION_NUM >= 502
 	lua_setuservalue(L, 1);
+#else
+	lua_getfenv(L, 1);
+	lua_pushboolean(L, 1);
+	lua_setfield(L, -2, "closed");
+	lua_setfenv(L, 1);
+#endif
 
 	return 0;
 }
@@ -608,7 +627,7 @@ static const luaL_Reg functions[] = {
 int EXPORT
 luaopen_SDL_net(lua_State *L)
 {
-	luaL_newlib(L, functions);
+	commonNewLibrary(L, functions);
 
 	/* Prepare the table for socket set reference */
 	lua_createtable(L, 0, 0);

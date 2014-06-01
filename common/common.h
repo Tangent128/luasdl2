@@ -41,8 +41,16 @@
  * Portability bits for different Lua versions
  */
 #if LUA_VERSION_NUM == 501
+
 #  define LUA_OK			0
 #  define lua_load(l, r, d, c, m)		lua_load(l, r, d, c)
+
+void *
+luaL_testudata(lua_State *L, int index, const char *tname);
+
+void
+lua_rawsetp(lua_State *L, int index, void *key);
+
 #endif
 
 /**
@@ -141,6 +149,15 @@ commonBindObject(lua_State *L, const CommonObject *def);
  */
 void
 commonBindLibrary(lua_State *L, const luaL_Reg *functions);
+
+/**
+ * Create a table and fills the functions in it.
+ *
+ * @param L the Lua state
+ * @param functions the functions
+ */
+void
+commonNewLibrary(lua_State *L, const luaL_Reg *functions);
 
 /**
  * Push a SDL object to Lua as an userdata. By default, the object

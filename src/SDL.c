@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <config.h>
+
 #include <common/rwops.h>
 #include <common/surface.h>
 #include <common/video.h>
@@ -417,7 +419,7 @@ luaopen_SDL(lua_State *L)
 	SDL_version ver;
 
 	/* General functions */
-	luaL_newlib(L, functions);
+	commonNewLibrary(L, functions);
 
 	/* Library categories */
 	for (i = 0; libraries[i].functions != NULL; ++i)
@@ -437,6 +439,7 @@ luaopen_SDL(lua_State *L)
 	tableSetInt(L, -1, "VERSION_MAJOR", ver.major);
 	tableSetInt(L, -1, "VERSION_MINOR", ver.minor);
 	tableSetInt(L, -1, "VERSION_PATCH", ver.patch);
+	tableSetInt(L, -1, "VERSION_BINDING", VERSION_BINDING);
 
 	if (ChannelMutex == NULL && (ChannelMutex = SDL_CreateMutex()) == NULL)
 		return luaL_error(L, SDL_GetError());

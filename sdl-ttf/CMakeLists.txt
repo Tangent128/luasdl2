@@ -42,7 +42,7 @@ set_target_properties(
 
 install(
 	TARGETS ttf
-	DESTINATION ${WITH_LIBDIR}/SDL
+	DESTINATION ${LUA_LIBDIR}/SDL
 )
 
 target_link_libraries(
