@@ -110,7 +110,13 @@ eventAddFilter(lua_State *L, int type)
  * --------------------------------------------------------- */
 
 /*
- * TODO
+ * SDL.addEventWatch(f)
+ *
+ * The function must have the following signature:
+ *	function f(event)
+ *
+ * Arguments:
+ *	f the function
  */
 static int
 l_event_addEventWatch(lua_State *L)
@@ -141,7 +147,6 @@ l_event_eventState(lua_State *L)
  * SDL.filterEvents(func)
  *
  * The func must have the following signature:
- *
  * 	function filter(event) -> return false to disable
  *
  * Arguments:
@@ -545,12 +550,12 @@ l_filter_tostring(lua_State *L)
  * Event object definition
  * -------------------------------------------------------- */
 
-const luaL_Reg filter_methods[] = {
+const luaL_Reg filterMethods[] = {
 	{ "remove",		l_filter_gc			},
 	{ NULL,			NULL				}
 };
 
-const luaL_Reg filter_metamethods[] = {
+const luaL_Reg filterMetamethods[] = {
 	{ "__eq",		l_filter_eq			},
 	{ "__gc",		l_filter_gc			},
 	{ "__tostring",		l_filter_tostring		},
@@ -559,8 +564,8 @@ const luaL_Reg filter_metamethods[] = {
 
 const CommonObject EventFilter = {
 	"Event",
-	filter_methods,
-	filter_metamethods
+	filterMethods,
+	filterMetamethods
 };
 
 /* --------------------------------------------------------
