@@ -70,7 +70,7 @@ getDirection(lua_State *L, int hindex, int index, SDL_HapticDirection *direction
 {
 	SDL_zero(direction);
 
-	direction->type		= tableGetInt(L, index, "type");
+	direction->type = tableGetInt(L, index, "type");
 
 	/* Iterate over the dir fields */
 	lua_getfield(L, index, "direction");
