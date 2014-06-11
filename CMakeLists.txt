@@ -49,6 +49,8 @@ set(
 	src/display.h
 	src/events.c
 	src/events.h
+	src/filesystem.c
+	src/filesystem.h
 	src/gamecontroller.c
 	src/gamecontroller.h
 	src/gl.c

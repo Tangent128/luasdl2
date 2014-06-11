@@ -28,6 +28,7 @@ set(
 	image
 	joystick
 	keyboard
+	paths
 	rwops
 	tcp
 	threads

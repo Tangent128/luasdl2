@@ -32,6 +32,7 @@
 #include "cpu.h"
 #include "display.h"
 #include "events.h"
+#include "filesystem.h"
 #include "gamecontroller.h"
 #include "gl.h"
 #include "haptic.h"
@@ -290,6 +291,7 @@ static const struct {
 	const luaL_Reg *functions;
 } libraries[] = {
 	{ CpuFunctions					},
+	{ FilesystemFunctions				},
 	{ LoggingFunctions				},
 	{ PlatformFunctions				},
 	{ PowerFunctions				},
