@@ -391,7 +391,7 @@ l_renderer_copyEx(lua_State *L)
 
 	/* Optional point */
 	lua_getfield(L, 2, "center");
-	if (lua_type(L, -1) != LUA_TTABLE) {
+	if (lua_type(L, -1) == LUA_TTABLE) {
 		videoGetPoint(L, -1, &point);
 		pointptr = &point;
 	}
