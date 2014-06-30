@@ -978,6 +978,7 @@ static const luaL_Reg MixerFunctions[] = {
 	{ "loadMUS",			l_mixer_loadMUS			},
 	{ "closeAudio",			l_mixer_closeAudio		},
 	{ "quit",			l_mixer_quit			},
+	{ NULL,				NULL				}
 };
 
 int EXPORT
