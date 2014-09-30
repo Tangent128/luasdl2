@@ -379,7 +379,7 @@ l_channel_gc(lua_State *L)
 {
 	Channel *c = commonGetAs(L, 1, ChannelName, Channel *);
 
-	SDL_AtomicDecRef(&c->ref);
+	(void)SDL_AtomicDecRef(&c->ref);
 	if (SDL_AtomicGet(&c->ref) == 0)
 		channelFree(c);
 

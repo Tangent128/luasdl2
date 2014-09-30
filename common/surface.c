@@ -199,28 +199,28 @@ surfaceBlit(lua_State *L, int scaled, int lower)
 
 	SDL_Surface *src = commonGetAs(L, 1, SurfaceName, SDL_Surface *);
 	SDL_Surface *dst = commonGetAs(L, 2, SurfaceName, SDL_Surface *);
-
 	SDL_Rect srcrect, dstrect;
-	SDL_Rect *srcptr = NULL, *dstptr = NULL;
+	SDL_Rect *srcptr = &srcrect, *dstptr = &dstrect;
 
-	if (lua_type(L, 2) != LUA_TNIL) {
-		videoGetRect(L, 2, &srcrect);
-		srcptr = &srcrect;
-	}
-	if (lua_type(L, 3) != LUA_TNIL) {
-		videoGetRect(L, 3, &dstrect);
-		dstptr = &dstrect;
-	}
+ 	if (lua_type(L, 3) == LUA_TNIL) 
+		videoGetRect(L, 3, &srcrect);
+	else
+		SDL_GetClipRect(src, &srcrect);
+
+	if (lua_type(L, 4) == LUA_TNIL)
+		videoGetRect(L, 4, &dstrect);
+	else
+		SDL_GetClipRect(dst, &dstrect);
 
 	if (!lower) {
-		BlitFunc func = (scaled) ? SDL_BlitSurface : SDL_BlitScaled;
+		BlitFunc func = (scaled) ? SDL_BlitScaled : SDL_BlitSurface ;
 
 		if (func(src, srcptr, dst, dstptr) < 0)
 			return commonPushSDLError(L, 2);
 	} else {
-		LowerBlitFunc func = (scaled) ? SDL_LowerBlit : SDL_LowerBlitScaled;
+		LowerBlitFunc func = (scaled) ? SDL_LowerBlitScaled : SDL_LowerBlit;
 
-		if (func(src, srcptr, dst, &dstrect) < 0)
+		if (func(src, srcptr, dst, dstptr) < 0)
 			return commonPushSDLError(L, 2);
 	}
 	
