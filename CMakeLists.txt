@@ -17,13 +17,13 @@
 #
 
 cmake_minimum_required(VERSION 2.8)
-project(LuaSDL C)
+project(Lua-SDL2 C)
 
 # Project information
 set(MAJOR "2")
 set(MINOR "0")
 set(PATCH "3")
-set(BINDING "1")
+set(BINDING "2")
 set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}")
 
 set(CMAKE_MODULE_PATH "${LuaSDL_SOURCE_DIR}/cmake")
