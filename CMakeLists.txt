@@ -26,7 +26,7 @@ set(PATCH "3")
 set(BINDING "2")
 set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}")
 
-set(CMAKE_MODULE_PATH "${LuaSDL_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${Lua-SDL2_SOURCE_DIR}/cmake")
 
 # Path where to install docs
 set(WITH_DOCSDIR "share/docs/Lua-SDL2"
@@ -85,11 +85,11 @@ set(
 )
 
 configure_file(
-	${LuaSDL_SOURCE_DIR}/cmake/config.h.in
-	${LuaSDL_BINARY_DIR}/config.h
+	${Lua-SDL2_SOURCE_DIR}/cmake/config.h.in
+	${Lua-SDL2_BINARY_DIR}/config.h
 )
 
-include_directories(${LuaSDL_BINARY_DIR})
+include_directories(${Lua-SDL2_BINARY_DIR})
 
 find_package(SDL2 REQUIRED)
 
@@ -114,7 +114,7 @@ endif ()
 
 include_directories(
 	${SDL2_INCLUDE_DIR}
-	${LuaSDL_SOURCE_DIR}
+	${Lua-SDL2_SOURCE_DIR}
 	${LUA_INCLUDES}
 )
 
@@ -131,7 +131,7 @@ if (NOT SYSQUEUE_FOUND
     OR NOT SYSQUEUE_STAILQ_FOREACH_SAFE
     OR NOT SYSQUEUE_LIST_FOREACH_SAFE
     OR NOT SYSQUEUE_TAILQ_FOREACH_SAFE)
-	include_directories(BEFORE ${LuaSDL_SOURCE_DIR}/extern/queue)
+	include_directories(BEFORE ${Lua-SDL2_SOURCE_DIR}/extern/queue)
 endif ()
 
 # Common code for modules
@@ -196,36 +196,30 @@ if (WIN32)
 	set(CPACK_PACKAGE_NAME "Lua-SDL2")
 	set(CPACK_NSIS_PACKAGE_NAME "Lua-SDL2")
 
-	if (CMAKE_CL_64)
-		set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
-		set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (x64)")
-	else ()
-		set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
-		set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION}")
-	endif ()
-
 	# This determine the *target* architecture
 	if (CMAKE_SIZEOF_VOID_P MATCHES "8")
 		set(WINARCH "amd64")
 	else ()
 		set(WINARCH "x86")
 	endif ()
+	
+	if (MINGW)
+		set(GENERATOR "MinGW")
+	else ()
+		set(GENERATOR "VC")
+	endif ()
 
-	set(CPACK_GENERATOR "NSIS;ZIP")
+	set(CPACK_GENERATOR "ZIP")
 	set(CPACK_MONOLITHIC_INSTALL FALSE)
 
 	set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 	set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README")
 
-	set(CPACK_NSIS_DISPLAY_NAME "Lua-SDL2")
-	set(CPACK_NSIS_EXECUTABLES_DIRECTORY "bin")
-	set(CPACK_NSIS_CONTACT "markand@malikania.fr")
-
 	set(CPACK_PACKAGE_VENDOR "Malikania")
 	set(CPACK_PACKAGE_VERSION "${VERSION}")
 	set(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR})
 	set(CPACK_PACKAGE_VERSION_MINOR ${MINOR})
-	set(CPACK_PACKAGE_FILE_NAME "Lua-SDL2-${VERSION}-${CMAKE_SYSTEM_NAME}-${WINARCH}")
+	set(CPACK_PACKAGE_FILE_NAME "Lua-SDL2-${VERSION}-${GENERATOR}-${WINARCH}")
 	set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README")
 	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Lua-SDL2")
 else ()

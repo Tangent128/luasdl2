@@ -18,13 +18,15 @@
 
 # Install DLL corresponding to the architecture
 if (CMAKE_SIZEOF_VOID_P MATCHES "8")
-	install(
-		DIRECTORY 64/
-		DESTINATION bin
-	)
+	if (MINGW)
+		install(DIRECTORY mingw-64/ DESTINATION bin)
+	else ()
+		install(DIRECTORY 64/ DESTINATION bin)
+	endif ()
 else ()
-	install(
-		DIRECTORY 32/
-		DESTINATION bin
-	)
+	if (MINGW)
+		install(DIRECTORY mingw-64/ DESTINATION bin)
+	else ()
+		install(DIRECTORY 32/ DESTINATION bin)
+	endif ()
 endif ()
