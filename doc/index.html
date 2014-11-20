@@ -13,11 +13,153 @@ ul.toc li.heading3 { margin-left: 2em; }
 a.wiki-anchor { display: none; margin-left: 6px; text-decoration: none; }
 a.wiki-anchor:hover { color: #aaa !important; text-decoration: none; }
 h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor { display: inline; color: #ddd; }
+.right { float: right; }
+.toc { border: thin dashed; }
 </style>
 </head>
 <body>
 
-<strong>Index par titre</strong>
+<a name="Wiki" />
+<a name="Wiki_Lua-SDL2"></a>
+<h1 >Lua-SDL2<a href="#Wiki_Lua-SDL2" class="wiki-anchor">&para;</a></h1>
+
+
+	<ul class="toc right"><li><a href="#Wiki_Lua-SDL2">Lua-SDL2</a></li><li><a href="#Wiki_About">About</a><ul><li><a href="#Wiki_Versioning">Versioning</a></li></ul>
+</li><li><a href="#Wiki_Download">Download</a><ul><li><ul><li><a href="#Wiki_Releases">Releases</a></li><li><a href="#Wiki_Development-version">Development version</a></li></ul>
+</li></ul>
+</li><li><a href="#Wiki_Documentation">Documentation</a></li><li><a href="#Wiki_Tutorials">Tutorials</a></li><li><a href="#Wiki_Versions">Versions</a></li></ul>
+
+
+	<p><img src="Lua-SDL2.png" alt="" /></p>
+
+
+	<p>Welcome to Lua-SDL2!</p>
+
+
+	<a name="Wiki_About"></a>
+<h1 >About<a href="#Wiki_About" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Lua-SDL2 is a <a href="http://libsdl.org/" class="external">SDL 2.0</a> binding for Lua. It is released under the ISC license.</p>
+
+
+	<ul>
+	<li><a href="#Supported_features" class="wiki-page">Supported features</a></li>
+		<li><a href="#Implementation_notes" class="wiki-page">Implementation notes</a></li>
+		<li><a href="#Major_differences_with_official_C_API" class="wiki-page">Major differences with official C API</a></li>
+	</ul>
+
+
+	<a name="Wiki_Versioning"></a>
+<h2 >Versioning<a href="#Wiki_Versioning" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Lua-SDL2 uses the same versioning as SDL except that it adds a trailing <strong>-v</strong> where <strong>v</strong> is the binding version (e.g 2.0.3-4 is SDL 2.0.3 and binding version 4).</p>
+
+
+	<a name="Wiki_Download"></a>
+<h1 >Download<a href="#Wiki_Download" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>You can download pre-compiled binaries for Windows and the Lua-SDL2 sources from here:</p>
+
+
+	<a name="Wiki_Releases"></a>
+<h3 >Releases<a href="#Wiki_Releases" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>All Windows binaries are built against dynamic Lua 5.2 library.</p>
+
+
+	<table>
+		<tr>
+			<th>File </th>
+			<th>Type </th>
+		</tr>
+		<tr>
+			<td> <a href="/attachments/download/175/Lua-SDL2-2.0.3-1-source.tar.gz">Lua-SDL2-2.0.3-2-source.tar.gz</a> </td>
+			<td> Source .tar.gz </td>
+		</tr>
+		<tr>
+			<td> <a href="/attachments/download/201/Lua-SDL2-2.0.3-2-source.zip">Lua-SDL2-2.0.3-2-source.zip</a> </td>
+			<td> Source .zip </td>
+		</tr>
+		<tr>
+			<td> <a href="/attachments/download/204/Lua-SDL2-2.0.3-2-VC-amd64.zip">Lua-SDL2-2.0.3-2-VC-amd64.zip</a> </td>
+			<td> Windows VC 2013 amd64 .zip</td>
+		</tr>
+		<tr>
+			<td> <a href="/attachments/download/203/Lua-SDL2-2.0.3-2-VC-x86.zip">Lua-SDL2-2.0.3-2-VC-x86.zip</a> </td>
+			<td> Windows VC 2013 x86 .zip </td>
+		</tr>
+		<tr>
+			<td> <a href="/attachments/download/206/Lua-SDL2-2.0.3-2-MinGW-amd64.zip">Lua-SDL2-2.0.3-2-MinGW-amd64.zip</a> </td>
+			<td> Windows MinGW amd64 .zip </td>
+		</tr>
+		<tr>
+			<td> <a href="/attachments/download/205/Lua-SDL2-2.0.3-2-MinGW-x86.zip">Lua-SDL2-2.0.3-2-MinGW-x86.zip</a> </td>
+			<td> Windows MinGW x86 .zip </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Wiki_Development-version"></a>
+<h3 >Development version<a href="#Wiki_Development-version" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>By using <a href="http://mercurial.selenic.com" class="external">mercurial</a>:</p>
+
+
+<pre>
+$ hg clone http://hg.malikania.fr/Lua-SDL2
+</pre>
+
+	<a name="Wiki_Documentation"></a>
+<h1 >Documentation<a href="#Wiki_Documentation" class="wiki-anchor">&para;</a></h1>
+
+
+	<ul>
+	<li><a href="#Building_from_sources" class="wiki-page">Building from sources</a></li>
+		<li><a href="#API_Reference" class="wiki-page">API Reference</a>
+
+	<ul>
+	<li><a href="#SDL_mixer" class="wiki-page">API Reference for SDL_mixer</a></li>
+		<li><a href="#SDL_image" class="wiki-page">API Reference for SDL_image</a></li>
+		<li><a href="#SDL_ttf" class="wiki-page">API Reference for SDL_ttf</a></li>
+		<li><a href="#SDL_net" class="wiki-page">API Reference for SDL_net</a></li>
+	</ul></li>
+	</ul>
+
+
+	<a name="Wiki_Tutorials"></a>
+<h1 >Tutorials<a href="#Wiki_Tutorials" class="wiki-anchor">&para;</a></h1>
+
+
+	<ul>
+	<li><a href="#Tutorial_01_-_Initialization" class="wiki-page">Tutorial 01 - Initialization</a></li>
+		<li><a href="#Tutorial_02_-_Opening_a_window" class="wiki-page">Tutorial 02 - Opening a window</a></li>
+		<li><a href="#Tutorial_03_-_Polling_events" class="wiki-page">Tutorial 03 - Polling events</a></li>
+		<li><a href="#Tutorial_04_-_Drawing_an_image" class="wiki-page">Tutorial 04 - Drawing an image</a></li>
+		<li><a href="#Tutorial_05_-_Playing_sound" class="wiki-page">Tutorial 05 - Playing sound</a></li>
+		<li><a href="#Tutorial_06_-_Writing_text" class="wiki-page">Tutorial 06 - Writing text</a></li>
+		<li><a href="#Tutorial_07_-_Bouncing_logo" class="wiki-page">Tutorial 07 - Bouncing logo</a></li>
+	</ul>
+
+
+	<a name="Wiki_Versions"></a>
+<h1 >Versions<a href="#Wiki_Versions" class="wiki-anchor">&para;</a></h1>
+
+
+	<ul>
+	<li><a href="#Version-2-0-3-2" class="wiki-page">Version 2.0.3-2 <strong>(latest)</strong></a></li>
+		<li><a href="#Version-2-0-3-1" class="wiki-page">Version 2.0.3-1</a></li>
+	</ul>
+
+<hr />
+
+<strong>Documentation Index</strong>
 <ul>
     <li><a href="#API_Reference">API Reference</a></li>
     <li><a href="#Building_from_sources">Building from sources</a></li>
@@ -20661,7 +20803,7 @@ win:setGammaRamp(red, green, blue)
 <h2 >Expected output<a href="#Tutorial_04_-_Drawing_an_image_Expected-output" class="wiki-anchor">&para;</a></h2>
 
 
-	<p><img src="/attachments/download/150/screenshot-04.png" alt="" /></p>
+	<p><img src="screenshot-04.png" alt="" /></p>
 
 
 	<a name="Tutorial_04_-_Drawing_an_image_Full-example"></a>
@@ -20821,7 +20963,7 @@ SDL.delay(<span class="integer">5000</span>)
 <h2 >Expected output<a href="#Tutorial_06_-_Writing_text_Expected-output" class="wiki-anchor">&para;</a></h2>
 
 
-	<p><img src="/attachments/download/151/screenshot-06.png" alt="" /></p>
+	<p><img src="screenshot-06.png" alt="" /></p>
 
 
 	<a name="Tutorial_06_-_Writing_text_Full-example"></a>
@@ -20933,7 +21075,7 @@ pos.h = <span class="integer">256</span>
 <h2 >Expected output<a href="#Tutorial_07_-_Bouncing_logo_Expected-output" class="wiki-anchor">&para;</a></h2>
 
 
-	<p><img src="/attachments/download/152/screenshot-07.png" alt="" /></p>
+	<p><img src="screenshot-07.png" alt="" /></p>
 
 
 	<a name="Tutorial_07_-_Bouncing_logo_Full-example"></a>
@@ -20968,144 +21110,6 @@ pos.h = <span class="integer">256</span>
 	<li>Fix various bugs</li>
 		<li>Add support for MinGW w64</li>
 		<li>Removed .exe installer</li>
-	</ul>
-<hr />
-<a name="Wiki" />
-<a name="Wiki_Lua-SDL2"></a>
-<h1 >Lua-SDL2<a href="#Wiki_Lua-SDL2" class="wiki-anchor">&para;</a></h1>
-
-
-	<ul class="toc right"><li><a href="#Wiki_Lua-SDL2">Lua-SDL2</a></li><li><a href="#Wiki_About">About</a><ul><li><a href="#Wiki_Versioning">Versioning</a></li></ul>
-</li><li><a href="#Wiki_Download">Download</a><ul><li><ul><li><a href="#Wiki_Releases">Releases</a></li><li><a href="#Wiki_Development-version">Development version</a></li></ul>
-</li></ul>
-</li><li><a href="#Wiki_Documentation">Documentation</a></li><li><a href="#Wiki_Tutorials">Tutorials</a></li><li><a href="#Wiki_Versions">Versions</a></li></ul>
-
-
-	<p><img src="/attachments/download/140/Lua-SDL2.png" alt="" /></p>
-
-
-	<p>Welcome to Lua-SDL2!</p>
-
-
-	<a name="Wiki_About"></a>
-<h1 >About<a href="#Wiki_About" class="wiki-anchor">&para;</a></h1>
-
-
-	<p>Lua-SDL2 is a <a href="http://libsdl.org/" class="external">SDL 2.0</a> binding for Lua. It is released under the ISC license.</p>
-
-
-	<ul>
-	<li><a href="#Supported_features" class="wiki-page">Supported features</a></li>
-		<li><a href="#Implementation_notes" class="wiki-page">Implementation notes</a></li>
-		<li><a href="#Major_differences_with_official_C_API" class="wiki-page">Major differences with official C API</a></li>
-	</ul>
-
-
-	<a name="Wiki_Versioning"></a>
-<h2 >Versioning<a href="#Wiki_Versioning" class="wiki-anchor">&para;</a></h2>
-
-
-	<p>Lua-SDL2 uses the same versioning as SDL except that it adds a trailing <strong>-v</strong> where <strong>v</strong> is the binding version (e.g 2.0.3-4 is SDL 2.0.3 and binding version 4).</p>
-
-
-	<a name="Wiki_Download"></a>
-<h1 >Download<a href="#Wiki_Download" class="wiki-anchor">&para;</a></h1>
-
-
-	<p>You can download pre-compiled binaries for Windows and the Lua-SDL2 sources from here:</p>
-
-
-	<a name="Wiki_Releases"></a>
-<h3 >Releases<a href="#Wiki_Releases" class="wiki-anchor">&para;</a></h3>
-
-
-	<p>All Windows binaries are built against dynamic Lua 5.2 library.</p>
-
-
-	<table>
-		<tr>
-			<th>File </th>
-			<th>Type </th>
-		</tr>
-		<tr>
-			<td> <a href="/attachments/download/175/Lua-SDL2-2.0.3-1-source.tar.gz">Lua-SDL2-2.0.3-2-source.tar.gz</a> </td>
-			<td> Source .tar.gz </td>
-		</tr>
-		<tr>
-			<td> <a href="/attachments/download/201/Lua-SDL2-2.0.3-2-source.zip">Lua-SDL2-2.0.3-2-source.zip</a> </td>
-			<td> Source .zip </td>
-		</tr>
-		<tr>
-			<td> <a href="/attachments/download/204/Lua-SDL2-2.0.3-2-VC-amd64.zip">Lua-SDL2-2.0.3-2-VC-amd64.zip</a> </td>
-			<td> Windows VC 2013 amd64 .zip</td>
-		</tr>
-		<tr>
-			<td> <a href="/attachments/download/203/Lua-SDL2-2.0.3-2-VC-x86.zip">Lua-SDL2-2.0.3-2-VC-x86.zip</a> </td>
-			<td> Windows VC 2013 x86 .zip </td>
-		</tr>
-		<tr>
-			<td> <a href="/attachments/download/206/Lua-SDL2-2.0.3-2-MinGW-amd64.zip">Lua-SDL2-2.0.3-2-MinGW-amd64.zip</a> </td>
-			<td> Windows MinGW amd64 .zip </td>
-		</tr>
-		<tr>
-			<td> <a href="/attachments/download/205/Lua-SDL2-2.0.3-2-MinGW-x86.zip">Lua-SDL2-2.0.3-2-MinGW-x86.zip</a> </td>
-			<td> Windows MinGW x86 .zip </td>
-		</tr>
-	</table>
-
-
-
-
-	<a name="Wiki_Development-version"></a>
-<h3 >Development version<a href="#Wiki_Development-version" class="wiki-anchor">&para;</a></h3>
-
-
-	<p>By using <a href="http://mercurial.selenic.com" class="external">mercurial</a>:</p>
-
-
-<pre>
-$ hg clone http://hg.malikania.fr/Lua-SDL2
-</pre>
-
-	<a name="Wiki_Documentation"></a>
-<h1 >Documentation<a href="#Wiki_Documentation" class="wiki-anchor">&para;</a></h1>
-
-
-	<ul>
-	<li><a href="#Building_from_sources" class="wiki-page">Building from sources</a></li>
-		<li><a href="#API_Reference" class="wiki-page">API Reference</a>
-
-	<ul>
-	<li><a href="#SDL_mixer" class="wiki-page">API Reference for SDL_mixer</a></li>
-		<li><a href="#SDL_image" class="wiki-page">API Reference for SDL_image</a></li>
-		<li><a href="#SDL_ttf" class="wiki-page">API Reference for SDL_ttf</a></li>
-		<li><a href="#SDL_net" class="wiki-page">API Reference for SDL_net</a></li>
-	</ul></li>
-	</ul>
-
-
-	<a name="Wiki_Tutorials"></a>
-<h1 >Tutorials<a href="#Wiki_Tutorials" class="wiki-anchor">&para;</a></h1>
-
-
-	<ul>
-	<li><a href="#Tutorial_01_-_Initialization" class="wiki-page">Tutorial 01 - Initialization</a></li>
-		<li><a href="#Tutorial_02_-_Opening_a_window" class="wiki-page">Tutorial 02 - Opening a window</a></li>
-		<li><a href="#Tutorial_03_-_Polling_events" class="wiki-page">Tutorial 03 - Polling events</a></li>
-		<li><a href="#Tutorial_04_-_Drawing_an_image" class="wiki-page">Tutorial 04 - Drawing an image</a></li>
-		<li><a href="#Tutorial_05_-_Playing_sound" class="wiki-page">Tutorial 05 - Playing sound</a></li>
-		<li><a href="#Tutorial_06_-_Writing_text" class="wiki-page">Tutorial 06 - Writing text</a></li>
-		<li><a href="#Tutorial_07_-_Bouncing_logo" class="wiki-page">Tutorial 07 - Bouncing logo</a></li>
-	</ul>
-
-
-	<a name="Wiki_Versions"></a>
-<h1 >Versions<a href="#Wiki_Versions" class="wiki-anchor">&para;</a></h1>
-
-
-	<ul>
-	<li><a href="#Version-2-0-3-2" class="wiki-page">Version 2.0.3-2 <strong>(latest)</strong></a></li>
-		<li><a href="#Version-2-0-3-1" class="wiki-page">Version 2.0.3-1</a></li>
 	</ul>
 
 </body>
