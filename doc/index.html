@@ -962,7 +962,7 @@ $ cmake .. -DWITH_DOCSDIR=/path/to/install/examples
 <h3 >Changing the Lua version<a href="#Building_from_sources_Changing-the-Lua-version" class="wiki-anchor">&para;</a></h3>
 
 
-	<p>You can change the Lua version by setting the <code>WITH_LUAVER</code> CMake variable, supported values are:</p>
+	<p>You can change the Lua version by setting the <code>WITH_LUAVER</code> CMake variable; supported values are:</p>
 
 
 	<ul>
@@ -975,6 +975,21 @@ $ cmake .. -DWITH_DOCSDIR=/path/to/install/examples
 <pre>
 $ cmake .. -DWITH_LUAVER=JIT
 </pre>
+
+	<p>It is sometimes useful to explicitly specify the path to the selected Lua version's include and library directories. The variables to set depend on the configured version:</p>
+
+<pre>
+$ cmake .. -DWITH_LUAVER=52 -DLUA52_LIBRARIES=/path/to/libraries/ -DLUA52_INCLUDE_DIR=/path/to/headers/
+</pre>
+<pre>
+$ cmake .. -DWITH_LUAVER=51 -DLUA_LIBRARIES=/path/to/libraries/ -DLUA_INCLUDE_DIR=/path/to/headers/
+</pre>
+<pre>
+$ cmake .. -DWITH_LUAVER=JIT -DLUAJIT_LIBRARIES=/path/to/libraries/ -DLUAJIT_INCLUDE_DIR=/path/to/headers/
+</pre>
+
+	<p>Also note that the header directory should be the one directly containing the headers. We <code>#include &lt;lua.h&gt;</code>, not <code>#include &lt;lua/lua.h&gt;</code>.</p>
+
 <hr />
 <a name="Image-Flags" />
 <a name="Image-Flags_imageflags"></a>
