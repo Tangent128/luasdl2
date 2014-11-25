@@ -16,16 +16,18 @@ Website
 
 The official website is hosted at:
 
-	https://redmine.malikania.fr/projects/luasdl2
+	https://github.com/Tangent128/luasdl2
 
 Documentation
 =============
 
-The documentation is available on the Lua-SDL2 wiki:
+The most recent documentation is available in HTML format:
 
-	https://redmine.malikania.fr/projects/luasdl2/wiki
+	http://tangent128.github.io/luasdl2/doc/
 
-Author
-======
+Author and Maintainer
+=====================
 
 The Lua-SDL2 library was written by David Demelier <markand@malikania.fr>
+
+It is currently being maintained by Joseph Wallace <tangent128@gmail.com>
