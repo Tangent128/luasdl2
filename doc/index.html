@@ -943,12 +943,14 @@ $ cmake .. -DWITH_DOCS=Off
 </pre>
 
 	<a name="Building_from_sources_Change-the-installation-of-libraries"></a>
-<h3 >Change the installation of libraries<a href="#Building_from_sources_Change-the-installation-of-libraries" class="wiki-anchor">&para;</a></h3>
+<h3 >Change the installation path of libraries<a href="#Building_from_sources_Change-the-installation-of-libraries" class="wiki-anchor">&para;</a></h3>
 
 
 <pre>
-$ cmake .. -DWITH_LIBDIR=/path/to/install/libraries
+$ cmake .. -DLUA_LIBDIR=/path/to/install/libraries
 </pre>
+
+	<p>Note that this is relative to CMAKE_INSTALL_PREFIX.</p>
 
 	<a name="Building_from_sources_Change-the-installation-directory-of-examples"></a>
 <h3 >Change the installation directory of examples<a href="#Building_from_sources_Change-the-installation-directory-of-examples" class="wiki-anchor">&para;</a></h3>
@@ -957,6 +959,8 @@ $ cmake .. -DWITH_LIBDIR=/path/to/install/libraries
 <pre>
 $ cmake .. -DWITH_DOCSDIR=/path/to/install/examples
 </pre>
+
+	<p>Note that this is relative to CMAKE_INSTALL_PREFIX.</p>
 
 	<a name="Building_from_sources_Changing-the-Lua-version"></a>
 <h3 >Changing the Lua version<a href="#Building_from_sources_Changing-the-Lua-version" class="wiki-anchor">&para;</a></h3>
@@ -988,7 +992,7 @@ $ cmake .. -DWITH_LUAVER=51 -DLUA_LIBRARIES=/path/to/libraries/ -DLUA_INCLUDE_DI
 $ cmake .. -DWITH_LUAVER=JIT -DLUAJIT_LIBRARIES=/path/to/libraries/ -DLUAJIT_INCLUDE_DIR=/path/to/headers/
 </pre>
 
-	<p>Also note that the header directory should be the one directly containing the headers. We <code>#include &lt;lua.h&gt;</code>, not <code>#include &lt;lua/lua.h&gt;</code>.</p>
+	<p>Also note that the include directory should be the one directly containing the headers. We <code>#include &lt;lua.h&gt;</code>, not <code>#include &lt;lua/lua.h&gt;</code>.</p>
 
 <hr />
 <a name="Image-Flags" />
