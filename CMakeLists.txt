@@ -2,6 +2,7 @@
 # CMakeLists.txt -- build system for LuaSDL2
 #
 # Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
+# Copyright (c) 2014 Joseph Wallace <tangent128@gmail.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -31,7 +32,7 @@ set(CMAKE_MODULE_PATH "${Lua-SDL2_SOURCE_DIR}/cmake")
 # Path where to install docs
 set(WITH_DOCSDIR "share/docs/Lua-SDL2"
     CACHE STRING "Path to install examples")
-# Lua version: JIT, 51 and 52, default: 5.2
+# Lua version: JIT, 51, 52, and 53, default: 5.2
 set(WITH_LUAVER "52"
     CACHE STRING "Version of Lua to use")
 
@@ -93,7 +94,12 @@ include_directories(${Lua-SDL2_BINARY_DIR})
 
 find_package(SDL2 REQUIRED)
 
-if (WITH_LUAVER MATCHES "52")
+if (WITH_LUAVER MATCHES "53")
+	find_package(Lua53 REQUIRED)
+	set(LUA_LIBRARIES ${LUA53_LIBRARIES})
+	set(LUA_INCLUDES ${LUA53_INCLUDE_DIR})
+	set(LUA_LIBDIR "lib/lua/5.3" CACHE STRING "Lua C Module Install Path")
+elseif (WITH_LUAVER MATCHES "52")
 	find_package(Lua52 REQUIRED)
 	set(LUA_LIBRARIES ${LUA52_LIBRARIES})
 	set(LUA_INCLUDES ${LUA52_INCLUDE_DIR})

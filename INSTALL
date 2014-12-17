@@ -81,6 +81,7 @@ Changing the Lua version
 You can change the Lua version by setting the WITH_LUAVER CMake variable;
 supported values are:
 
+* 53, Lua 5.3
 * 52, Lua 5.2 (default)
 * 51, Lua 5.1
 * JIT, LuaJIT
@@ -91,6 +92,8 @@ Changing the Lua location
 -------------------------
 
 It is sometimes useful to explicitly specify the path to the selected Lua version's include and library directories. The variables to set depend on the configured version:</p>
+
+    $ cmake .. -DWITH_LUAVER=53 -DLUA53_LIBRARIES=/path/to/libraries/ -DLUA53_INCLUDE_DIR=/path/to/headers/
 
     $ cmake .. -DWITH_LUAVER=52 -DLUA52_LIBRARIES=/path/to/libraries/ -DLUA52_INCLUDE_DIR=/path/to/headers/
 
