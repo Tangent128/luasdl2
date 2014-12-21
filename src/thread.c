@@ -315,7 +315,7 @@ loadfunction(lua_State *owner, lua_State *thread, int index)
 	/* Copy the function at the top of the stack */
 	lua_pushvalue(owner, index);
 
-	if (lua_dump(owner, (lua_Writer)writer, &state) != LUA_OK) {
+	if (lua_dump(owner, (lua_Writer)writer, &state, 0) != LUA_OK) {
 		ret = commonPush(owner, "ns", "failed to dump function");
 		goto cleanup;
 	}

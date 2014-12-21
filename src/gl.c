@@ -211,7 +211,7 @@ l_glGetDrawableSize(lua_State *L)
 static int
 l_glSetSwapInterval(lua_State *L)
 {
-	int interval = luaL_optint(L, 1, -1);
+	int interval = luaL_optinteger(L, 1, -1);
 
 	if (SDL_GL_SetSwapInterval(interval) < 0)
 		return commonPushSDLError(L, 1);

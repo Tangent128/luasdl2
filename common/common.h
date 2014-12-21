@@ -53,6 +53,12 @@ lua_rawsetp(lua_State *L, int index, void *key);
 
 #endif
 
+#if LUA_VERSION_NUM < 503
+
+#  define lua_dump(l, w, d, s)		lua_dump(l, w, d)
+
+#endif
+
 /**
  * @struct common_evalue
  * @brief bind C enum as tables to Lua
