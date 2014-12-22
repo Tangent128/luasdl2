@@ -64,8 +64,8 @@ l_chunk_playChannel(lua_State *L)
 {
 	Mix_Chunk *c	= commonGetAs(L, 1, MixChunk, Mix_Chunk *);
 	int channel	= luaL_checkinteger(L, 2);
-	int loops	= luaL_optint(L, 3, -1);
-	int ticks	= luaL_optint(L, 4, -1);
+	int loops	= luaL_optinteger(L, 3, -1);
+	int ticks	= luaL_optinteger(L, 4, -1);
 
 	if (Mix_PlayChannelTimed(channel, c, loops, ticks) < 0)
 		return commonPushSDLError(L, 1);
@@ -93,7 +93,7 @@ l_chunk_fadeInChannel(lua_State *L)
 	int channel	= luaL_checkinteger(L, 2);
 	int loops	= luaL_checkinteger(L, 3);
 	int ms		= luaL_checkinteger(L, 4);
-	int ticks	= luaL_optint(L, 5, -1);
+	int ticks	= luaL_optinteger(L, 5, -1);
 
 	if (Mix_FadeInChannelTimed(channel, c, loops, ms, ticks) < 0)
 		return commonPushSDLError(L, 1);
@@ -168,7 +168,7 @@ static int
 l_music_play(lua_State *L)
 {
 	Mix_Music *m = commonGetAs(L, 1, MixMusicName, Mix_Music *);
-	int loops = luaL_optint(L, 2, -1);
+	int loops = luaL_optinteger(L, 2, -1);
 
 	if (Mix_PlayMusic(m, loops) < 0)
 		return commonPushSDLError(L, 1);
@@ -402,7 +402,7 @@ typedef int (*GroupFunction)(int);
 static int
 groupFunction(lua_State *L, GroupFunction func)
 {
-	return commonPush(L, "i", func(luaL_optint(L, 1, -1)));
+	return commonPush(L, "i", func(luaL_optinteger(L, 1, -1)));
 }
 
 /* ---------------------------------------------------------
@@ -507,7 +507,7 @@ l_mixer_getNumChunkDecoders(lua_State *L)
 static int
 l_mixer_getChunkDecoder(lua_State *L)
 {
-	return commonPush(L, "s", Mix_GetChunkDecoder(luaL_optint(L, 1, 0)));
+	return commonPush(L, "s", Mix_GetChunkDecoder(luaL_optinteger(L, 1, 0)));
 }
 
 /*
@@ -683,7 +683,7 @@ l_mixer_fadeOutChannel(lua_State *L)
 static int
 l_mixer_playing(lua_State *L)
 {
-	return commonPush(L, "i", Mix_Playing(luaL_optint(L, 1, -1)));
+	return commonPush(L, "i", Mix_Playing(luaL_optinteger(L, 1, -1)));
 }
 
 /*
@@ -698,7 +698,7 @@ l_mixer_playing(lua_State *L)
 static int
 l_mixer_paused(lua_State *L)
 {
-	return commonPush(L, "i", Mix_Paused(luaL_optint(L, 1, -1)));
+	return commonPush(L, "i", Mix_Paused(luaL_optinteger(L, 1, -1)));
 }
 
 /*
@@ -750,7 +750,7 @@ static int
 l_mixer_groupChannel(lua_State *L)
 {
 	int which	= luaL_checkinteger(L, 1);
-	int tag		= luaL_optint(L, 2, -1);
+	int tag		= luaL_optinteger(L, 2, -1);
 
 	return commonPush(L, "b", Mix_GroupChannel(which, tag));
 }
@@ -771,7 +771,7 @@ l_mixer_groupChannels(lua_State *L)
 {
 	int from	= luaL_checkinteger(L, 1);
 	int to		= luaL_checkinteger(L, 2);
-	int tag		= luaL_optint(L, 3, -1);
+	int tag		= luaL_optinteger(L, 3, -1);
 
 	return commonPush(L, "i", Mix_GroupChannels(from, to, tag));
 }

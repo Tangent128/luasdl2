@@ -50,5 +50,4 @@ target_link_libraries(
 	common
 	${SDL2_LIBRARY}
 	${SDL2_TTF_LIBRARY}
-	${LUA_LIBRARY}
 )

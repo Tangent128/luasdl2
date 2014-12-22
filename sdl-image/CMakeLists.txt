@@ -45,7 +45,6 @@ target_link_libraries(
 	common
 	${SDL2_LIBRARY}
 	${SDL2_IMAGE_LIBRARY}
-	${LUA_LIBRARIES}
 )
 
 install(

@@ -37,4 +37,4 @@ set(
 
 add_library(common STATIC ${SOURCES})
 set_target_properties(common PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-target_link_libraries(common ${SDL2_LIBRARY} ${LUA_LIBRARIES})
+target_link_libraries(common ${SDL2_LIBRARY})
