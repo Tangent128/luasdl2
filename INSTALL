@@ -93,13 +93,13 @@ Changing the Lua location
 
 It is sometimes useful to explicitly specify the path to the selected Lua version's include and library directories. The variables to set depend on the configured version:</p>
 
-    $ cmake .. -DWITH_LUAVER=53 -DLUA53_LIBRARIES=/path/to/libraries/ -DLUA53_INCLUDE_DIR=/path/to/headers/
+    $ cmake .. -DWITH_LUAVER=53 -DLUA53_INCLUDE_DIR=/path/to/headers/
 
-    $ cmake .. -DWITH_LUAVER=52 -DLUA52_LIBRARIES=/path/to/libraries/ -DLUA52_INCLUDE_DIR=/path/to/headers/
+    $ cmake .. -DWITH_LUAVER=52 -DLUA52_INCLUDE_DIR=/path/to/headers/
 
-    $ cmake .. -DWITH_LUAVER=51 -DLUA_LIBRARIES=/path/to/libraries/ -DLUA_INCLUDE_DIR=/path/to/headers/
+    $ cmake .. -DWITH_LUAVER=51 -DLUA_INCLUDE_DIR=/path/to/headers/
 
-    $ cmake .. -DWITH_LUAVER=JIT -DLUAJIT_LIBRARIES=/path/to/libraries/ -DLUAJIT_INCLUDE_DIR=/path/to/headers/
+    $ cmake .. -DWITH_LUAVER=JIT -DLUAJIT_INCLUDE_DIR=/path/to/headers/
 
 Also note that the include directory should be the one directly containing
 the headers. We `#include <lua.h>`, not `#include <lua/lua.h>`.
