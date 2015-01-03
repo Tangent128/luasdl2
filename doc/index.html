@@ -861,7 +861,7 @@ $ git clone https://github.com/Tangent128/luasdl2.git
 
 
 	<ul>
-	<li>Lua 5.2 (<a class="external" href="http://lua.org">http://lua.org</a>), mandatory (or Lua 5.1, LuaJIT)</li>
+	<li>Lua (<a class="external" href="http://lua.org">http://lua.org</a>), mandatory (Lua 5.1, LuaJIT, Lua 5.2, or Lua 5.3)</li>
 		<li>SDL 2.0 (<a class="external" href="http://libsdl.org">http://libsdl.org</a>), mandatory</li>
 		<li>CMake (<a class="external" href="http://cmake.org">http://cmake.org</a>), for building only</li>
 	</ul>
@@ -970,9 +970,10 @@ $ cmake .. -DWITH_DOCSDIR=/path/to/install/examples
 
 
 	<ul>
+	<li><strong>53</strong>, Lua 5.3</li>
 	<li><strong>52</strong>, Lua 5.2 (default)</li>
-		<li><strong>51</strong>, Lua 5.1</li>
-		<li><strong>JIT</strong>, LuaJIT</li>
+	<li><strong>51</strong>, Lua 5.1</li>
+	<li><strong>JIT</strong>, LuaJIT</li>
 	</ul>
 
 
@@ -982,6 +983,9 @@ $ cmake .. -DWITH_LUAVER=JIT
 
 	<p>It is sometimes useful to explicitly specify the path to the selected Lua version's include and library directories. The variables to set depend on the configured version:</p>
 
+<pre>
+$ cmake .. -DWITH_LUAVER=53 -DLUA53_LIBRARIES=/path/to/libraries/ -DLUA53_INCLUDE_DIR=/path/to/headers/
+</pre>
 <pre>
 $ cmake .. -DWITH_LUAVER=52 -DLUA52_LIBRARIES=/path/to/libraries/ -DLUA52_INCLUDE_DIR=/path/to/headers/
 </pre>
@@ -19439,9 +19443,10 @@ win:setGammaRamp(red, green, blue)
 
 
 	<ul>
-	<li>LuaJIT,</li>
-		<li>Lua 5.1</li>
-		<li>Lua 5.2</li>
+	<li>LuaJIT</li>
+	<li>Lua 5.1</li>
+	<li>Lua 5.2</li>
+	<li>Lua 5.3</li>
 	</ul>
 
 
