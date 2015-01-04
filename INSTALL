@@ -7,7 +7,7 @@ Requirements
 ============
 
 * Lua (http://lua.org), mandatory (Lua 5.1, LuaJIT, Lua 5.2, or Lua 5.3)
-* SDL 2.0 (http://libsdl.org), mandatory
+* SDL 2.0.1+ (http://libsdl.org), mandatory
 * CMake (http://cmake.org), for building only
 
 And optional libraries for the official SDL modules:

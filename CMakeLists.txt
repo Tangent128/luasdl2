@@ -2,7 +2,7 @@
 # CMakeLists.txt -- build system for LuaSDL2
 #
 # Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
-# Copyright (c) 2014 Joseph Wallace <tangent128@gmail.com>
+# Copyright (c) 2014, 2015 Joseph Wallace <tangent128@gmail.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
