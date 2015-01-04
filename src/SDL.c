@@ -441,7 +441,9 @@ luaopen_SDL(lua_State *L)
 	tableSetInt(L, -1, "VERSION_MAJOR", ver.major);
 	tableSetInt(L, -1, "VERSION_MINOR", ver.minor);
 	tableSetInt(L, -1, "VERSION_PATCH", ver.patch);
+
 	tableSetInt(L, -1, "VERSION_BINDING", VERSION_BINDING);
+	tableSetInt(L, -1, "VERSION_BINDING_PATCH", VERSION_BINDING_PATCH);
 
 	if (ChannelMutex == NULL && (ChannelMutex = SDL_CreateMutex()) == NULL)
 		return luaL_error(L, SDL_GetError());

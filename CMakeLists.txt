@@ -24,8 +24,9 @@ project(Lua-SDL2 C)
 set(MAJOR "2")
 set(MINOR "0")
 set(PATCH "3")
-set(BINDING "2")
-set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}")
+set(BINDING "3")
+set(BINDING_PATCH "1")
+set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}.${BINDING_PATCH}")
 
 set(CMAKE_MODULE_PATH "${Lua-SDL2_SOURCE_DIR}/cmake")
 
