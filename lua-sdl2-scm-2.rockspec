@@ -1,6 +1,13 @@
 package = "Lua-SDL2"
 version = "scm-2"
 source = {
+   url = "https://github.com/Tangent128/luasdl2/archive/v2.0.3-3.tar.gz",
+   md5 = "",
+   dir = "luasdl2-2.0.3-3"
+}
+source = {
+   -- when making a release rockspec, update fields in the above source
+   -- block and delete this source block.
    url = "git://github.com/Tangent128/luasdl2"
 }
 description = {
