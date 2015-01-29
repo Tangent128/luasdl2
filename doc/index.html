@@ -40,7 +40,7 @@ h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor { display
 <h1 >About<a href="#Wiki_About" class="wiki-anchor">&para;</a></h1>
 
 
-	<p>Lua-SDL2 is a <a href="http://libsdl.org/" class="external">SDL 2.0</a> binding for Lua. It is released under the ISC license.</p>
+	<p>Lua-SDL2 is an <a href="http://libsdl.org/" class="external">SDL 2</a> binding for Lua. It is released under the ISC license.</p>
 
 
 	<ul>
@@ -61,8 +61,9 @@ h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor { display
 <h1 >Download<a href="#Wiki_Download" class="wiki-anchor">&para;</a></h1>
 
 
-	<p>You can download pre-compiled binaries for Windows and the Lua-SDL2 sources from here:</p>
+	<p>To obtain the Lua-SDL2 sources:</p>
 
+	<p>(Precompiled binaries are not available at present.)</p>
 
 	<a name="Wiki_Releases"></a>
 <h3 >Releases<a href="#Wiki_Releases" class="wiki-anchor">&para;</a></h3>
@@ -74,12 +75,14 @@ h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor { display
 <h3 >Development version<a href="#Wiki_Development-version" class="wiki-anchor">&para;</a></h3>
 
 
-	<p>By using <a href="http://git-scm.com/" class="external">git</a>:</p>
+	<p>The latest version of the code may be checked out via <a href="http://git-scm.com/" class="external">git</a>:</p>
 
 
 <pre>
 $ git clone https://github.com/Tangent128/luasdl2.git
 </pre>
+
+	<p>Note that the development version's stability can very heavily from commit to commit. Some revisions may be obviously buggy, others might be stabler than the previous release. Don't rely on them for production.</p>
 
 	<a name="Wiki_Documentation"></a>
 <h1 >Documentation<a href="#Wiki_Documentation" class="wiki-anchor">&para;</a></h1>
@@ -863,7 +866,7 @@ $ git clone https://github.com/Tangent128/luasdl2.git
 
 	<ul>
 	<li>Lua (<a class="external" href="http://lua.org">http://lua.org</a>), mandatory (Lua 5.1, LuaJIT, Lua 5.2, or Lua 5.3)</li>
-		<li>SDL 2.0 (<a class="external" href="http://libsdl.org">http://libsdl.org</a>), mandatory</li>
+		<li>SDL 2.0.1+ (<a class="external" href="http://libsdl.org">http://libsdl.org</a>), mandatory</li>
 		<li>CMake (<a class="external" href="http://cmake.org">http://cmake.org</a>), for building only</li>
 	</ul>
 
@@ -21111,6 +21114,11 @@ pos.h = <span class="integer">256</span>
 	<ul>
 	<li>Add Lua 5.3 support</li>
 	<li>Make build system a little more robust</li>
+	</ul>
+	
+	<h2>Lua-SDL2 2.0.3-3.1</h2>
+	<ul>
+	<li>Fix code-visible version number.</li>
 	</ul>
 
 </body>
