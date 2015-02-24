@@ -138,9 +138,9 @@ static const CommonObject MixChunkObject = {
  * Mix_Music object
  * --------------------------------------------------------- */
 
-#define MixMusicName		MixMusic.name
+#define MixMusic	MixMusicObject.name
 
-static const CommonObject	MixMusic;
+static const CommonObject	MixMusicObject;
 
 /*
  * mixer.type
@@ -168,7 +168,7 @@ static const CommonEnum MusicType[] = {
 static int
 l_music_play(lua_State *L)
 {
-	Mix_Music *m = commonGetAs(L, 1, MixMusicName, Mix_Music *);
+	Mix_Music *m = commonGetAs(L, 1, MixMusic, Mix_Music *);
 	int loops = luaL_optinteger(L, 2, -1);
 
 	if (Mix_PlayMusic(m, loops) < 0)
@@ -192,7 +192,7 @@ l_music_play(lua_State *L)
 static int
 l_music_fadeIn(lua_State *L)
 {
-	Mix_Music *m	= commonGetAs(L, 1, MixMusicName, Mix_Music *);
+	Mix_Music *m	= commonGetAs(L, 1, MixMusic, Mix_Music *);
 	int loops	= luaL_checkinteger(L, 2);
 	int ms		= luaL_checkinteger(L, 3);
 	double pos;
@@ -310,7 +310,7 @@ l_music_fadeOut(lua_State *L)
 static int
 l_music_getType(lua_State *L)
 {
-	return commonPush(L, "i", Mix_GetMusicType(commonGetAs(L, 1, MixMusicName, Mix_Music *)));
+	return commonPush(L, "i", Mix_GetMusicType(commonGetAs(L, 1, MixMusic, Mix_Music *)));
 }
 
 /*
@@ -355,7 +355,7 @@ l_music_fading(lua_State *L)
 static int
 l_music_gc(lua_State *L)
 {
-	CommonUserdata *udata = commonGetUserdata(L, 1, MixMusicName);
+	CommonUserdata *udata = commonGetUserdata(L, 1, MixMusic);
 
 	if (udata->mustdelete)
 		Mix_FreeMusic(udata->data);
@@ -384,7 +384,7 @@ static const luaL_Reg MusicMetamethods[] = {
 	{ NULL,			NULL					}
 };
 
-static const CommonObject Music = {
+static const CommonObject MixMusicObject = {
 	"Music",
 	MusicMethods,
 	MusicMetamethods
@@ -919,7 +919,7 @@ l_mixer_loadMUS(lua_State *L)
 
 	(void)L;
 
-	return commonPush(L, "p", MixMusicName, music);
+	return commonPush(L, "p", MixMusic, music);
 }
 
 /*
@@ -995,7 +995,7 @@ luaopen_SDL_mixer(lua_State *L)
 	commonBindObject(L, &MixChunkObject);
 
 	/* Mix_Music object */
-	commonBindObject(L, &Music);
+	commonBindObject(L, &MixMusicObject);
 
 	return 1;
 }
