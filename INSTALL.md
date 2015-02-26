@@ -22,13 +22,13 @@ Installation
 
 Take care to substitute version with the current Lua-SDL2 version.
 
-$ tar xvzf Lua-SDL2-version.tar.gz
-$ cd Lua-SDL2-version
-$ mkdir _build_
-$ cd _build_
-$ cmake ..
-$ make
-# make install
+    $ tar xvzf Lua-SDL2-version.tar.gz
+    $ cd Lua-SDL2-version
+    $ mkdir _build_
+    $ cd _build_
+    $ cmake ..
+    $ make
+    # make install
 
 Customizing the build
 =====================
