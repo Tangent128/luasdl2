@@ -62,23 +62,6 @@ readPoints(lua_State *L, Array *points)
 }
 
 static int
-readLines(lua_State *L, Array *lines)
-{
-	Line line;
-
-	/* Lines must be tables too */
-	if (lua_type(L, -1) != LUA_TTABLE)
-		return 0;
-
-	line.x1 = tableGetInt(L, -1, "x1");
-	line.y1 = tableGetInt(L, -1, "y1");
-	line.x2 = tableGetInt(L, -1, "x2");
-	line.y2 = tableGetInt(L, -1, "y2");
-
-	return arrayAppend(lines, &line) != -1;
-}
-
-static int
 readColors(lua_State *L, Array *colors)
 {
 	SDL_Color color;
@@ -205,12 +188,6 @@ videoGetLine(lua_State *L, int index, Line *line)
 	line->y1 = tableGetInt(L, index, "y1");
 	line->x2 = tableGetInt(L, index, "x2");
 	line->y2 = tableGetInt(L, index, "y2");
-}
-
-int
-videoGetLines(lua_State *L, int index, Array *lines)
-{
-	return readTable(L, index, lines, sizeof (Line), readLines);
 }
 
 Uint32

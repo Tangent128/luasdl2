@@ -119,17 +119,6 @@ void
 videoGetLine(lua_State *L, int index, Line *line);
 
 /**
- * Get a list of lines from table of tables. Does not raises an error.
- *
- * @param L the Lua state
- * @param index the table index
- * @param array the array to fill (will be initialized)
- * @return 0 on success or -1 on failure
- */
-int
-videoGetLines(lua_State *L, int index, Array *lines);
-
-/**
  * Get a color from a Lua table or a hexadecimal number.
  *
  * @param L the Lua state

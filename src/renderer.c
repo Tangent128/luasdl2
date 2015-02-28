@@ -431,10 +431,10 @@ l_renderer_drawLine(lua_State *L)
 }
 
 /*
- * Renderer:drawLines(lines)
+ * Renderer:drawLines(points)
  *
  * Arguments:
- *	lines a sequence of lines
+ *	points a sequence of points connected by lines
  *
  * Returns:
  *	True on success or false
@@ -445,14 +445,14 @@ l_renderer_drawLines(lua_State *L)
 {
 	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
 
-	Array lines;
+	Array points;
 	int ret;
 
-	if (videoGetLines(L, 2, &lines) < 0)
+	if (videoGetPoints(L, 2, &points) < 0)
 		return commonPushErrno(L, 1);
 
-	ret = SDL_RenderDrawLines(rd, lines.data, lines.length);
-	arrayFree(&lines);
+	ret = SDL_RenderDrawLines(rd, points.data, points.length);
+	arrayFree(&points);
 
 	if (ret < 0)
 		return commonPushSDLError(L, 1);
