@@ -8841,7 +8841,7 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 <h1 >Renderer:drawLines<a href="#Sdl-RendererDrawLines_RendererdrawLines" class="wiki-anchor">&para;</a></h1>
 
 
-	<p>Draw several lines.</p>
+	<p>Draw a series of connected lines.</p>
 
 
 	<a name="Sdl-RendererDrawLines_Method"></a>
@@ -8852,7 +8852,7 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 <h3 >SYNOPSIS<a href="#Sdl-RendererDrawLines_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
 
 
-<pre><code class="Lua syntaxhl"><span class="CodeRay">ret, err = <span class="keyword">function</span> Renderer:<span class="function">drawLines</span>(lines)
+<pre><code class="Lua syntaxhl"><span class="CodeRay">ret, err = <span class="keyword">function</span> Renderer:<span class="function">drawLines</span>(points)
 </span></code></pre>
 
 	<a name="Sdl-RendererDrawLines_ARGUMENTS"></a>
@@ -8860,7 +8860,7 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 
 
 	<ul>
-	<li>lines, the sequence of lines (see <a href="#Sdl-Lines" class="wiki-page">Lines</a>)</li>
+	<li>points, the sequence of points connected by lines (see <a href="#Sdl-Points" class="wiki-page">Points</a>)</li>
 	</ul>
 
 
