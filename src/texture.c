@@ -300,6 +300,7 @@ const CommonObject Texture = {
 const CommonEnum TextureAccess[] = {
 	{ "Static",			SDL_TEXTUREACCESS_STATIC	},
 	{ "Streaming",			SDL_TEXTUREACCESS_STREAMING	},
+	{ "Target",			SDL_TEXTUREACCESS_TARGET	},
 	{ NULL,				-1				}
 };
 
