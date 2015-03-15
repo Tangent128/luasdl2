@@ -369,13 +369,13 @@ $ git clone https://github.com/Tangent128/luasdl2.git
     <li><a href="#Sdl-SurfaceUnlock">Sdl-SurfaceUnlock</a></li>
     <li><a href="#Sdl-TextureAccess">Sdl-TextureAccess</a></li>
     <li><a href="#Sdl-TextureGetAlphaMod">Sdl-TextureGetAlphaMod</a></li>
-    <li><a href="#Sdl-TextureGetBlendMod">Sdl-TextureGetBlendMod</a></li>
+    <li><a href="#Sdl-TextureGetBlendMode">Sdl-TextureGetBlendMode</a></li>
     <li><a href="#Sdl-TextureGetColorMod">Sdl-TextureGetColorMod</a></li>
     <li><a href="#Sdl-TextureModulate">Sdl-TextureModulate</a></li>
     <li><a href="#Sdl-TextureObject">Sdl-TextureObject</a></li>
     <li><a href="#Sdl-TextureQuery">Sdl-TextureQuery</a></li>
     <li><a href="#Sdl-TextureSetAlphaMod">Sdl-TextureSetAlphaMod</a></li>
-    <li><a href="#Sdl-TextureSetBlendMod">Sdl-TextureSetBlendMod</a></li>
+    <li><a href="#Sdl-TextureSetBlendMode">Sdl-TextureSetBlendMode</a></li>
     <li><a href="#Sdl-TextureSetColorMod">Sdl-TextureSetColorMod</a></li>
     <li><a href="#Sdl-TextureUnlock">Sdl-TextureUnlock</a></li>
     <li><a href="#Sdl-ThreadGetId">Sdl-ThreadGetId</a></li>
@@ -11171,27 +11171,27 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 	<li>mod, the alpha mod integer.</li>
 	</ul>
 <hr />
-<a name="Sdl-TextureGetBlendMod" />
-<a name="Sdl-TextureGetBlendMod_TexturegetBlendMod"></a>
-<h1 >Texture:getBlendMod<a href="#Sdl-TextureGetBlendMod_TexturegetBlendMod" class="wiki-anchor">&para;</a></h1>
+<a name="Sdl-TextureGetBlendMode" />
+<a name="Sdl-TextureGetBlendMode_TexturegetBlendMode"></a>
+<h1 >Texture:getBlendMode<a href="#Sdl-TextureGetBlendMode_TexturegetBlendMode" class="wiki-anchor">&para;</a></h1>
 
 
 	<p>Get the blend mod.</p>
 
 
-	<a name="Sdl-TextureGetBlendMod_Method"></a>
-<h2 >Method<a href="#Sdl-TextureGetBlendMod_Method" class="wiki-anchor">&para;</a></h2>
+	<a name="Sdl-TextureGetBlendMode_Method"></a>
+<h2 >Method<a href="#Sdl-TextureGetBlendMode_Method" class="wiki-anchor">&para;</a></h2>
 
 
-	<a name="Sdl-TextureGetBlendMod_SYNOPSIS"></a>
-<h3 >SYNOPSIS<a href="#Sdl-TextureGetBlendMod_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
+	<a name="Sdl-TextureGetBlendMode_SYNOPSIS"></a>
+<h3 >SYNOPSIS<a href="#Sdl-TextureGetBlendMode_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
 
 
-<pre><code class="Lua syntaxhl"><span class="CodeRay">mod = <span class="keyword">function</span> Texture:<span class="function">getBlendMod</span>()
+<pre><code class="Lua syntaxhl"><span class="CodeRay">mod = <span class="keyword">function</span> Texture:<span class="function">getBlendMode</span>()
 </span></code></pre>
 
-	<a name="Sdl-TextureGetBlendMod_RETURNS"></a>
-<h3 >RETURNS<a href="#Sdl-TextureGetBlendMod_RETURNS" class="wiki-anchor">&para;</a></h3>
+	<a name="Sdl-TextureGetBlendMode_RETURNS"></a>
+<h3 >RETURNS<a href="#Sdl-TextureGetBlendMode_RETURNS" class="wiki-anchor">&para;</a></h3>
 
 
 	<ul>
@@ -11286,7 +11286,7 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 			<td> Get the alpha mod </td>
 		</tr>
 		<tr>
-			<td> <a href="#Sdl-TextureGetBlendMod" class="wiki-page">Texture:getBlendMod</a> </td>
+			<td> <a href="#Sdl-TextureGetBlendMode" class="wiki-page">Texture:getBlendMode</a> </td>
 			<td> Get the blend mod </td>
 		</tr>
 		<tr>
@@ -11306,7 +11306,7 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 			<td> Set the alpha mod </td>
 		</tr>
 		<tr>
-			<td> <a href="#Sdl-TextureSetBlendMod" class="wiki-page">Texture:setBlendMod</a> </td>
+			<td> <a href="#Sdl-TextureSetBlendMode" class="wiki-page">Texture:setBlendMode</a> </td>
 			<td> Set the blend mod </td>
 		</tr>
 		<tr>
@@ -11390,27 +11390,27 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 		<li>err, the error message</li>
 	</ul>
 <hr />
-<a name="Sdl-TextureSetBlendMod" />
-<a name="Sdl-TextureSetBlendMod_TexturesetBlendMod"></a>
-<h1 >Texture:setBlendMod<a href="#Sdl-TextureSetBlendMod_TexturesetBlendMod" class="wiki-anchor">&para;</a></h1>
+<a name="Sdl-TextureSetBlendMode" />
+<a name="Sdl-TextureSetBlendMode_TexturesetBlendMode"></a>
+<h1 >Texture:setBlendMode<a href="#Sdl-TextureSetBlendMode_TexturesetBlendMode" class="wiki-anchor">&para;</a></h1>
 
 
 	<p>Set the blend mod.</p>
 
 
-	<a name="Sdl-TextureSetBlendMod_Method"></a>
-<h2 >Method<a href="#Sdl-TextureSetBlendMod_Method" class="wiki-anchor">&para;</a></h2>
+	<a name="Sdl-TextureSetBlendMode_Method"></a>
+<h2 >Method<a href="#Sdl-TextureSetBlendMode_Method" class="wiki-anchor">&para;</a></h2>
 
 
-	<a name="Sdl-TextureSetBlendMod_SYNOPSIS"></a>
-<h3 >SYNOPSIS<a href="#Sdl-TextureSetBlendMod_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
+	<a name="Sdl-TextureSetBlendMode_SYNOPSIS"></a>
+<h3 >SYNOPSIS<a href="#Sdl-TextureSetBlendMode_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
 
 
-<pre><code class="Lua syntaxhl"><span class="CodeRay">ret, err = <span class="keyword">function</span> Texture:<span class="function">setBlendMod</span>(value)
+<pre><code class="Lua syntaxhl"><span class="CodeRay">ret, err = <span class="keyword">function</span> Texture:<span class="function">setBlendMode</span>(value)
 </span></code></pre>
 
-	<a name="Sdl-TextureSetBlendMod_ARGUMENTS"></a>
-<h3 >ARGUMENTS<a href="#Sdl-TextureSetBlendMod_ARGUMENTS" class="wiki-anchor">&para;</a></h3>
+	<a name="Sdl-TextureSetBlendMode_ARGUMENTS"></a>
+<h3 >ARGUMENTS<a href="#Sdl-TextureSetBlendMode_ARGUMENTS" class="wiki-anchor">&para;</a></h3>
 
 
 	<ul>
@@ -11418,8 +11418,8 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 	</ul>
 
 
-	<a name="Sdl-TextureSetBlendMod_RETURNS"></a>
-<h3 >RETURNS<a href="#Sdl-TextureSetBlendMod_RETURNS" class="wiki-anchor">&para;</a></h3>
+	<a name="Sdl-TextureSetBlendMode_RETURNS"></a>
+<h3 >RETURNS<a href="#Sdl-TextureSetBlendMode_RETURNS" class="wiki-anchor">&para;</a></h3>
 
 
 	<ul>
