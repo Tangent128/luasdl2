@@ -841,8 +841,8 @@ l_renderer_setViewport(lua_State *L)
  *	h the height of the logical resolution
  *
  * Returns:
- *	True on success or false
- *	The error message
+ *	True on success or nil on failure
+ *	The error message on failure
  */
 static int
 l_renderer_setLogicalSize(lua_State *L)
