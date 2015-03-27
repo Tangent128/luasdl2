@@ -679,6 +679,26 @@ l_renderer_getViewport(lua_State *L)
 }
 
 /*
+ * Renderer:getLogicalSize()
+ *
+ * Returns:
+ *	w width
+ *	h height
+ */
+static int
+l_renderer_getLogicalSize(lua_State *L)
+{
+	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
+	int w, h;
+
+	SDL_RenderGetLogicalSize(rd, &w, &h);
+	commonPush(L, "i", w);
+	commonPush(L, "i", h);
+
+	return 2;
+}
+
+/*
  * Renderer:present()
  */
 static int
@@ -813,6 +833,30 @@ l_renderer_setViewport(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+/*
+ * Renderer:setLogicalSize(w, h)
+ *
+ * Arguments:
+ *	w the width of the logical resolution
+ *	h the height of the logical resolution
+ *
+ * Returns:
+ *	True on success or false
+ *	The error message
+ */
+static int
+l_renderer_setLogicalSize(lua_State *L)
+{
+	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
+	int w = luaL_checkinteger(L, 2);
+	int h = luaL_checkinteger(L, 3);
+
+	if (SDL_RenderSetLogicalSize(rd, w, h) < 0)
+		return commonPushSDLError(L, 1);
+
+	return commonPush(L, "b", 1);
+}
+
 /* --------------------------------------------------------
  * Renderer object metamethods
  * -------------------------------------------------------- */
@@ -888,12 +932,14 @@ static const luaL_Reg RendererMethods[] = {
 	{ "getDrawColor",		l_renderer_getDrawColor			},
 	{ "getInfo",			l_renderer_getInfo			},
 	{ "getViewport",		l_renderer_getViewport			},
+	{ "getLogicalSize",		l_renderer_getLogicalSize		},
 	{ "present",			l_renderer_present			},
 	{ "setClipRect",		l_renderer_setClipRect			},
 	{ "setDrawBlendMode",		l_renderer_setDrawBlendMode		},
 	{ "setDrawColor",		l_renderer_setDrawColor			},
 	{ "setTarget",			l_renderer_setTarget			},
 	{ "setViewport",		l_renderer_setViewport			},
+	{ "setLogicalSize",		l_renderer_setLogicalSize		},
 	{ NULL,				NULL					}
 };
 
