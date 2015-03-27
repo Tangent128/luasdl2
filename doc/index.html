@@ -333,6 +333,7 @@ $ git clone https://github.com/Tangent128/luasdl2.git
     <li><a href="#Sdl-RendererGetDrawColor">Sdl-RendererGetDrawColor</a></li>
     <li><a href="#Sdl-RendererGetRendererInfo">Sdl-RendererGetRendererInfo</a></li>
     <li><a href="#Sdl-RendererGetViewport">Sdl-RendererGetViewport</a></li>
+    <li><a href="#Sdl-RendererGetLogicalSize">Sdl-RendererGetLogicalSize</a></li>
     <li><a href="#Sdl-RendererInfo">Sdl-RendererInfo</a></li>
     <li><a href="#Sdl-RendererObject">Sdl-RendererObject</a></li>
     <li><a href="#Sdl-RendererPresent">Sdl-RendererPresent</a></li>
@@ -341,6 +342,7 @@ $ git clone https://github.com/Tangent128/luasdl2.git
     <li><a href="#Sdl-RendererSetDrawColor">Sdl-RendererSetDrawColor</a></li>
     <li><a href="#Sdl-RendererSetTarget">Sdl-RendererSetTarget</a></li>
     <li><a href="#Sdl-RendererSetViewport">Sdl-RendererSetViewport</a></li>
+    <li><a href="#Sdl-RendererSetLogicalSize">Sdl-RendererSetLogicalSize</a></li>
     <li><a href="#Sdl-Scancode">Sdl-Scancode</a></li>
     <li><a href="#Sdl-SurfaceBlit">Sdl-SurfaceBlit</a></li>
     <li><a href="#Sdl-SurfaceBlitScaled">Sdl-SurfaceBlitScaled</a></li>
@@ -9301,6 +9303,34 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 	<li>rect, the rectangle (see <a href="#Sdl-Rect" class="wiki-page">Rect</a>)</li>
 	</ul>
 <hr />
+<a name="Sdl-RendererGetLogicalSize" />
+<a name="Sdl-RendererGetLogicalSize_RenderergetLogicalSize"></a>
+<h1 >Renderer:getLogicalSize<a href="#Sdl-RendererGetLogicalSize_RenderergetLogicalSize" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Get device independent resolution for rendering.</p>
+
+
+	<a name="Sdl-RendererGetLogicalSize_Method"></a>
+<h2 >Method<a href="#Sdl-RendererGetLogicalSize_Method" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="Sdl-RendererGetLogicalSize_SYNOPSIS"></a>
+<h3 >SYNOPSIS<a href="#Sdl-RendererGetLogicalSize_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
+
+
+<pre><code class="Lua syntaxhl"><span class="CodeRay">w, h = <span class="keyword">function</span> Renderer:<span class="function">getLogicalSize</span>()
+</span></code></pre>
+
+	<a name="Sdl-RendererGetLogicalSize_RETURNS"></a>
+<h3 >RETURNS<a href="#Sdl-RendererGetLogicalSize_RETURNS" class="wiki-anchor">&para;</a></h3>
+
+
+	<ul>
+	<li>w, the width</li>
+	<li>h, the height</li>
+	</ul>
+<hr />
 <a name="Sdl-RendererInfo" />
 <a name="Sdl-RendererInfo_RendererInfo"></a>
 <h1 >RendererInfo<a href="#Sdl-RendererInfo_RendererInfo" class="wiki-anchor">&para;</a></h1>
@@ -9434,6 +9464,10 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 			<td> Get the viewport </td>
 		</tr>
 		<tr>
+			<td> <a href="#Sdl-RendererGetLogicalSize" class="wiki-page">Renderer:getLogicalSize</a> </td>
+			<td> Get device independent resolution for rendering </td>
+		</tr>
+		<tr>
 			<td> <a href="#Sdl-RendererPresent" class="wiki-page">Renderer:present</a> </td>
 			<td> Present the renderer </td>
 		</tr>
@@ -9456,6 +9490,10 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 		<tr>
 			<td> <a href="#Sdl-RendererSetViewport" class="wiki-page">Renderer:setViewport</a> </td>
 			<td> Set the viewport </td>
+		</tr>
+		<tr>
+			<td> <a href="#Sdl-RendererSetLogicalSize" class="wiki-page">Renderer:setLogicalSize</a> </td>
+			<td> Set a device independent resolution for rendering </td>
 		</tr>
 	</table>
 <hr />
@@ -9661,6 +9699,43 @@ reader.file = io.open(<span class="string"><span class="delimiter">&quot;</span>
 	<ul>
 	<li>ret, true on success or false</li>
 		<li>err, the error message</li>
+	</ul>
+<hr />
+<a name="Sdl-RendererSetLogicalSize" />
+<a name="Sdl-RendererSetLogicalSize_RenderersetLogicalSize"></a>
+<h1 >Renderer:setLogicalSize<a href="#Sdl-RendererSetLogicalSize_RenderersetLogicalSize" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Set a device independent resolution for rendering.</p>
+
+
+	<a name="Sdl-RendererSetLogicalSize_Method"></a>
+<h2 >Method<a href="#Sdl-RendererSetLogicalSize_Method" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="Sdl-RendererSetLogicalSize_SYNOPSIS"></a>
+<h3 >SYNOPSIS<a href="#Sdl-RendererSetLogicalSize_SYNOPSIS" class="wiki-anchor">&para;</a></h3>
+
+
+<pre><code class="Lua syntaxhl"><span class="CodeRay">ret, err = <span class="keyword">function</span> Renderer:<span class="function">setLogicalSize</span>(w, h)
+</span></code></pre>
+
+	<a name="Sdl-RendererSetLogicalSize_ARGUMENTS"></a>
+<h3 >ARGUMENTS<a href="#Sdl-RendererSetLogicalSize_ARGUMENTS" class="wiki-anchor">&para;</a></h3>
+
+
+	<ul>
+	<li>w, the width of the logical resolution</li>
+	<li>h, the height of the logical resolution</li>
+	</ul>
+
+
+	<a name="Sdl-RendererSetLogicalSize_RETURNS"></a>
+<h3 >RETURNS<a href="#Sdl-RendererSetLogicalSize_RETURNS" class="wiki-anchor">&para;</a></h3>
+
+
+	<ul>
+	<li>ret, true on success or false</li>
 	</ul>
 <hr />
 <a name="Sdl-Scancode" />
