@@ -26,12 +26,9 @@ The official website is hosted at:
 
 	https://github.com/Tangent128/luasdl2
 
-Documentation
-=============
+The current documentation is available at the associated wiki:
 
-The most recent documentation is available in HTML format:
-
-	http://tangent128.github.io/luasdl2/doc/
+	https://github.com/Tangent128/luasdl2/wiki/
 
 Author and Maintainer
 =====================
