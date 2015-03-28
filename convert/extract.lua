@@ -25,19 +25,17 @@ for line in io.lines() do
 			currentPage = aName
 			pages[currentPage] = pages[currentPage] or ""
 		end
-	--[=[elseif line:match[[href="#([^"]+)"]] then
-		print(line)
-		print(line:gsub([[href="#([^"]+)"]], [[href="%1"]]))
-	]=]
 	elseif currentPage ~= nil then
-		pages[currentPage] = pages[currentPage] .. "\n" .. line
+		-- remove indentation that screws up Markdown (but keep potential <pre> text)
+		local trimmedLine = line:gsub("^%s+<", "<")
+		pages[currentPage] = pages[currentPage] .. "\n" .. trimmedLine
 	end
 	
 end
 
 
 -- fix cross-page link targets
-local localLink = [[href="#%s"]]
+local localLink = ""
 local pageLink = [[href="%s"]]
 
 for k, v in pairs(pages) do
@@ -49,8 +47,16 @@ for k, v in pairs(pages) do
 			return(localLink:format(name))
 		end
 	end)
+	
 end
 
+for k, v in pairs(pages) do
+	-- remove anchor links, pandoc doesn't support anchor links
+	-- and Github provides links for headings anyways
+	pages[k] = v:gsub([[<a[^>]*>&para;</a>]], "")
+end
+
+--print(pages.Wiki)
 -- dump pages to individual files
 if dumpPrefix then
 	for k, v in pairs(pages) do
