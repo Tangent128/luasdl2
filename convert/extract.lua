@@ -1,4 +1,13 @@
 
+local dumpPrefix = nil
+
+for k, v in pairs{...} do
+	local out = v:match "--out=(.+)"
+	if out then
+		dumpPrefix = out
+	end
+end
+
 -- Reads the wiki dump HTML as stdin, tries to split it out into
 -- the individual pages for later conversion to Markdown
 
@@ -26,6 +35,8 @@ for line in io.lines() do
 	
 end
 
+
+-- fix cross-page link targets
 local localLink = [[href="#%s"]]
 local pageLink = [[href="%s"]]
 
@@ -40,4 +51,11 @@ for k, v in pairs(pages) do
 	end)
 end
 
---print(next(pages))
+-- dump pages to individual files
+if dumpPrefix then
+	for k, v in pairs(pages) do
+		local file = assert(io.open(dumpPrefix .. "/" .. k .. ".md", "w"))
+		file:write(v)
+		file:close()
+	end
+end
