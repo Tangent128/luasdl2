@@ -1,0 +1,1 @@
+find . -name *.md -execdir ~/.cabal/bin/pandoc -f html {} -t markdown_github -o {} ;
