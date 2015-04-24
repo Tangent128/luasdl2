@@ -25,15 +25,29 @@ external_dependencies = {
       header = "SDL2/SDL_scancode.h"
    }
 }
+
+local function PlusCommon(...)
+   return {
+      "common/array.c",
+      "common/common.c",
+      "common/rwops.c",
+      "common/surface.c",
+      "common/table.c",
+      "common/variant.c",
+      "common/video.c",
+      ...
+   }
+end
+
 build = {
    type = "builtin",
    modules = {
-      SDL2 = {
+      SDL = {
          libraries = {"SDL2"},
          defines = {},
          incdirs = {"$(SDL2_INCDIR)/SDL2", "src/", "extern/queue/", "./", "rocks/"},
          libdirs = {"$(SDL2_LIBDIR)"},
-         sources = {
+         sources = PlusCommon(
             "src/audio.c",
             "src/channel.c",
             "src/clipboard.c",
@@ -56,8 +70,8 @@ build = {
             "src/texture.c",
             "src/thread.c",
             "src/timer.c",
-            "src/window.c",
-         },
+            "src/window.c"
+         ),
       }
    },
 }
