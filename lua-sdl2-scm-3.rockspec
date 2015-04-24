@@ -1,0 +1,65 @@
+package = "Lua-SDL2"
+version = "scm-3"
+local BINDING_VERSION = 3
+local BINDING_PATCH = 1
+source = {
+   url = "https://github.com/Tangent128/luasdl2/archive/v2.0.3-3.tar.gz",
+   md5 = "",
+   dir = "luasdl2-2.0.3-3"
+}
+source = {
+   -- when making a release rockspec, update fields in the above source
+   -- block and delete this source block.
+   url = "git://github.com/Tangent128/luasdl2"
+}
+description = {
+   summary = "Lua-SDL2 is a pure C binding of SDL 2.0 for Lua 5.1, JIT, 5.2, and 5.3",
+   detailed = "Lua-SDL2 is a pure C binding of SDL 2.0 for Lua 5.1, JIT, 5.2, and 5.3",
+   homepage = "https://github.com/Tangent128/luasdl2/",
+   license = "ISC",
+   maintainer = "Joseph Wallace <Tangent128@gmail.com>"
+}
+dependencies = {}
+external_dependencies = {
+   SDL2 = {
+      header = "SDL2/SDL_scancode.h"
+   }
+}
+build = {
+   type = "builtin",
+   modules = {
+      SDL2 = {
+         libraries = {"SDL2"},
+         defines = {},
+         incdirs = {"$(SDL2_INCDIR)/SDL2", "src/", "extern/queue/", "./", "rocks/"},
+         libdirs = {"$(SDL2_LIBDIR)"},
+         sources = {
+            "src/audio.c",
+            "src/channel.c",
+            "src/clipboard.c",
+            "src/cpu.c",
+            "src/display.c",
+            "src/events.c",
+            "src/filesystem.c",
+            "src/gamecontroller.c",
+            "src/gl.c",
+            "src/haptic.c",
+            "src/joystick.c",
+            "src/keyboard.c",
+            "src/logging.c",
+            "src/mouse.c",
+            "src/platform.c",
+            "src/power.c",
+            "src/rectangle.c",
+            "src/renderer.c",
+            "src/SDL.c",
+            "src/texture.c",
+            "src/thread.c",
+            "src/timer.c",
+            "src/window.c",
+         },
+      }
+   },
+}
+
+
