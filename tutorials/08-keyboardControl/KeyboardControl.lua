@@ -89,4 +89,5 @@ while true do
 		print("Exiting!")
 		break
 	end
+	SDL.delay(60)
 end
