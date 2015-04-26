@@ -14,47 +14,34 @@ local width = 32
 local height = 32
 
 local function initialize()
-	--init SDL
-	local ret, err = SDL.init {SDL.flags.Video}
-	if not ret then
-		error(err)
-	end
+	assert(SDL.init {SDL.flags.Video})
 
 	--make sure our image is init
-	local ret, err = image.init{image.flags.PNG}
-	if not ret then
-		error(err)
-	end
+	local ret = assert (image.init{image.flags.PNG})
 
 	--create window
-	local win, err = SDL.createWindow {
+	local win = assert(SDL.createWindow {
 		title	= "Keyboard",
 		width	= 320,
 		height	= 240
-	}
-	if not win then
-		error(err)
-	end
+	})
 
 	--create renderer
-	local rdr, err = SDL.createRenderer(win, -1)
-	if not rdr then
-		error(err)
-	end
+	local rdr = assert(SDL.createRenderer(win, -1))
 
 	--draws background white
 	rdr:setDrawColor(0xFFFFFF)
 
 	--allow loading of image
-	local img, ret = image.load("../sprite/player.png")
+	local img = assert(image.load("boo.png"))
 	if not img then
-		error(err)
+		error()
 	end
 
 	--embedding above loaded image into a texture
-	local logo, err = rdr:createTextureFromSurface(img)
+	local logo = assert(rdr:createTextureFromSurface(img))
 	if not logo then
-		error(err)
+		error()
 	end
 
 	graphics.win = win
@@ -65,8 +52,8 @@ local function initialize()
 	local f, a, w, h = logo:query()
 	pos.x = width / 2 - w / 2
 	pos.y = height / 2 - h / 2
-	pos.w = 32
-	pos.h = 32
+	pos.w = w
+	pos.h = h
 end
 
 initialize()
@@ -74,14 +61,14 @@ initialize()
 local keys = SDL.getKeyboardState()
 
 while true do
-	--this reads SDL keyboari input -- needed
+	--this reads SDL keyboard input -- needed
 	SDL.pumpEvents()
 	--rendering in the graphics/player
 	graphics.rdr:clear()
 	graphics.rdr:copy(graphics.logo, nil, pos)
 	graphics.rdr:present()
 
-	--keyboard contorls. also spit out what you are pressing
+	--keyboard contorls. also spit out what you are pressing with print
 	if keys[SDL.scancode.Left] then
 		pos.x = pos.x - dir
 		print("left pressed")
@@ -102,6 +89,4 @@ while true do
 		print("Exiting!")
 		break
 	end
-	--delays message output and activity every 60 millisecs
-	SDL.delay(60)
 end
