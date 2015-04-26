@@ -33,7 +33,7 @@ local function initialize()
 	rdr:setDrawColor(0xFFFFFF)
 
 	--allow loading of image
-	local img = assert(image.load("boo.png"))
+	local img = assert(image.load("player.png"))
 	if not img then
 		error()
 	end
