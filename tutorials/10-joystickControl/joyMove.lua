@@ -63,9 +63,7 @@ while true do
 			end
 			---this just prints our axis 0 [left/right] to know what is happening. good for output test
 			print(string.format("axis %d: %d", e.axis, e.value))
-		end
-		---axis 1 is the left analog stick but for UP/DOWN
-		if e.axis == 1 then
+		elseif e.axis == 1 then
 			---this will make the image go UP the screen
 			if e.value < -10 then
 				pos.y = pos.y - dir
