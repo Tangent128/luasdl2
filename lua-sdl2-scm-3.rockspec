@@ -23,6 +23,9 @@ dependencies = {}
 external_dependencies = {
    SDL2 = {
       header = "SDL2/SDL_scancode.h"
+   },
+   SDL2_image = {
+      header = "SDL2/SDL_image.h"
    }
 }
 
@@ -71,6 +74,15 @@ build = {
             "src/thread.c",
             "src/timer.c",
             "src/window.c"
+         ),
+      },
+      ["SDL.image"] = {
+         libraries = {"SDL2", "SDL2_image"},
+         defines = {},
+         incdirs = {"$(SDL2_INCDIR)/SDL2", "src/", "extern/queue/", "./", "rocks/"},
+         libdirs = {"$(SDL2_LIBDIR)"},
+         sources = PlusCommon(
+            "sdl-image/src/image.c"
          ),
       }
    },
