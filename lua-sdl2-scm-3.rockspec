@@ -1,7 +1,5 @@
 package = "Lua-SDL2"
 version = "scm-3"
-local BINDING_VERSION = 3
-local BINDING_PATCH = 1
 source = {
    url = "https://github.com/Tangent128/luasdl2/archive/v2.0.3-3.tar.gz",
    md5 = "",
