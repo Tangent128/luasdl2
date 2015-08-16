@@ -24,6 +24,15 @@ external_dependencies = {
    },
    SDL2_image = {
       header = "SDL2/SDL_image.h"
+   },
+   SDL2_mixer = {
+      header = "SDL2/SDL_mixer.h"
+   },
+   SDL2_net = {
+      header = "SDL2/SDL_net.h"
+   },
+   SDL2_ttf = {
+      header = "SDL2/SDL_ttf.h"
    }
 }
 
@@ -82,8 +91,35 @@ build = {
          sources = PlusCommon(
             "sdl-image/src/image.c"
          ),
-      }
-   },
+      },
+      ["SDL.mixer"] = {
+         libraries = {"SDL2", "SDL2_mixer"},
+         defines = {},
+         incdirs = {"$(SDL2_INCDIR)/SDL2", "src/", "extern/queue/", "./", "rocks/"},
+         libdirs = {"$(SDL2_LIBDIR)"},
+         sources = PlusCommon(
+            "sdl-mixer/src/mixer.c"
+         ),
+      },
+      ["SDL.net"] = {
+         libraries = {"SDL2", "SDL2_net"},
+         defines = {},
+         incdirs = {"$(SDL2_INCDIR)/SDL2", "src/", "extern/queue/", "./", "rocks/"},
+         libdirs = {"$(SDL2_LIBDIR)"},
+         sources = PlusCommon(
+            "sdl-net/src/net.c"
+         ),
+      },
+      ["SDL.ttf"] = {
+         libraries = {"SDL2", "SDL2_ttf"},
+         defines = {},
+         incdirs = {"$(SDL2_INCDIR)/SDL2", "src/", "extern/queue/", "./", "rocks/"},
+         libdirs = {"$(SDL2_LIBDIR)"},
+         sources = PlusCommon(
+            "sdl-ttf/src/ttf.c"
+         ),
+      },
+   }
 }
 
 
