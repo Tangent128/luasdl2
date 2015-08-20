@@ -33,6 +33,26 @@ external_dependencies = {
    },
    SDL2_ttf = {
       header = "SDL2/SDL_ttf.h"
+   },
+   
+   platforms = {
+      windows = {
+         SDL2 = {
+            header = "SDL_scancode.h"
+         },
+         SDL2_image = {
+            header = "SDL_image.h"
+         },
+         SDL2_mixer = {
+            header = "SDL_mixer.h"
+         },
+         SDL2_net = {
+            header = "SDL_net.h"
+         },
+         SDL2_ttf = {
+            header = "SDL_ttf.h"
+         },
+      }
    }
 }
 
@@ -119,6 +139,27 @@ build = {
             "sdl-ttf/src/ttf.c"
          ),
       },
+   },
+   platforms = {
+      windows = {
+         modules = {
+            SDL = {
+               incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
+            },
+            ["SDL_image"] = {
+               incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
+            },
+            ["SDL_mixer"] = {
+               incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
+            },
+            ["SDL_net"] = {
+               incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
+            },
+            ["SDL_ttf"] = {
+               incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
+            },
+         }
+      }
    }
 }
 
