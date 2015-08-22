@@ -19,6 +19,15 @@ Compatability
 * compiles with Lua 5.1, 5.2, 5.3, or LuaJIT
 * compiles with SDL 2.0.1 and later
 
+Installing
+==========
+
+If you have LuaRocks installed,
+
+    $ luarocks install lua-sdl2
+
+Otherwise, read `INSTALL.md` for instructions to build it yourself.
+
 Website
 =======
 
