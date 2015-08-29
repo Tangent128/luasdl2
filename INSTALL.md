@@ -6,19 +6,46 @@ Lua-SDL2 installation guide.
 Requirements
 ============
 
-* Lua (http://lua.org), mandatory (Lua 5.1, LuaJIT, Lua 5.2, or Lua 5.3)
-* SDL 2.0.1+ (http://libsdl.org), mandatory
-* CMake (http://cmake.org), for building only
+* [Lua](http://lua.org), mandatory (Lua 5.1, LuaJIT, Lua 5.2, or Lua 5.3)
+* [SDL 2.0.1+](http://libsdl.org), mandatory
+* Either [CMake](http://cmake.org) or [LuaRocks](https://luarocks.org), for building only
 
 And optional libraries for the official SDL modules:
 
-* SDL_mixer (http://www.libsdl.org/projects/SDL_mixer)
-* SDL_ttf (http://www.libsdl.org/projects/SDL_ttf)
-* SDL_net (http://www.libsdl.org/projects/SDL_net)
-* SDL_image (http://www.libsdl.org/projects/SDL_image)
+* [SDL_mixer](http://www.libsdl.org/projects/SDL_mixer)
+* [SDL_ttf](http://www.libsdl.org/projects/SDL_ttf)
+* [SDL_net](http://www.libsdl.org/projects/SDL_net)
+* [SDL_image](http://www.libsdl.org/projects/SDL_image)
 
-Installation
-============
+Installation (LuaRocks)
+=======================
+
+    $ luarocks install lua-sdl2
+
+Will install Lua-SDL2 from the Luarocks repositories.
+
+If you want to install a development version, clone the repository and run:
+
+    $ luarocks install lua-sdl2-scm-3.rockspec
+
+Currently, there is no way to disable the mixer/ttf/net/image modules.
+Eventually they will be split into separate rockspecs.
+
+Manually locating SDL2 headers
+------------------------------
+
+By default, Luarocks expects to find the SDL2 headers under `/usr/include/SDL2/`.
+You can customize the prefix by setting the SDL2_INCDIR variable in your Luarocks
+configuration or on the command line for installing.
+
+On most systems, you need to specify the path *containing* the `SDL2/` folder,
+for example `/usr/local/include`.
+
+On Windows, you need to specify the folder containing the headers directly,
+such as `c:\include\SDL2\`.
+
+Installation (CMake)
+====================
 
 Take care to substitute version with the current Lua-SDL2 version.
 
@@ -30,8 +57,8 @@ Take care to substitute version with the current Lua-SDL2 version.
     $ make
     # make install
 
-Customizing the build
-=====================
+Customizing the build (CMake)
+=============================
 
 Several options are available. The following commands are expected to be ran in
 the _build_ directory created above.
