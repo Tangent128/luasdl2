@@ -786,6 +786,23 @@ l_surface_gc(lua_State *L)
 	return 0;
 }
 
+
+
+/*
+ * Surface:getSize()
+ *
+ * Returns:
+ *	The width
+ *	The height
+ */
+static int
+l_surface_getSize(lua_State *L)
+{
+	SDL_Surface *surf = commonGetAs(L, 1, SurfaceName, SDL_Surface *);
+
+	return commonPush(L, "ii", surf->w, surf->h);
+}
+
 static const luaL_Reg methods[] = {
 	{ "blit",		l_surface_blit			},
 	{ "blitScaled",		l_surface_blitScaled		},
@@ -798,6 +815,7 @@ static const luaL_Reg methods[] = {
 	{ "getAlphaMod",	l_surface_getAlphaMod		},
 	{ "getBlendMode",	l_surface_getBlendMode		},
 	{ "getColorMod",	l_surface_getColorMod		},
+	{ "getSize",		l_surface_getSize		},
 	{ "lock",		l_surface_lock			},
 	{ "lowerBlit",		l_surface_lowerBlit		},
 	{ "lowerBlitScaled",	l_surface_lowerBlitScaled	},
