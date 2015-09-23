@@ -202,12 +202,12 @@ surfaceBlit(lua_State *L, int scaled, int lower)
 	SDL_Rect srcrect, dstrect;
 	SDL_Rect *srcptr = &srcrect, *dstptr = &dstrect;
 
- 	if (lua_type(L, 3) == LUA_TNIL) 
+	if (lua_type(L, 3) == LUA_TTABLE)
 		videoGetRect(L, 3, &srcrect);
 	else
 		SDL_GetClipRect(src, &srcrect);
 
-	if (lua_type(L, 4) == LUA_TNIL)
+	if (lua_type(L, 4) == LUA_TTABLE)
 		videoGetRect(L, 4, &dstrect);
 	else
 		SDL_GetClipRect(dst, &dstrect);
