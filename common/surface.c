@@ -117,7 +117,7 @@ static int l_surface_createRGBFrom(lua_State *L)
 	 * TODO: we need to store the pixels into the metatable and free
 	 * them after the surface.
 	 */
-	
+
 	SDL_Surface *s = SDL_CreateRGBSurfaceFrom(pixels, width, height, depth,
 	    pitch, rmask, gmask, bmask, amask);
 
@@ -149,7 +149,7 @@ static int l_surface_loadBMP(lua_State *L)
 	s = SDL_LoadBMP(path);
 	if (s == NULL)
 		return commonPushSDLError(L, 1);
-	
+
 	return commonPush(L, "p", SurfaceName, s);
 }
 
@@ -223,7 +223,7 @@ surfaceBlit(lua_State *L, int scaled, int lower)
 		if (func(src, srcptr, dst, dstptr) < 0)
 			return commonPushSDLError(L, 2);
 	}
-	
+
 	/* Push true + the modified rectangle */
 	lua_pushboolean(L, 1);
 	videoPushRect(L, &dstrect);
@@ -803,6 +803,25 @@ l_surface_getSize(lua_State *L)
 	return commonPush(L, "ii", surf->w, surf->h);
 }
 
+
+/*
+ * Surface:getRawPixel(x,y)
+ *
+ * Returns:
+ *	(raw) byte string of pixel data (pixel format dependent)
+ */
+static int
+l_surface_getRawPixel(lua_State *L)
+{
+	SDL_Surface *surf = commonGetAs(L, 1, SurfaceName, SDL_Surface *);
+	int x = luaL_checkinteger(L, 2);
+	int y = luaL_checkinteger(L, 3);
+	int size = surf->format->BytesPerPixel;
+	Uint8 *ptr = (Uint8 *)surf->pixels + y * surf->pitch + x * size;
+	lua_pushlstring(L, ptr, size);
+	return 1;
+}
+
 static const luaL_Reg methods[] = {
 	{ "blit",		l_surface_blit			},
 	{ "blitScaled",		l_surface_blitScaled		},
@@ -816,6 +835,7 @@ static const luaL_Reg methods[] = {
 	{ "getBlendMode",	l_surface_getBlendMode		},
 	{ "getColorMod",	l_surface_getColorMod		},
 	{ "getSize",		l_surface_getSize		},
+	{ "getRawPixel",        l_surface_getRawPixel		},
 	{ "lock",		l_surface_lock			},
 	{ "lowerBlit",		l_surface_lowerBlit		},
 	{ "lowerBlitScaled",	l_surface_lowerBlitScaled	},
