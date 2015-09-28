@@ -360,45 +360,43 @@ l_renderer_copy(lua_State *L)
 static int
 l_renderer_copyEx(lua_State *L)
 {
-#define GET_RECT(idx, field, rect, rectptr) do {			\
-	lua_getfield(L, idx, field);					\
-	if (lua_type(L, -1) == LUA_TTABLE) {				\
-		videoGetRect(L, -1, &rect);				\
+#define GET_RECT(idx, rect, rectptr) do {				\
+	if (lua_gettop(L) >= idx && lua_type(L, idx) == LUA_TTABLE) {	\
+		videoGetRect(L, idx, &rect);				\
 		rectptr = &rect;					\
 	}								\
-	lua_pop(L, 1);							\
 } while (/* CONSTCOND */ 0)
 
 	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
 	SDL_Texture *tex;
-	SDL_RendererFlip flip;
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	SDL_Point point, *pointptr = NULL;
 	SDL_Rect srcr, *srcptr = NULL;
 	SDL_Rect dstr, *dstptr = NULL;
-	double angle;
-
-	luaL_checktype(L, 2, LUA_TTABLE);
+	double angle = 0;
 
 	/* Texture is mandatory */
-	tex = tableGetUserdata(L, 2, "texture", TextureName)->data;
+	tex = commonGetAs(L, 2, TextureName, SDL_Texture *);
 
 	/* Optional SDL_Rect fields */
-	GET_RECT(2, "source", srcr, srcptr);
-	GET_RECT(2, "destination", dstr, dstptr);
+	GET_RECT(3, srcr, srcptr);
+	GET_RECT(4, dstr, dstptr);
 
 	/* Optional angle */
-	angle = tableGetDouble(L, 2, "angle");
+	if (lua_gettop(L) >= 5 && lua_isnumber(L, 5)) {
+	    angle = lua_tonumber(L, 5);
+	}
 
 	/* Optional point */
-	lua_getfield(L, 2, "center");
-	if (lua_type(L, -1) == LUA_TTABLE) {
-		videoGetPoint(L, -1, &point);
-		pointptr = &point;
+	if (lua_gettop(L) >= 6 && lua_type(L, 6) == LUA_TTABLE) {
+	    videoGetPoint(L, 6, &point);
+	    pointptr = &point;
 	}
-	lua_pop(L, 1);
 		
 	/* Optional flip */
-	flip = tableGetInt(L, 2, "flip");
+	if (lua_gettop(L) >= 7 && lua_type(L, 7) == LUA_TNUMBER) {
+	    flip = lua_tointeger(L, 7);
+	}
 
 	if (SDL_RenderCopyEx(rd, tex, srcptr, dstptr, angle, pointptr, flip) < 0)
 		return commonPushSDLError(L, 1);
