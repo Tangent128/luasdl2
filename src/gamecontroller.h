@@ -23,6 +23,12 @@
 
 #define GameCtlName	GameCtl.name
 
+extern const luaL_Reg GamectlFunctions[];
+
 extern const CommonObject GameCtl;
+
+extern const CommonEnum GameCtlAxis[];
+
+extern const CommonEnum GameCtlButton[];
 
 #endif /* !_GAMECONTROLLER_H_ */

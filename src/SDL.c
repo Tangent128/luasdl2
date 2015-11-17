@@ -303,6 +303,7 @@ static const struct {
 	{ ChannelFunctions				},
 
 	/* Event group */
+	{ GamectlFunctions				},
 	{ JoystickFunctions				},
 	{ KeyboardFunctions				},
 	{ MouseFunctions				},
@@ -350,6 +351,10 @@ static const struct {
 
 	/* Joystick values */
 	{ "joyHat",		EventJoyHat			},
+
+	/* Game Controller values */
+	{ "controllerAxis",	GameCtlAxis			},
+	{ "controllerButton",	GameCtlButton			},
 
 	/* Keyboard */
 	{ "key",		KeyboardCodes			},
