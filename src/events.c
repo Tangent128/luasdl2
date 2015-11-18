@@ -399,7 +399,7 @@ l_event_waitEvent(lua_State *L)
 	}
 
 	if (!ret)
-		commonPushSDLError(L, 1);
+		return commonPushSDLError(L, 1);
 
 	eventPush(L, &ev);
 
@@ -702,7 +702,7 @@ pushCtlButton(lua_State *L, const SDL_Event *ev)
 {
 	tableSetInt(L, -1, "which", ev->cbutton.which);
 	tableSetInt(L, -1, "button", ev->cbutton.button);
-	tableSetInt(L, -1, "state", ev->cbutton.state);
+	tableSetBool(L, -1, "state", ev->cbutton.state);
 }
 
 static void
