@@ -146,16 +146,16 @@ build = {
             SDL = {
                incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
             },
-            ["SDL_image"] = {
+            ["SDL.image"] = {
                incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
             },
-            ["SDL_mixer"] = {
+            ["SDL.mixer"] = {
                incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
             },
-            ["SDL_net"] = {
+            ["SDL.net"] = {
                incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
             },
-            ["SDL_ttf"] = {
+            ["SDL.ttf"] = {
                incdirs = {"$(SDL2_INCDIR)", "src/", "extern/queue/", "./", "rocks/"}
             },
          }
