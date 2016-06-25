@@ -49,15 +49,15 @@ typedef STAILQ_HEAD(channel_list, channel) ChannelList;
 static int
 channelGiven(unsigned int target, unsigned int current)
 {
-	if (target > current)
-		return 0;
-	if (target == current)
-		return 1;
-
 	union cv {
 		unsigned long u;
 		long i;
 	} t, c;
+	
+	if (target > current)
+		return 0;
+	if (target == current)
+		return 1;
 
 	t.u = target;
 	c.u = current;

@@ -193,10 +193,10 @@ rendererDrawOrFillRect(lua_State *L, int draw)
 	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
 	SDL_Rect r;
 
-	videoGetRect(L, 2, &r);
-
 	/* Draw or fill? */
 	UseFunc func = (draw) ? SDL_RenderDrawRect : SDL_RenderFillRect;
+	
+	videoGetRect(L, 2, &r);
 
 	if (func(rd, &r) < 0)
 		return commonPushSDLError(L, 1);
