@@ -200,12 +200,12 @@ videoGetColorHex(lua_State *L, int index)
 	} else if (lua_type(L, index) == LUA_TTABLE) {
 		SDL_Color tmp;
 
-		tmp.r = tableGetInt(L, index, "r");
-		tmp.g = tableGetInt(L, index, "g");
-		tmp.b = tableGetInt(L, index, "b");
-		tmp.a = tableGetInt(L, index, "a");
+		tmp.r = tableGetInt(L, index, "r") & 0xFF;
+		tmp.g = tableGetInt(L, index, "g") & 0xFF;
+		tmp.b = tableGetInt(L, index, "b") & 0xFF;
+		tmp.a = tableGetInt(L, index, "a") & 0xFF;
 
-		value = (tmp.r << 16) | (tmp.g << 8) | tmp.b;
+		value = (tmp.r << 16) | (tmp.g << 8) | tmp.b | (tmp.a << 24);
 	}
 
 	return value;
@@ -219,6 +219,7 @@ videoGetColorRGB(lua_State *L, int index)
 	if (lua_type(L, index) == LUA_TNUMBER) {
 		int value = lua_tointeger(L, index);
 
+		c.a = ((value >> 24) & 0xFF);
 		c.r = ((value >> 16) & 0xFF);
 		c.g = ((value >> 8) & 0xFF);
 		c.b = ((value) & 0xFF);
