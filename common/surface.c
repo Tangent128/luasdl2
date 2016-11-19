@@ -372,6 +372,40 @@ l_surface_fillRects(lua_State *L)
 }
 
 /*
+ * Surface:mapRGB()
+ *
+ * Returns:
+ * 	A Uint32 filled with the correct pixel value
+ */
+static int
+l_surface_mapRGB(lua_State *L)
+{
+	SDL_Surface *surf = commonGetAs(L, 1, SurfaceName, SDL_Surface *);
+	SDL_Color c = videoGetColorRGB(L, 2);
+
+	lua_pushinteger(L, SDL_MapRGB(surf->format, c.r, c.g, c.b));
+
+	return 1;
+}
+
+/*
+ * Surface:mapRGBA()
+ *
+ * Returns:
+ * 	A Uint32 filled with the correct pixel value.
+ */
+static int
+l_surface_mapRGBA(lua_State *L)
+{
+	SDL_Surface *surf = commonGetAs(L, 1, SurfaceName, SDL_Surface *);
+	SDL_Color c = videoGetColorRGB(L, 2);
+
+	lua_pushinteger(L, SDL_MapRGBA(surf->format, c.r, c.g, c.b, c.a));
+
+	return 1;
+}
+
+/*
  * Surface:getClipRect()
  *
  * Returns:
@@ -829,6 +863,8 @@ static const luaL_Reg methods[] = {
 	{ "convertFormat",	l_surface_convertFormat		},
 	{ "fillRect",		l_surface_fillRect		},
 	{ "fillRects",		l_surface_fillRects		},
+	{ "mapRGB", 		l_surface_mapRGB		},
+	{ "mapRGBA",		l_surface_mapRGBA		},
 	{ "getClipRect",	l_surface_getClipRect,		},
 	{ "getColorKey",	l_surface_getColorKey		},
 	{ "getAlphaMod",	l_surface_getAlphaMod		},
