@@ -82,6 +82,20 @@ l_cpu_hasAVX(lua_State *L)
 }
 #endif
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.hasAVX2()
+ *
+ * Returns:
+ *	True if the CPU has support for AVX2
+ */
+static int
+l_cpu_hasAVX2(lua_State *L)
+{
+	return commonPush(L, "b", SDL_HasAVX2());
+}
+#endif
+
 /*
  * SDL.hasMMX()
  *
@@ -161,6 +175,9 @@ const luaL_Reg CpuFunctions[] = {
 	{ "hasAltiVec",				l_cpu_hasAltiVec		},
 #if SDL_VERSION_ATLEAST(2, 0, 2)
 	{ "hasAVX",				l_cpu_hasAVX			},
+#endif
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "hasAVX2",				l_cpu_hasAVX2			},
 #endif
 	{ "hasMMX",				l_cpu_hasMMX			},
 	{ "hasRDTSC",				l_cpu_hasRDTSC			},

@@ -364,6 +364,9 @@ static const struct {
 
 	/* Window */
 	{ "window",		WindowFlags			},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "hitTestResult",	HitTestResults			},
+#endif
 
 	/* General */
 	{ "flags",		InitFlags			},

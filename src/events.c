@@ -483,6 +483,10 @@ const CommonEnum EventType[] = {
 #if SDL_VERSION_ATLEAST(2, 0, 2)
 	{ "RenderTargetsReset",		SDL_RENDER_TARGETS_RESET	},
 #endif
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "AudioDeviceAdded",		SDL_AUDIODEVICEADDED		},
+	{ "AudioDeviceRemoved",		SDL_AUDIODEVICEREMOVED		},
+#endif
 	{ "UserEvent",			SDL_USEREVENT			},
 	{ "Last",			SDL_LASTEVENT			},
 	{ NULL,				-1				}
@@ -751,6 +755,16 @@ pushDropFile(lua_State *L, const SDL_Event *ev)
 	SDL_free(ev->drop.file);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+static void
+pushAudioDevice(lua_State *L, const SDL_Event *ev)
+{
+	tableSetInt(L, -1, "timestamp", ev->adevice.timestamp);
+	tableSetInt(L, -1, "which", ev->adevice.which);
+	tableSetBool(L, -1, "iscapture", ev->adevice.iscapture);
+}
+#endif
+
 void
 eventPush(lua_State *L, const SDL_Event *ev)
 {
@@ -803,6 +817,10 @@ eventPush(lua_State *L, const SDL_Event *ev)
 	case SDL_DOLLARGESTURE:			func = pushDollarGesture;	break;
 	case SDL_MULTIGESTURE:			func = pushMultiGesture;	break;
 	case SDL_DROPFILE:			func = pushDropFile;		break;
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	case SDL_AUDIODEVICEADDED:
+	case SDL_AUDIODEVICEREMOVED:		func = pushAudioDevice;		break;
+#endif
 	case SDL_USEREVENT:			/* XXX: TO IMPLEMENT */
 	default:
 		break;
