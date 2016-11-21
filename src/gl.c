@@ -323,6 +323,9 @@ const CommonEnum GlAttr[] = {
 	{ "ContextProfileMask",		SDL_GL_CONTEXT_PROFILE_MASK		},
 	{ "ShareWithCurrentContext",	SDL_GL_SHARE_WITH_CURRENT_CONTEXT	},
 	{ "FramebufferSRGBCapable",	SDL_GL_FRAMEBUFFER_SRGB_CAPABLE		},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "ContextReleaseBehavior",	SDL_GL_CONTEXT_RELEASE_BEHAVIOR		},
+#endif
 	{ NULL,				-1					}
 };
 

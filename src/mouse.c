@@ -22,6 +22,29 @@
 #include "mouse.h"
 #include "window.h"
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.captureMouse(enabled)
+ *
+ * Arguments:
+ *	enabled enables or disables global mouse event capturing.
+ *
+ * Returns:
+ *	true on success, nil if not supported
+ *	an error message on failure
+ */
+static int
+l_captureMouse(lua_State *L)
+{
+	SDL_bool enabled = lua_toboolean(L, 1);
+
+	if (SDL_CaptureMouse(enabled) < 0)
+		return commonPush(L, "ns", SDL_GetError);
+
+	return commonPush(L, "b", 1);
+}
+#endif
+
 /*
  * SDL.createColorCursor(s, x, y)
  *
@@ -227,6 +250,9 @@ l_showCursor(lua_State *L)
 }
 
 const luaL_Reg MouseFunctions[] = {
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "captureMouse",		l_captureMouse		},
+#endif
 	{ "createColorCursor",		l_createColorCursor	},
 	{ "createCursor",		l_createCursor		},
 	{ "getCursor",			l_getCursor		},

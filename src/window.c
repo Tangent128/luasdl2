@@ -2,6 +2,7 @@
  * window.c -- window management
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
+ * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -79,8 +80,30 @@ l_createWindow(lua_State *L)
 	return commonPush(L, "p", WindowName, win);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.getGrabbedWindow()
+ *
+ * Returns:
+ *	the window that currently has an input grab, or nil if no window is grabbed.
+ */
+static int
+l_getGrabbedWindow(lua_State *L)
+{
+	SDL_Window *win = SDL_GetGrabbedWindow();
+
+	if (win == NULL)
+		return commonPush(L, "n");
+
+	return commonPush(L, "p", WindowName, win);
+}
+#endif
+
 const struct luaL_Reg WindowFunctions[] = {
 	{ "createWindow",	l_createWindow		},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "getGrabbedWindow",	l_getGrabbedWindow	},
+#endif
 	{ NULL,			NULL			}
 };
 
@@ -742,6 +765,87 @@ l_window_warpMouse(lua_State *L)
 	return 0;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+
+// TODO: determine if this works without concurrency crazyness.
+// TODO: Get authoritative proof of how uservalues work
+
+typedef struct {
+	lua_State *L;	// The Lua state the callback is in
+	int ref;	// The registry index of the function to call
+} CallbackData;
+
+static SDL_HitTestResult
+hitTestCallback(SDL_Window *win, const SDL_Point *area, CallbackData *cd)
+{
+	SDL_HitTestResult ht;
+	int st = lua_gettop(cd->L);
+
+	lua_geti(cd->L, LUA_REGISTRYINDEX, cd->ref);
+	commonPush(cd->L, "p", WindowName, win);
+	videoPushPoint(cd->L, area);
+
+	if (lua_pcall(cd->L, 2, 1, 0) == LUA_OK)
+		ht = lua_tointeger(cd->L, -1);
+	else
+		ht = SDL_HITTEST_NORMAL;
+
+	lua_settop(cd->L, st);
+
+	return ht;
+}
+
+/*
+ * Window:setHitTest(func)
+ *
+ * Arguments:
+ *	func a callback function or nil to clear the hit-test callback.
+ */
+static int
+l_window_setHitTest(lua_State *L)
+{
+	SDL_Window *w 	= commonGetAs(L, 1, WindowName, SDL_Window *);
+	int t		= lua_type(L, 2);
+
+	/* Clear a window's existing callback */
+	if (lua_getuservalue(L, 1) == LUA_TUSERDATA) {
+		CallbackData **cd = lua_touserdata(L, -1);
+		luaL_unref((*cd)->L, LUA_REGISTRYINDEX, (*cd)->ref);
+		lua_pop(L, 1);
+		lua_pushnil(L);
+		lua_setuservalue(L, 1);
+	}
+	else {
+		lua_pop(L, 1);
+	}
+
+	if (t == LUA_TFUNCTION) {
+		CallbackData *cd;
+		if ((cd = malloc(sizeof (CallbackData))) == NULL)
+			return commonPushErrno(L, 1);
+
+		cd->L = L;
+		cd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
+		lua_pop(L, 1);
+
+		/* Set a window's callback */
+		CallbackData **cdp = lua_newuserdata(L, sizeof(CallbackData *));
+		*cdp = cd;
+
+		lua_setuservalue(L, 1);
+
+		if (SDL_SetWindowHitTest(w, (SDL_HitTest)hitTestCallback, cd) < 0)
+			return commonPush(L, "ns", SDL_GetError());
+	}
+	else
+		if (SDL_SetWindowHitTest(w, NULL, NULL) < 0)
+		return commonPush(L, "ns", SDL_GetError());
+
+	return 0;
+}
+
+#endif
+
 /* --------------------------------------------------------
  * Window object metamethods
  * -------------------------------------------------------- */
@@ -817,6 +921,9 @@ static const luaL_Reg WindowMethods[] = {
 	{ "updateSurface",	l_window_updateSurface		},
 	{ "updateSurfaceRects",	l_window_updateSurfaceRects	},
 	{ "warpMouse",		l_window_warpMouse		},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "setHitTest",		l_window_setHitTest		},
+#endif
 	{ NULL,			NULL				}
 };
 
@@ -851,3 +958,21 @@ const CommonEnum WindowFlags[] = {
 	{ "Foreign",			SDL_WINDOW_FOREIGN		},
 	{ NULL,				-1				}
 };
+
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+
+const CommonEnum HitTestResults[] = {
+	{ "Normal",			SDL_HITTEST_NORMAL		},
+	{ "Draggable",			SDL_HITTEST_DRAGGABLE		},
+	{ "ResizeTopLeft",		SDL_HITTEST_RESIZE_TOPLEFT	},
+	{ "ResizeTop",			SDL_HITTEST_RESIZE_TOP		},
+	{ "ResizeTopRight",		SDL_HITTEST_RESIZE_TOPRIGHT	},
+	{ "ResizeRight",		SDL_HITTEST_RESIZE_RIGHT	},
+	{ "ResizeBottomLeft",		SDL_HITTEST_RESIZE_BOTTOMLEFT	},
+	{ "ResizeBottom",		SDL_HITTEST_RESIZE_BOTTOM	},
+	{ "ResizeBottomRight",		SDL_HITTEST_RESIZE_BOTTOMRIGHT	},
+	{ "ResizeLeft",			SDL_HITTEST_RESIZE_LEFT		},
+	{ NULL,				-1				}
+};
+
+#endif

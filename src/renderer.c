@@ -195,7 +195,7 @@ rendererDrawOrFillRect(lua_State *L, int draw)
 
 	/* Draw or fill? */
 	UseFunc func = (draw) ? SDL_RenderDrawRect : SDL_RenderFillRect;
-	
+
 	videoGetRect(L, 2, &r);
 
 	if (func(rd, &r) < 0)
@@ -277,7 +277,7 @@ l_renderer_createTextureFromSuface(lua_State *L)
 {
 	SDL_Renderer *rd	= commonGetAs(L, 1, RendererName, SDL_Renderer *);
 	SDL_Surface *surf	= commonGetAs(L, 2, SurfaceName, SDL_Surface *);
-	
+
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(rd, surf);
 	if (tex == NULL)
 		return commonPushSDLError(L, 1);
@@ -396,7 +396,7 @@ l_renderer_copyEx(lua_State *L)
 		pointptr = &point;
 	}
 	lua_pop(L, 1);
-		
+
 	/* Optional flip */
 	flip = tableGetInt(L, 2, "flip");
 
@@ -735,6 +735,22 @@ l_renderer_setClipRect(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * Renderer:isClipEnabled()
+ *
+ * Returns:
+ *	True if enabled or false otherwise.
+ */
+static int
+l_renderer_isClipEnabled(lua_State *L)
+{
+	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
+
+	return commonPush(L, "b", SDL_RenderIsClipEnabled(rd));
+}
+#endif
+
 /*
  * Renderer:setDrawBlendMode(mode)
  *
@@ -940,6 +956,9 @@ static const luaL_Reg RendererMethods[] = {
 	{ "setTarget",			l_renderer_setTarget			},
 	{ "setViewport",		l_renderer_setViewport			},
 	{ "setLogicalSize",		l_renderer_setLogicalSize		},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "isClipEnabled",		l_renderer_isClipEnabled		},
+#endif
 	{ NULL,				NULL					}
 };
 

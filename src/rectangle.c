@@ -2,6 +2,7 @@
  * rectangle.c -- rectangle, overlap and merges
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
+ * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -63,7 +64,7 @@ l_enclosePoints(lua_State *L)
 
 	/* Get rid of points */
 	arrayFree(&points);
-	
+
 	return 2;
 }
 
@@ -214,6 +215,30 @@ l_unionRect(lua_State *L)
 	return 1;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.pointInRect(p, r)
+ *
+ * Arguments:
+ *	p the point
+ *	r the rectangle
+ *
+ * Returns:
+ *	true if p lies within r
+ */
+static int
+l_pointInRect(lua_State *L)
+{
+	SDL_Point p;
+	SDL_Rect r;
+
+	videoGetPoint(L, 1, &p);
+	videoGetRect(L, 2, &r);
+
+	return commonPush(L, "b", SDL_PointInRect(&p, &r));
+}
+#endif
+
 const luaL_Reg RectangleFunctions[] = {
 	{ "enclosePoints",		l_enclosePoints		},
 	{ "hasIntersection",		l_hasIntersection	},
@@ -222,5 +247,8 @@ const luaL_Reg RectangleFunctions[] = {
 	{ "rectEmpty",			l_rectEmpty		},
 	{ "rectEquals",			l_rectEquals		},
 	{ "unionRect",			l_unionRect		},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "pointInRect",		l_pointInRect		},
+#endif
 	{ NULL,				NULL			}
 };
