@@ -171,7 +171,7 @@ l_logMessage(lua_State *L)
 	int priority	= luaL_checkinteger(L, 2);
 	const char *msg	= luaL_checkstring(L, 3);
 
-	SDL_LogMessage(category, priority, msg);
+	SDL_LogMessage(category, priority, "%s", msg);
 
 	return 0;
 }
@@ -220,7 +220,7 @@ l_logSetOutputFunction(lua_State *L)
 	luaL_checktype(L, 1, LUA_TFUNCTION);
 
 	/* Remove old one if needed */
-	if (loggingOutputFunc != LUA_REFNIL)	
+	if (loggingOutputFunc != LUA_REFNIL)
 		luaL_unref(L, LUA_REGISTRYINDEX, loggingOutputFunc);
 
 	lua_pushvalue(L, 1);

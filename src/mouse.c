@@ -2,6 +2,7 @@
  * mouse.c -- mouse event management
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
+ * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -288,3 +289,16 @@ const CommonEnum MouseMask[] = {
 	{ "X2",				SDL_BUTTON_X2MASK	},
 	{ NULL,				-1			},
 };
+
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+
+/*
+ * SDL.mouseClick
+ */
+const CommonEnum MouseClick[] = {
+	{ "Single", 			1	},
+	{ "Double",			2	},
+	{ NULL,				-1	}
+};
+
+#endif
