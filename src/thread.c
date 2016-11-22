@@ -249,7 +249,7 @@ l_thread_gc(lua_State *L)
 {
 	LuaThread *t = commonGetAs(L, 1, ThreadName, LuaThread *);
 
-#if SDL_PATCHLEVEL >= 2
+#if SDL_VERSION_ATLEAST(2, 0, 2)
 	if (!t->joined)
 		SDL_DetachThread(t->ptr);
 #endif

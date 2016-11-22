@@ -103,7 +103,7 @@ timerCallback(Uint32 interval, Timer *t)
 	lua_pushinteger(t->L, interval);
 
 	if (lua_pcall(t->L, 1, 1, 0) != LUA_OK) {
-		SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, lua_tostring(t->L, -1));
+		SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, "%s", lua_tostring(t->L, -1));
 		lua_pop(t->L, 1);
 	} else if (lua_type(t->L, -1) == LUA_TNUMBER)
 		v = (Uint32)lua_tonumber(t->L, -1);

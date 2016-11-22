@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
  * Copyright (c) 2014 Joseph Wallace <tangent128@gmail.com>
+ * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -97,6 +98,21 @@ l_glGetAttribute(lua_State *L)
 	return commonPush(L, "i", value);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+/*
+ * SDL.glResetAttributes()
+ *
+ * Returns:
+ *	nothing
+ */
+static int
+l_glResetAttributes(lua_State *L)
+{
+	SDL_GL_ResetAttributes();
+	return 0;
+}
+#endif
+
 /*
  * SDL.glCreateContext(window)
  *
@@ -170,7 +186,7 @@ l_glGetCurrentWindow(lua_State *L)
 static int
 l_glGetCurrentContext(lua_State *L)
 {
-	SDL_GLContext c = SDL_GL_GetCurrentContext();	
+	SDL_GLContext c = SDL_GL_GetCurrentContext();
 
 	if (c == NULL)
 		return commonPushSDLError(L, 1);
@@ -264,6 +280,9 @@ const luaL_Reg GlFunctions[] = {
 	{ "glExtensionSupported",	l_glExtensionSupported			},
 	{ "glSetAttribute",		l_glSetAttribute			},
 	{ "glGetAttribute",		l_glGetAttribute			},
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+	{ "glResetAttributes",		l_glResetAttributes			},
+#endif
 	{ "glCreateContext",		l_glCreateContext			},
 	{ "glMakeCurrent",		l_glMakeCurrent				},
 	{ "glGetCurrentWindow",		l_glGetCurrentWindow			},

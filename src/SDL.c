@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
  * Copyright (c) 2014, 2015 Joseph Wallace <tangent128@gmail.com>
+ * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -202,7 +203,7 @@ l_getError(lua_State *L)
 static int
 l_setError(lua_State *L)
 {
-	SDL_SetError(luaL_checkstring(L, 1));
+	SDL_SetError("%s", luaL_checkstring(L, 1));
 
 	return 0;
 }
@@ -369,6 +370,9 @@ static const struct {
 
 	{ "mouseButton",	MouseButtons			},
 	{ "mouseMask",		MouseMask			},
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+	{ "mouseClick",		MouseClick			},
+#endif
 	{ "event",		EventType			},
 	{ "eventAction",	EventAction			},
 	{ "eventWindow",	EventWindow			},

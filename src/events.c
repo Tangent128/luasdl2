@@ -2,6 +2,7 @@
  * events.c -- general event management and enumerations
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
+ * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -31,7 +32,7 @@
  *
  * SDL_DelEventWatch() checks for the function / userdata to remove the
  * correct one, so we need to create a new filter for each new filter
- * function since the function is the same (event_filter).
+ * function since the function is the same (eventFilter).
  */
 typedef struct {
 	lua_State	*L;		/*! the Lua state */
@@ -57,7 +58,7 @@ eventFilter(Filter *data, SDL_Event *ev)
 	lua_rawgeti(data->L, LUA_REGISTRYINDEX, data->ref);
 	eventPush(data->L, ev);
 	lua_call(data->L, 1, nret);
-	
+
 	/* Return value is needed for EventFilter */
 	value = (data->type == EventTypeFilter) ? lua_toboolean(data->L, -1) : 0;
 
@@ -264,7 +265,7 @@ l_event_peepEvents(lua_State *L)
 	int last	= SDL_LASTEVENT;
 	int ret, toreturn;
 	SDL_Event *events;
-	
+
 	/*
 	 * First and last are defaulted to SDL_FIRSTEVENT and SDL_LASTEVENT.
 	 */
@@ -479,6 +480,9 @@ const CommonEnum EventType[] = {
 	{ "MultiGesture",		SDL_MULTIGESTURE		},
 	{ "ClipboardUpdate",		SDL_CLIPBOARDUPDATE		},
 	{ "DropFile",			SDL_DROPFILE			},
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+	{ "RenderTargetsReset",		SDL_RENDER_TARGETS_RESET	},
+#endif
 	{ "UserEvent",			SDL_USEREVENT			},
 	{ "Last",			SDL_LASTEVENT			},
 	{ NULL,				-1				}
@@ -636,6 +640,9 @@ pushMouseButton(lua_State *L, const SDL_Event *ev)
 	tableSetInt(L, -1, "y", ev->button.y);
 	tableSetInt(L, -1, "which", ev->button.which);
 	tableSetBool(L, -1, "state", ev->button.state);
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+	tableSetInt(L, -1, "clicks", ev->button.clicks);
+#endif
 
 	if (ev->motion.which == SDL_TOUCH_MOUSEID)
 		tableSetBool(L, -1, "touch", 1);
