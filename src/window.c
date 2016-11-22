@@ -767,9 +767,6 @@ l_window_warpMouse(lua_State *L)
 
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 
-// TODO: determine if this works without concurrency crazyness.
-// TODO: Get authoritative proof of how uservalues work
-
 typedef struct {
 	lua_State *L;	// The Lua state the callback is in
 	int ref;	// The registry index of the function to call
@@ -785,10 +782,8 @@ hitTestCallback(SDL_Window *win, const SDL_Point *area, CallbackData *cd)
 	commonPush(cd->L, "p", WindowName, win);
 	videoPushPoint(cd->L, area);
 
-	if (lua_pcall(cd->L, 2, 1, 0) == LUA_OK)
-		ht = lua_tointeger(cd->L, -1);
-	else
-		ht = SDL_HITTEST_NORMAL;
+	/* If the callback errored or didn't return a value, we get HITTEST_NORMAL */
+	ht = luaL_optinteger(cd->L, -1, SDL_HITTEST_NORMAL);
 
 	lua_settop(cd->L, st);
 
@@ -806,11 +801,12 @@ l_window_setHitTest(lua_State *L)
 {
 	SDL_Window *w 	= commonGetAs(L, 1, WindowName, SDL_Window *);
 	int t		= lua_type(L, 2);
+	int ut;
 
 	/* Clear a window's existing callback */
-	if (lua_getuservalue(L, 1) == LUA_TUSERDATA) {
-		CallbackData **cd = lua_touserdata(L, -1);
-		luaL_unref((*cd)->L, LUA_REGISTRYINDEX, (*cd)->ref);
+	if ((ut = lua_getuservalue(L, 1)) == LUA_TUSERDATA) {
+		CallbackData *cd = *(CallbackData **)lua_touserdata(L, -1);
+		luaL_unref(cd->L, LUA_REGISTRYINDEX, cd->ref);
 		lua_pop(L, 1);
 		lua_pushnil(L);
 		lua_setuservalue(L, 1);
@@ -826,7 +822,6 @@ l_window_setHitTest(lua_State *L)
 
 		cd->L = L;
 		cd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
-		lua_pop(L, 1);
 
 		/* Set a window's callback */
 		CallbackData **cdp = lua_newuserdata(L, sizeof(CallbackData *));
