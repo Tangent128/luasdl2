@@ -159,6 +159,31 @@ l_video_getDisplayBounds(lua_State *L)
 	return 1;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.getDisplayDPI(index)
+ *
+ * Arguments:
+ *	index the display index
+ *
+ * Returns:
+ *	The diagonal DPI of the display or nil on failure
+ *	The horizontal DPI of the display, or an error message on failure
+ *	The vertical DPI of the display, or nil on failure
+ */
+static int
+l_video_getDisplayDPI(lua_State *L)
+{
+	int display_index	= luaL_checkinteger(L, 1);
+	float ddpi, hdpi, vdpi;
+
+	if (SDL_GetDisplayDPI(display_index, &ddpi, &hdpi, &vdpi) < 0)
+		return commonPushSDLError(L, 1);
+
+	return commonPush(L, "ddd", ddpi, hdpi, vdpi);
+}
+#endif
+
 /*
  * SDL.getDisplayMode(index, modeIndex)
  *
@@ -315,6 +340,9 @@ const luaL_Reg DisplayFunctions[] = {
 	{ "getCurrentVideoDriver",		l_video_getCurrentVideoDriver	},
 	{ "getDesktopDisplayMode",		l_video_getDesktopDisplayMode	},
 	{ "getDisplayBounds",			l_video_getDisplayBounds	},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "getDisplayDPI",			l_video_getDisplayDPI		},
+#endif
 	{ "getDisplayMode",			l_video_getDisplayMode		},
 	{ "getNumDisplayModes",			l_video_getNumDisplayModes	},
 	{ "getNumVideoDisplays",		l_video_getNumVideoDisplays	},
@@ -366,5 +394,9 @@ const CommonEnum PixelFormat[] = {
 	{ "YUY2",				SDL_PIXELFORMAT_YUY2		},
 	{ "UYVY",				SDL_PIXELFORMAT_UYVY		},
 	{ "YVYU",				SDL_PIXELFORMAT_YVYU		},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "NV12",				SDL_PIXELFORMAT_NV12		},
+	{ "NV21",				SDL_PIXELFORMAT_NV21		},
+#endif
 	{ NULL,					-1				}
 };

@@ -45,6 +45,31 @@ l_joystickOpen(lua_State *L)
 	return commonPush(L, "p", JoystickName, j);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.joystickFromInstanceID(id)
+ *
+ * Arguments:
+ *	id the Joystick's InstanceID
+ *
+ * Returns:
+ *	the joystick object or nil on failure
+ *	The error message
+ */
+ static int
+ l_joystickFromInstanceID(lua_State *L)
+ {
+	 int id = luaL_checkinteger(L, 1);
+	 SDL_Joystick *j;
+
+	 j = SDL_JoystickFromInstanceID(id);
+	 if (j == NULL)
+	 return commonPushSDLError(L, 1);
+
+	 return commonPush(L, "p", JoystickName, j);
+ }
+#endif
+
 /*
  * SDL.joystickEventState(index)
  *
@@ -124,6 +149,9 @@ l_joystickUpdate(lua_State *L)
 
 const luaL_Reg JoystickFunctions[] = {
 	{ "joystickOpen",		l_joystickOpen			},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "joystickFromInstanceID",	l_joystickFromInstanceID	},
+#endif
 	{ "joystickEventState",		l_joystickEventState		},
 	{ "numJoysticks",		l_numJoysticks			},
 	{ "joystickNameForIndex",	l_joystickNameForIndex		},
@@ -153,6 +181,25 @@ joystickGetNum(lua_State *L, NumFunc func)
 /* --------------------------------------------------------
  * Joystick object methods
  * -------------------------------------------------------- */
+
+/*
+ * Joystick:currentPowerlevel()
+ *
+ * Returns:
+ *	The current powerlevel of the joystick, or SDL.joystickPowerLevel.Unknown if unknown
+ *	An error message if unknown
+ */
+static int
+l_joystick_currentPowerLevel(lua_State *L)
+{
+	SDL_Joystick *j = commonGetAs(L, 1, JoystickName, SDL_Joystick *);
+	SDL_JoystickPowerLevel pl;
+
+	if ((pl = SDL_JoystickCurrentPowerLevel(j)) == SDL_JOYSTICK_POWER_UNKNOWN)
+		return commonPush(L, "is", pl, SDL_GetError());
+
+	return commonPush(L, "i", pl);
+}
 
 /*
  * Joystick:getAttached()
@@ -402,6 +449,9 @@ l_joystick_tostring(lua_State *L)
  * -------------------------------------------------------- */
 
 static const luaL_Reg JoystickMethods[] = {
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "currentPowerlevel",		l_joystick_currentPowerLevel	},
+#endif
 	{ "getAttached",		l_joystick_getAttached		},
 	{ "getAxis",			l_joystick_getAxis		},
 	{ "getBall",			l_joystick_getBall		},
@@ -443,3 +493,19 @@ const CommonEnum EventJoyHat[] = {
 	{ "LeftDown",	SDL_HAT_LEFTDOWN	},
 	{ NULL,		-1			}
 };
+
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.joystickPowerLevel
+ */
+const CommonEnum JoystickPowerLevels[] = {
+	{ "Unknown",	SDL_JOYSTICK_POWER_UNKNOWN	},
+	{ "Empty",	SDL_JOYSTICK_POWER_EMPTY	},
+	{ "Low",	SDL_JOYSTICK_POWER_LOW		},
+	{ "Medium",	SDL_JOYSTICK_POWER_MEDIUM	},
+	{ "Full",	SDL_JOYSTICK_POWER_FULL		},
+	{ "Wired",	SDL_JOYSTICK_POWER_WIRED	},
+	{ "Max",	SDL_JOYSTICK_POWER_MAX		},
+	{ NULL,		-1				}
+};
+#endif

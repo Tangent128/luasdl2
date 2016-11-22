@@ -352,6 +352,9 @@ static const struct {
 
 	/* Joystick values */
 	{ "joyHat",		EventJoyHat			},
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "joystickPowerLevel",	JoystickPowerLevels		},
+#endif
 
 	/* Game Controller values */
 	{ "controllerAxis",	GameCtlAxis			},
