@@ -108,6 +108,7 @@ l_glGetAttribute(lua_State *L)
 static int
 l_glResetAttributes(lua_State *L)
 {
+	(void) L;
 	SDL_GL_ResetAttributes();
 	return 0;
 }

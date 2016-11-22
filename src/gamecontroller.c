@@ -118,6 +118,31 @@ l_gameControllerOpen(lua_State *L)
 	return commonPush(L, "p", GameCtlName, c);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+/*
+ * SDL.gameControllerFromInstanceID(id)
+ *
+ * Arguments:
+ *	id the controller InstanceID
+ *
+ * Returns:
+ *	The controller object or nil on failure
+ *	The error message
+ */
+static int
+l_gameControllerFromInstanceID(lua_State *L)
+{
+	int id = luaL_checkinteger(L, 1);
+	SDL_GameController *c;
+
+	c = SDL_GameControllerFromInstanceID(id);
+	if (c == NULL)
+		return commonPushSDLError(L, 1);
+
+	return commonPush(L, "p", GameCtlName, c);
+}
+#endif
+
 /*
  * SDL.gameControllerNameForIndex(index)
  *
@@ -163,6 +188,7 @@ const luaL_Reg GamectlFunctions[] = {
 #if SDL_VERSION_ATLEAST(2, 0, 2)
 	{ "gameControllerAddMappingsFromFile",	l_gameControllerAddMappingsFromFile	},
 	{ "gameControllerAddMappingsFromRW",	l_gameControllerAddMappingsFromRW	},
+	{ "gameControllerFromInstanceID",	l_gameControllerFromInstanceID		},
 #endif
 	{ "gameControllerOpen",			l_gameControllerOpen			},
 	{ "gameControllerNameForIndex",		l_gameControllerNameForIndex		},

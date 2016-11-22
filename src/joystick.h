@@ -29,4 +29,8 @@ extern const CommonObject Joystick;
 
 extern const CommonEnum EventJoyHat[];
 
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+extern const CommonEnum JoystickPowerLevels[];
+#endif
+
 #endif /* !_JOYSTICK_H_ */

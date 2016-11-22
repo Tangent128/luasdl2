@@ -484,6 +484,7 @@ const CommonEnum EventType[] = {
 	{ "RenderTargetsReset",		SDL_RENDER_TARGETS_RESET	},
 #endif
 #if SDL_VERSION_ATLEAST(2, 0, 4)
+	{ "RenderDeviceReset",		SDL_RENDER_DEVICE_RESET		},
 	{ "AudioDeviceAdded",		SDL_AUDIODEVICEADDED		},
 	{ "AudioDeviceRemoved",		SDL_AUDIODEVICEREMOVED		},
 #endif
@@ -659,6 +660,9 @@ pushMouseWheel(lua_State *L, const SDL_Event *ev)
 	tableSetInt(L, -1, "which", ev->wheel.which);
 	tableSetInt(L, -1, "x", ev->wheel.x);
 	tableSetInt(L, -1, "y", ev->wheel.y);
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+	tableSetInt(L, -1, "direction", ev->wheel.direction);
+#endif
 }
 
 static void
