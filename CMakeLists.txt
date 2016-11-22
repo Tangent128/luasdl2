@@ -23,8 +23,8 @@ project(Lua-SDL2 C)
 # Project information
 set(MAJOR "2")
 set(MINOR "0")
-set(PATCH "3")
-set(BINDING "4")
+set(PATCH "4")
+set(BINDING "5")
 set(BINDING_PATCH "0")
 set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}.${BINDING_PATCH}")
 
@@ -211,7 +211,7 @@ if (WIN32)
 	else ()
 		set(WINARCH "x86")
 	endif ()
-	
+
 	if (MINGW)
 		set(GENERATOR "MinGW")
 	else ()
