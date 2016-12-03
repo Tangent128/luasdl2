@@ -747,7 +747,7 @@ l_audiodev_queue(lua_State *L)
 
 	if (dev->isdevice) {
 		if (SDL_QueueAudio(dev->id, (void *)data, len) < 0)
-			return commonPush(L, "ns", SDL_GetError());
+			return commonPushSDLError(L, 1);
 		else
 			return commonPush(L, "b", 1);
 	}
