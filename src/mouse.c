@@ -39,7 +39,7 @@ l_captureMouse(lua_State *L)
 	SDL_bool enabled = lua_toboolean(L, 1);
 
 	if (SDL_CaptureMouse(enabled) < 0)
-		return commonPush(L, "ns", SDL_GetError);
+		return commonPushSDLError(L, 1);
 
 	return commonPush(L, "b", 1);
 }

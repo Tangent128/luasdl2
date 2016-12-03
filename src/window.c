@@ -781,6 +781,7 @@ hitTestCallback(SDL_Window *win, const SDL_Point *area, CallbackData *cd)
 	lua_geti(cd->L, LUA_REGISTRYINDEX, cd->ref);
 	commonPush(cd->L, "p", WindowName, win);
 	videoPushPoint(cd->L, area);
+	lua_pcall(cd->L, 2, 1, 0);
 
 	/* If the callback errored or didn't return a value, we get HITTEST_NORMAL */
 	ht = luaL_optinteger(cd->L, -1, SDL_HITTEST_NORMAL);
@@ -807,6 +808,7 @@ l_window_setHitTest(lua_State *L)
 	if ((ut = lua_getuservalue(L, 1)) == LUA_TUSERDATA) {
 		CallbackData *cd = *(CallbackData **)lua_touserdata(L, -1);
 		luaL_unref(cd->L, LUA_REGISTRYINDEX, cd->ref);
+		free(cd);
 		lua_pop(L, 1);
 		lua_pushnil(L);
 		lua_setuservalue(L, 1);
@@ -830,11 +832,11 @@ l_window_setHitTest(lua_State *L)
 		lua_setuservalue(L, 1);
 
 		if (SDL_SetWindowHitTest(w, (SDL_HitTest)hitTestCallback, cd) < 0)
-			return commonPush(L, "ns", SDL_GetError());
+			return commonPushSDLError(L, 1);
 	}
 	else
 		if (SDL_SetWindowHitTest(w, NULL, NULL) < 0)
-		return commonPush(L, "ns", SDL_GetError());
+			return commonPushSDLError(L, 1);
 
 	return 0;
 }
