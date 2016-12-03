@@ -765,7 +765,7 @@ l_window_warpMouse(lua_State *L)
 	return 0;
 }
 
-#if SDL_VERSION_ATLEAST(2, 0, 4)
+#if SDL_VERSION_ATLEAST(2, 0, 4) && LUA_VERSION_NUM >= 502
 
 typedef struct {
 	lua_State *L;	// The Lua state the callback is in
@@ -794,8 +794,16 @@ hitTestCallback(SDL_Window *win, const SDL_Point *area, CallbackData *cd)
 /*
  * Window:setHitTest(func)
  *
+ * Sets the HitTest callback for a window.
+ * It is highly recommended that this is called in the same thread that
+ * initialized video and calls SDL.pollEvent().
+ *
  * Arguments:
  *	func a callback function or nil to clear the hit-test callback.
+ *
+ * Returns:
+ *	true or nil on failure
+ *	the error message on failure
  */
 static int
 l_window_setHitTest(lua_State *L)
@@ -834,11 +842,12 @@ l_window_setHitTest(lua_State *L)
 		if (SDL_SetWindowHitTest(w, (SDL_HitTest)hitTestCallback, cd) < 0)
 			return commonPushSDLError(L, 1);
 	}
-	else
+	else {
 		if (SDL_SetWindowHitTest(w, NULL, NULL) < 0)
 			return commonPushSDLError(L, 1);
+	}
 
-	return 0;
+	return commonPush(L, "b", 1);
 }
 
 #endif
@@ -918,7 +927,7 @@ static const luaL_Reg WindowMethods[] = {
 	{ "updateSurface",	l_window_updateSurface		},
 	{ "updateSurfaceRects",	l_window_updateSurfaceRects	},
 	{ "warpMouse",		l_window_warpMouse		},
-#if SDL_VERSION_ATLEAST(2, 0, 4)
+#if SDL_VERSION_ATLEAST(2, 0, 4) && LUA_VERSION_NUM >= 502
 	{ "setHitTest",		l_window_setHitTest		},
 #endif
 	{ NULL,			NULL				}
