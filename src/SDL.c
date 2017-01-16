@@ -244,6 +244,31 @@ l_getHint(lua_State *L)
 	return 1;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+/*
+ * SDL.getHintBoolean(name[, default])
+ *
+ * Get a hint as a boolean value.
+ * If the hint does not exist, returns the 'truthyness'
+ * of the 'default' argument.
+ *
+ * Arguments:
+ *	The name of the hint to query.
+ *	The default value to return if the hint does not exist.
+ *
+ * Returns:
+ *	The hint value as a boolean.
+ */
+static int
+l_getHintBoolean(lua_State *L)
+{
+	const char *name = luaL_checkstring(L, 1);
+	int val = lua_toboolean(L, 2);
+
+	return commonPush(L, "b", SDL_GetHintBoolean(name, val));
+}
+#endif
+
 /*
  * SDL.setHint(name, value)
  *
@@ -285,6 +310,9 @@ static const luaL_Reg functions[] = {
 	{ "setError",		l_setError		},
 	{ "clearHints",		l_clearHints		},
 	{ "getHint",		l_getHint		},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "getHintBoolean",	l_getHintBoolean	},
+#endif
 	{ "setHint",		l_setHint		},
 	{ NULL,			NULL			}
 };

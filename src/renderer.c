@@ -640,6 +640,22 @@ l_renderer_getDrawColor(lua_State *L)
 	return 2;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+/*
+ * Renderer:getIntegerScale(enabled)
+ *
+ * Returns:
+ *	true if enabled, false otherwise
+ */
+static int
+l_renderer_getIntegerScale(lua_State *L)
+{
+	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
+
+	return commonPush(L, "b", SDL_RenderGetIntegerScale(rd));
+}
+#endif
+
 /*
  * Renderer:getRendererInfo()
  *
@@ -800,6 +816,30 @@ l_renderer_setDrawColor(lua_State *L)
 	return commonPush(L, "b", 1);
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+/*
+ * Renderer:setIntegerScale(enabled)
+ *
+ * Arguments:
+ *	enable enable integer scaling for this renderer
+ *
+ * Returns:
+ *	true on success, nil otherwise
+ *	the error message
+ */
+static int
+l_renderer_setIntegerScale(lua_State *L)
+{
+	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
+	int enabled = lua_toboolean(L, 2);
+
+	if (SDL_RenderSetIntegerScale(rd, enabled) < 0)
+		return commonPushSDLError(L, 1);
+
+	return commonPush(L, "b", 1);
+}
+#endif
+
 /*
  * Renderer:setTarget(texture)
  *
@@ -947,6 +987,9 @@ static const luaL_Reg RendererMethods[] = {
 	{ "getClipRect",		l_renderer_getClipRect			},
 	{ "getDrawBlendMode",		l_renderer_getDrawBlendMode		},
 	{ "getDrawColor",		l_renderer_getDrawColor			},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "getIntegerScale",		l_renderer_getIntegerScale		},
+#endif
 	{ "getInfo",			l_renderer_getInfo			},
 	{ "getViewport",		l_renderer_getViewport			},
 	{ "getLogicalSize",		l_renderer_getLogicalSize		},
@@ -954,6 +997,9 @@ static const luaL_Reg RendererMethods[] = {
 	{ "setClipRect",		l_renderer_setClipRect			},
 	{ "setDrawBlendMode",		l_renderer_setDrawBlendMode		},
 	{ "setDrawColor",		l_renderer_setDrawColor			},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "setIntegerScale",		l_renderer_setIntegerScale		},
+#endif
 	{ "setTarget",			l_renderer_setTarget			},
 	{ "setViewport",		l_renderer_setViewport			},
 	{ "setLogicalSize",		l_renderer_setLogicalSize		},

@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <errno.h>
 
 #include <common/rwops.h>
 #include <common/table.h>
@@ -752,9 +753,51 @@ l_audiodev_queue(lua_State *L)
 			return commonPush(L, "b", 1);
 	}
 	else {
-		return commonPush(L, "ns", "No Audio Device ID present.");
+		return commonPush(L, "ns", "Must be an AudioDevice (opened with SDL.openAudioDevice).");
 	}
 }
+
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+/*
+ * AudioDevice:dequeue(len)
+ *
+ * Pull (dequeue) audio data from capture devices.
+ * NOTE: This function DOES NOT operate on playback devices. This
+ * is audio INPUT, not output.
+ *
+ * Arguments:
+ *	The number of bytes of audio data to retrieve.
+ *
+ * Returns:
+ *	The dequeued audio data, as a string.
+ *	The number of bytes actually queued.
+ *
+ */
+static int
+l_audiodev_dequeue(lua_State *L)
+{
+	AudioDevice *dev	= commonGetAs(L, 1, AudioDeviceName, AudioDevice *);
+	size_t len		= luaL_checkinteger(L, 2);
+
+	if (dev->isdevice && dev->iscapture) {
+		void *data;
+		if ((data = malloc(len)) == NULL)
+			return commonPushErrno(L, 1);
+
+		len = SDL_DequeueAudio(dev->id, data, len);
+
+		lua_pushlstring(L, (const char *)data, len);
+		lua_pushinteger(L, len);
+
+		free(data);
+
+		return 2;
+	}
+	else {
+		return commonPush(L, "ns", "Must be a capture AudioDevice (opened with SDL.openAudioDevice).");
+	}
+}
+#endif
 
 /*
  * AudioDevice:clearQueued()
@@ -864,6 +907,9 @@ static const luaL_Reg AudiodevMethods[] = {
 	{ "unlock",			l_audiodev_unlock	},
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 	{ "queue",			l_audiodev_queue	},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "dequeue",			l_audiodev_dequeue	},
+#endif
 	{ "clearQueued",		l_audiodev_clearQueued	},
 	{ "getQueuedSize",		l_audiodev_getQueuedSize},
 #endif

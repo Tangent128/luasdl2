@@ -160,6 +160,29 @@ l_video_getDisplayBounds(lua_State *L)
 	return 1;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+/*
+ * SDL.getDisplayUsableBounds(index)
+ *
+ * Returns:
+ *	The bounds rectangle or nil on failure
+ *	The error message
+ */
+static int
+l_video_getDisplayUsableBounds(lua_State *L)
+{
+	int index = luaL_checkinteger(L, 1);
+	SDL_Rect ret;
+
+	if (SDL_GetDisplayUsableBounds(index, &ret) < 0)
+		return commonPushSDLError(L, 1);
+
+	videoPushRect(L, &ret);
+
+	return 1;
+}
+#endif
+
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 /*
  * SDL.getDisplayDPI(index)
@@ -341,6 +364,9 @@ const luaL_Reg DisplayFunctions[] = {
 	{ "getCurrentVideoDriver",		l_video_getCurrentVideoDriver	},
 	{ "getDesktopDisplayMode",		l_video_getDesktopDisplayMode	},
 	{ "getDisplayBounds",			l_video_getDisplayBounds	},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "getDisplayUsableBounds",		l_video_getDisplayUsableBounds	},
+#endif
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 	{ "getDisplayDPI",			l_video_getDisplayDPI		},
 #endif
@@ -390,6 +416,12 @@ const CommonEnum PixelFormat[] = {
 	{ "ABGR8888",				SDL_PIXELFORMAT_ABGR8888	},
 	{ "BGRA8888",				SDL_PIXELFORMAT_BGRA8888	},
 	{ "ARGB2101010",			SDL_PIXELFORMAT_ARGB2101010	},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "RGBA32",				SDL_PIXELFORMAT_RGBA32		},
+	{ "ARGB32",				SDL_PIXELFORMAT_ARGB32		},
+	{ "BGRA32",				SDL_PIXELFORMAT_BGRA32		},
+	{ "ABGR32",				SDL_PIXELFORMAT_ABGR32		},
+#endif
 	{ "YV12",				SDL_PIXELFORMAT_YV12		},
 	{ "IYUV",				SDL_PIXELFORMAT_IYUV		},
 	{ "YUY2",				SDL_PIXELFORMAT_YUY2		},
