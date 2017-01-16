@@ -129,6 +129,36 @@ static int l_surface_createRGBFrom(lua_State *L)
 
 #endif
 
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+/*
+ * SDL.createRGBSurfaceWithFormat(
+ *	width,
+ * 	height,
+ * 	depth = 32,
+ *	format = SDL.pixelFormat.RGBA32)
+ *
+ * Create a surface object with the specified format and return it.
+ *
+ * Returns:
+ *	The surface or nil
+ *	The error message
+ */
+static int l_surface_createRGBWithFormat(lua_State *L)
+{
+	int width	= luaL_checkinteger(L, 1);
+	int height	= luaL_checkinteger(L, 2);
+	int depth	= luaL_optinteger(L, 3, 32);
+	int format	= luaL_optinteger(L, 4, SDL_PIXELFORMAT_RGBA32);
+	SDL_Surface *s;
+
+	s = SDL_CreateRGBSurfaceWithFormat(0, width, height, depth, format);
+	if (s == NULL)
+		return commonPushSDLError(L, 1);
+
+	return commonPush(L, "p", SurfaceName, s);
+}
+#endif
+
 /*
  * SDL.loadBMP(path)
  *
@@ -178,11 +208,18 @@ static int l_surface_loadBMP_RW(lua_State *L)
 }
 
 const luaL_Reg SurfaceFunctions[] = {
-	{ "createRGBSurface",		l_surface_createRGB	},
-	{ "loadBMP",			l_surface_loadBMP	},
-	{ "loadBMP_RW",			l_surface_loadBMP_RW	},
+	{ "createRGBSurface",			l_surface_createRGB		},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "createRGBSurfaceWithFormat",		l_surface_createRGBWithFormat	},
+#endif
+	{ "loadBMP",				l_surface_loadBMP		},
+	{ "loadBMP_RW",				l_surface_loadBMP_RW		},
 #if 0
-	{ "createRGBSurfaceFrom",	l_surface_createRGBFrom	},
+	{ "createRGBSurfaceFrom",		l_surface_createRGBFrom		},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "createRGBSurfaceFromWithFormat",
+		l_surface_createRGBFromWithFormat				},
+#endif
 #endif
 	{ NULL,				NULL			}
 };

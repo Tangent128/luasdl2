@@ -2,7 +2,7 @@
  * events.c -- general event management and enumerations
  *
  * Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
- * Copyright (c) 2016 Webster Sheets <webster@web-eworks.com>
+ * Copyright (c) 2016-2017 Webster Sheets <webster@web-eworks.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -488,6 +488,11 @@ const CommonEnum EventType[] = {
 	{ "AudioDeviceAdded",		SDL_AUDIODEVICEADDED		},
 	{ "AudioDeviceRemoved",		SDL_AUDIODEVICEREMOVED		},
 #endif
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "DropText",			SDL_DROPTEXT			},
+	{ "DropBegin",			SDL_DROPBEGIN			},
+	{ "DropComplete",		SDL_DROPCOMPLETE		},
+#endif
 	{ "UserEvent",			SDL_USEREVENT			},
 	{ "Last",			SDL_LASTEVENT			},
 	{ NULL,				-1				}
@@ -511,6 +516,10 @@ const CommonEnum EventWindow[] = {
 	{ "FocusGained",		SDL_WINDOWEVENT_FOCUS_GAINED	},
 	{ "FocusLost",			SDL_WINDOWEVENT_FOCUS_LOST	},
 	{ "Close",			SDL_WINDOWEVENT_CLOSE		},
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	{ "TakeFocus",			SDL_WINDOWEVENT_TAKE_FOCUS	},
+	{ "HitTest",			SDL_WINDOWEVENT_HIT_TEST	},
+#endif
 	{ NULL,				-1				}
 };
 
@@ -588,6 +597,9 @@ pushWindow(lua_State *L, const SDL_Event *ev)
 {
 	tableSetInt(L, -1, "windowID", ev->window.windowID);
 	tableSetInt(L, -1, "event", ev->window.event);
+	tableSetInt(L, -1, "timestamp", ev->window.timestamp);
+	tableSetInt(L, -1, "data1", ev->window.data1);
+	tableSetInt(L, -1, "data2", ev->window.data2);
 }
 
 static void
@@ -755,6 +767,8 @@ pushMultiGesture(lua_State *L, const SDL_Event *ev)
 static void
 pushDropFile(lua_State *L, const SDL_Event *ev)
 {
+	tableSetInt(L, -1, "timestamp", ev->drop.timestamp);
+	tableSetInt(L, -1, "windowID", ev->drop.windowID);
 	tableSetString(L, -1, "file", ev->drop.file);
 	SDL_free(ev->drop.file);
 }
@@ -820,6 +834,11 @@ eventPush(lua_State *L, const SDL_Event *ev)
 	case SDL_FINGERMOTION:			func = pushFinger;		break;
 	case SDL_DOLLARGESTURE:			func = pushDollarGesture;	break;
 	case SDL_MULTIGESTURE:			func = pushMultiGesture;	break;
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+	case SDL_DROPTEXT:
+	case SDL_DROPBEGIN:
+	case SDL_DROPCOMPLETE:
+#endif
 	case SDL_DROPFILE:			func = pushDropFile;		break;
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 	case SDL_AUDIODEVICEADDED:
