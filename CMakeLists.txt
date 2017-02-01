@@ -23,8 +23,8 @@ project(Lua-SDL2 C)
 # Project information
 set(MAJOR "2")
 set(MINOR "0")
-set(PATCH "4")
-set(BINDING "5")
+set(PATCH "5")
+set(BINDING "6")
 set(BINDING_PATCH "0")
 set(VERSION "${MAJOR}.${MINOR}.${PATCH}-${BINDING}.${BINDING_PATCH}")
 
