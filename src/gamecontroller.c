@@ -18,7 +18,7 @@
  */
 
 #include "gamecontroller.h"
-#include "common/rwops.c"
+#include "common/rwops.h"
 
 /* --------------------------------------------------------
  * Gamecontroller functions
