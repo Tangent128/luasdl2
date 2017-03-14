@@ -22,9 +22,8 @@ cmake_minimum_required(VERSION 2.8)
 project(Lua-SDL2 C)
 
 # Project information.  Follows the [SEMVER](semver.org) standard
-set(BINDING_MAJOR "1")
-set(BINDING_MINOR "0")
-set(BINDING_PATCH "0")
+set(BINDING_MAJOR "2")
+set(BINDING_MINOR "1")
 
 # Latest implemented SDL2 version.  Only increment when a new SDL2 version is
 # completely implemented.
@@ -32,7 +31,7 @@ set(MAJOR "2")
 set(MINOR "0")
 set(PATCH "5")
 
-set(VERSION "${BINDING_MAJOR}.${BINDING_MINOR}.${BINDING_PATCH} for SDL ${MAJOR}.${MINOR}.${PATCH}")
+set(VERSION "${BINDING_MAJOR}.${BINDING_MINOR} for SDL ${MAJOR}.${MINOR}.${PATCH}")
 
 set(CMAKE_MODULE_PATH "${Lua-SDL2_SOURCE_DIR}/cmake")
 

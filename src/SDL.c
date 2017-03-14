@@ -484,6 +484,9 @@ luaopen_SDL(lua_State *L)
 	/* Store the version */
 	SDL_GetVersion(&ver);
 
+	tableSetInt(L, -1, "VERSION_MAJOR", ver.major);
+	tableSetInt(L, -1, "VERSION_MINOR", ver.minor);
+	tableSetInt(L, -1, "VERSION_PATCH", ver.patch);
 	lua_newtable(L);
 
 	tableSetInt(L, -1, "major", ver.major);
@@ -496,7 +499,6 @@ luaopen_SDL(lua_State *L)
 
 	tableSetInt(L, -1, "major", VERSION_BINDING_MAJOR);
 	tableSetInt(L, -1, "minor", VERSION_BINDING_MINOR);
-	tableSetInt(L, -1, "patch", VERSION_BINDING_PATCH);
 
 	lua_setfield(L, -2, "binding");
 
