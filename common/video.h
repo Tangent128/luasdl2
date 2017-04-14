@@ -38,15 +38,6 @@ typedef struct line {
 } Line;
 
 /**
- * Push a SDL_Color as a table with three fields r, g, b to Lua.
- *
- * @param L the Lua state
- * @param color the color
- */
-void
-videoPushColorRGB(lua_State *L, const SDL_Color *color);
-
-/**
  * Push a SDL_Rect as a table to Lua.
  *
  * @param L the Lua state
@@ -121,6 +112,8 @@ videoGetLine(lua_State *L, int index, Line *line);
 /**
  * Get a color from a Lua table or a hexadecimal number.
  *
+ * NOTE: This method is deprecated in favor of videoGetRGB + SDL_MapRGBA.
+ *
  * @param L the Lua state
  * @param index the value index
  * @return the color as hexadecimal
@@ -148,6 +141,24 @@ videoGetColorRGB(lua_State *L, int index);
  */
 int
 videoGetColorsRGB(lua_State *L, int index, Array *colors);
+
+/**
+ * Push a SDL_Color as a table with three fields r, g, b to Lua.
+ *
+ * @param L the Lua state
+ * @param color the color
+ */
+void
+videoPushColorRGB(lua_State *L, const SDL_Color *color);
+
+/**
+ * Push a SDL_Color as a hexadecimal integer in ARGB8888 format to Lua.
+ *
+ * @param L the Lua state
+ * @param color the color
+ */
+void
+videoPushColorRGB(lua_State *L, const SDL_Color *color);
 
 /**
  * Get a SDL_DisplayMode from a Lua table. Raises an error if
