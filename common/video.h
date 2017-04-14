@@ -158,7 +158,7 @@ videoPushColorRGB(lua_State *L, const SDL_Color *color);
  * @param color the color
  */
 void
-videoPushColorRGB(lua_State *L, const SDL_Color *color);
+videoPushColorHex(lua_State *L, const SDL_Color *color);
 
 /**
  * Get a SDL_DisplayMode from a Lua table. Raises an error if

@@ -627,14 +627,11 @@ l_renderer_getDrawColor(lua_State *L)
 {
 	SDL_Renderer *rd = commonGetAs(L, 1, RendererName, SDL_Renderer *);
 	SDL_Color c;
-	Uint32 value;
 
 	if (SDL_GetRenderDrawColor(rd, &c.r, &c.g, &c.b, &c.a) < 0)
 		return commonPushSDLError(L, 2);
 
-	value = (c.a << 24) | (c.r << 16) | (c.g << 8) | c.b;
-
-	commonPush(L, "i", value);
+	videoPushColorHex(L, &c);
 	videoPushColorRGB(L, &c);
 
 	return 2;
