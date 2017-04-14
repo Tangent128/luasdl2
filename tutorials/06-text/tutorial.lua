@@ -21,17 +21,18 @@ trySDL(ttf.init)
 -- Create the window
 local win = trySDL(SDL.createWindow, {
 	title	= "06 - Drawing text",		-- optional
-	width	= 90,				-- optional
-	height	= 50,				-- optional
+	width	= 160,				-- optional
+	height	= 80,				-- optional
 })
 
 -- Create the renderer
 local rdr = trySDL(SDL.createRenderer, win, -1)
 
 -- Open the font
-local font = trySDL(ttf.open, "DejaVuSans.ttf", 10)
+local font = trySDL(ttf.open, "DejaVuSans.ttf", 24)
 
 -- Create some text
+local w, h = trySDL(font.sizeText, "Lua-SDL2", t)
 local s = trySDL(font.renderUtf8, font, "Lua-SDL2", "solid", 0xFFFFFF)
 
 -- Convert to texture and show
@@ -39,7 +40,15 @@ local text = trySDL(rdr.createTextureFromSurface, rdr, s)
 
 for i = 1, 50 do
 	rdr:clear()
-	rdr:copy(text)
+
+	-- If a rectangle is not specified, it defaults to the clipping rectangle
+	-- of the source or destination, respectively.
+	if i%20 < 10 then
+		rdr:copy(text)
+	else
+		rdr:copy(text, nil, {x=0, y=0, w=w, h=h})
+	end
+
 	rdr:present()
 
 	SDL.delay(100)
