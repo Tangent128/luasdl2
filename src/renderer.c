@@ -632,7 +632,7 @@ l_renderer_getDrawColor(lua_State *L)
 	if (SDL_GetRenderDrawColor(rd, &c.r, &c.g, &c.b, &c.a) < 0)
 		return commonPushSDLError(L, 2);
 
-	value = (c.r << 16) | (c.g << 8) | c.b;
+	value = (c.a << 24) | (c.r << 16) | (c.g << 8) | c.b;
 
 	commonPush(L, "i", value);
 	videoPushColorRGB(L, &c);

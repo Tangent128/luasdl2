@@ -365,8 +365,10 @@ l_surface_fillRect(lua_State *L)
 	}
 
 	/* Default color is black */
-	if (lua_gettop(L) >= 3)
-		color = videoGetColorHex(L, 3);
+	if (lua_gettop(L) >= 3) {
+		SDL_Color c = videoGetColorRGB(L, 3);
+		color = SDL_MapRGBA(surf->format, c.r, c.g, c.b, c.a);
+	}
 
 	if (SDL_FillRect(surf, rectptr, color) < 0)
 		return commonPushSDLError(L, 1);
@@ -389,7 +391,8 @@ static int
 l_surface_fillRects(lua_State *L)
 {
 	SDL_Surface *surf	= commonGetAs(L, 1, SurfaceName, SDL_Surface *);
-	Uint32 color		= videoGetColorHex(L, 3);
+	SDL_Color c		= videoGetColorRGB(L, 3);
+	Uint32 color		= SDL_MapRGBA(surf->format, c.r, c.g, c.b, c.a);
 	Array rects;
 	int ret;
 

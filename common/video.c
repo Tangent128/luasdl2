@@ -117,17 +117,6 @@ readTable(lua_State *L, int index, Array *array, size_t unit, TableReadFunc func
  * -------------------------------------------------------- */
 
 void
-videoPushColorRGB(lua_State *L, const SDL_Color *color)
-{
-	lua_createtable(L, 0, 4);
-
-	tableSetInt(L, -1, "r", color->r);
-	tableSetInt(L, -1, "g", color->g);
-	tableSetInt(L, -1, "b", color->b);
-	tableSetInt(L, -1, "a", color->a);
-}
-
-void
 videoPushRect(lua_State *L, const SDL_Rect *rect)
 {
 	lua_createtable(L, 4, 4);
@@ -190,14 +179,20 @@ videoGetLine(lua_State *L, int index, Line *line)
 	line->y2 = tableGetInt(L, index, "y2");
 }
 
+/*
+ * Deprecated in favor of videoGetColorRGB and SDL_MapRGBA, which enforce a
+ * common representation of color values across color tables and hexadecimal
+ * formats.
+*/
 Uint32
 videoGetColorHex(lua_State *L, int index)
 {
-	Uint32 value = 0;
+	/*Uint32 value = 0;
 
 	if (lua_type(L, index) == LUA_TNUMBER) {
 		value = lua_tointeger(L, index);
-	} else if (lua_type(L, index) == LUA_TTABLE) {
+	}
+	else if (lua_type(L, index) == LUA_TTABLE) {
 		SDL_Color tmp;
 
 		tmp.r = tableGetInt(L, index, "r") & 0xFF;
@@ -205,10 +200,13 @@ videoGetColorHex(lua_State *L, int index)
 		tmp.b = tableGetInt(L, index, "b") & 0xFF;
 		tmp.a = tableGetInt(L, index, "a") & 0xFF;
 
-		value = (tmp.r << 16) | (tmp.g << 8) | tmp.b | (tmp.a << 24);
+		value = (tmp.a << 24) | (tmp.r << 16) | (tmp.g << 8) | tmp.b;
 	}
 
-	return value;
+	return value;*/
+
+	SDL_Color c = videoGetColorRGB(L, index);
+	return c.a << 24 | c.r << 16 | c.g << 8 | c.b;
 }
 
 SDL_Color
@@ -237,6 +235,23 @@ int
 videoGetColorsRGB(lua_State *L, int index, Array *colors)
 {
 	return readTable(L, index, colors, sizeof (SDL_Color), readColors);
+}
+
+void
+videoPushColorHex(lua_State *L, const SDL_Color *c)
+{
+       lua_pushinteger(L, (c->a << 24) | (c->r << 16) | (c->g << 8) | c->b);
+}
+
+void
+videoPushColorRGB(lua_State *L, const SDL_Color *color)
+{
+       lua_createtable(L, 0, 4);
+
+       tableSetInt(L, -1, "r", color->r);
+       tableSetInt(L, -1, "g", color->g);
+       tableSetInt(L, -1, "b", color->b);
+       tableSetInt(L, -1, "a", color->a);
 }
 
 void
