@@ -215,7 +215,7 @@ l_getRelativeMouseState(lua_State *L)
 	lua_pushinteger(L, x);
 	lua_pushinteger(L, y);
 
-	return 0;
+	return 3;
 }
 
 /*

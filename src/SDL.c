@@ -233,8 +233,8 @@ l_clearHints(lua_State *L)
 static int
 l_getHint(lua_State *L)
 {
-	const char *name = luaL_checkstring(L, 1);
-	const char *value = SDL_GetHint(name);
+	const char *name	= luaL_checkstring(L, 1);
+	const char *value	= SDL_GetHint(name);
 
 	if (value == NULL)
 		lua_pushnil(L);
@@ -262,19 +262,20 @@ l_getHint(lua_State *L)
 static int
 l_getHintBoolean(lua_State *L)
 {
-	const char *name = luaL_checkstring(L, 1);
-	int val = lua_toboolean(L, 2);
+	const char *name	= luaL_checkstring(L, 1);
+	int val			= lua_toboolean(L, 2);
 
 	return commonPush(L, "b", SDL_GetHintBoolean(name, val));
 }
 #endif
 
 /*
- * SDL.setHint(name, value)
+ * SDL.setHint(name, value, priority)
  *
  * Arguments:
  *	name the hint name
  *	value the hint value
+ *	priority the hint priority - defaults to SDL.hintPriority.Normal.
  *
  * Returns:
  *	True on success or false
@@ -283,10 +284,11 @@ l_getHintBoolean(lua_State *L)
 static int
 l_setHint(lua_State *L)
 {
-	const char *name	= luaL_checkstring(L, 1);
-	const char *value	= luaL_checkstring(L, 2);
+	const char *name		= luaL_checkstring(L, 1);
+	const char *value		= luaL_checkstring(L, 2);
+	const SDL_HintPriority priority	= luaL_optinteger(L, 3, SDL_HINT_DEFAULT);
 
-	return commonPush(L, "b", SDL_SetHint(name, value));
+	return commonPush(L, "b", SDL_SetHintWithPriority(name, value, priority));
 }
 
 /*
