@@ -187,25 +187,8 @@ videoGetLine(lua_State *L, int index, Line *line)
 Uint32
 videoGetColorHex(lua_State *L, int index)
 {
-	/*Uint32 value = 0;
-
-	if (lua_type(L, index) == LUA_TNUMBER) {
-		value = lua_tointeger(L, index);
-	}
-	else if (lua_type(L, index) == LUA_TTABLE) {
-		SDL_Color tmp;
-
-		tmp.r = tableGetInt(L, index, "r") & 0xFF;
-		tmp.g = tableGetInt(L, index, "g") & 0xFF;
-		tmp.b = tableGetInt(L, index, "b") & 0xFF;
-		tmp.a = tableGetInt(L, index, "a") & 0xFF;
-
-		value = (tmp.a << 24) | (tmp.r << 16) | (tmp.g << 8) | tmp.b;
-	}
-
-	return value;*/
-
 	SDL_Color c = videoGetColorRGB(L, index);
+
 	return c.a << 24 | c.r << 16 | c.g << 8 | c.b;
 }
 
