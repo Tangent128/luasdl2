@@ -9,6 +9,7 @@ local running	= true
 local graphics	= { }
 local pos	= { }
 local dir	= { 1, 1 }
+local velocity	= 2
 local width	= 640
 local height	= 480
 
@@ -78,19 +79,18 @@ while running do
 	graphics.rdr:copy(graphics.logo, nil, pos)
 	graphics.rdr:present()
 
-	pos.x = pos.x + dir[1]
-	pos.y = pos.y + dir[2]
+	pos.x = pos.x + dir[1] * velocity
+	pos.y = pos.y + dir[2] * velocity
 
-	if dir[1] > 0 and pos.x > width - 256 then
-		dir[1] = -1
-	elseif dir[1] < 0 and pos.x <= 0 then
-		dir[1] = 1
+	-- When we hit a wall, bounce.
+	if (dir[1] > 0 and pos.x > width - 256)
+	or (dir[1] < 0 and pos.x <= 0) then
+		dir[1] = -dir[1]
 	end
 
-	if dir[2] > 0 and pos.y > height - 256 then
-		dir[2] = -1
-	elseif dir[2] < 0 and pos.y <= 0 then
-		dir[2] = 1
+	if (dir[2] > 0 and pos.y > height - 256)
+	or (dir[2] < 0 and pos.y <= 0) then
+		dir[2] = -dir[2]
 	end
 
 	SDL.delay(20)
