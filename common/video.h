@@ -112,7 +112,7 @@ videoGetLine(lua_State *L, int index, Line *line);
 /**
  * Get a color from a Lua table or a hexadecimal number.
  *
- * NOTE: This method is deprecated in favor of videoGetRGB + SDL_MapRGBA.
+ * NOTE: This method is deprecated in favor of videoGetColorRGB + SDL_MapRGBA.
  *
  * @param L the Lua state
  * @param index the value index
