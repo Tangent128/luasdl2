@@ -23,14 +23,15 @@ object-oriented design.
 Lua-SDL2 is very well documented, with copious source-code comments, and a full
 API reference available at [the wiki](https://github.com/Tangent128/LuaSDL2/wiki/).
 
-Compatability
+Compatibility
 =============
 
 Lua-SDL2 is designed to be as compatible as possible.  The library has support
 for all the latest features of SDL2, while still compiling with SDL 2.0.1.
 
-If the library is compiled with a newer version of SDL than what is listed here,
-the library should still function, simply without access to the newer features.
+If the library is compiled with a newer point release of SDL than what is
+listed here, the library should still function, simply without access to the
+newer features.
 
 Lua-SDL2 is compatible with:
 
@@ -49,7 +50,7 @@ Otherwise, read `INSTALL.md` for instructions to build it yourself.
 Website
 =======
 
-The official website is hosted at [https://github.com/Tangent128/luasdl2][].
+The official website is hosted at [https://github.com/Tangent128/luasdl2](https://github.com/Tangent128/luasdl2).
 
 The current documentation is available at the associated
 [wiki](https://github.com/Tangent128/luasdl2/wiki/).
@@ -57,6 +58,6 @@ The current documentation is available at the associated
 Author and Maintainer
 =====================
 
-The Lua-SDL2 library was written by David Demelier <markand@malikania.fr>
+The Lua-SDL2 library was written by [David Demelier](mailto:markand@malikania.fr).
 
-It is currently being maintained by Joseph Wallace <tangent128@gmail.com>
+It is currently being maintained by [Joseph Wallace](mailto:tangent128@gmail.com).
