@@ -28,6 +28,8 @@ extern const luaL_Reg MouseFunctions[];
 
 extern const CommonObject MouseCursor;
 
+extern const CommonEnum SystemCursor[];
+
 extern const CommonEnum MouseButtons[];
 
 extern const CommonEnum MouseMask[];
