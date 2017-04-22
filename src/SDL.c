@@ -458,6 +458,7 @@ static const struct {
 	{ &Haptic						},
 	{ &TimerObject						},
 	{ &GlObject						},
+	{ &MouseCursor						},
 	{ NULL							}
 };
 
