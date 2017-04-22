@@ -404,6 +404,7 @@ static const struct {
 	/* General */
 	{ "flags",		InitFlags			},
 
+	{ "systemCursor",	SystemCursor			},
 	{ "mouseButton",	MouseButtons			},
 	{ "mouseMask",		MouseMask			},
 #if SDL_VERSION_ATLEAST(2, 0, 2)

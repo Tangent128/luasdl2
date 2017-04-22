@@ -46,6 +46,29 @@ l_captureMouse(lua_State *L)
 #endif
 
 /*
+ * SDL.createSystemCursor(id)
+ *
+ * Arguments:
+ *	id the cursor id
+ *
+ * Returns:
+ *	A cursor object or nil on failure
+ *	The error message
+ */
+static int
+l_createSystemCursor(lua_State *L)
+{
+	int id	= luaL_checkinteger(L, 1);
+	SDL_Cursor *c;
+
+	c = SDL_CreateSystemCursor(id);
+	if (c == NULL)
+		return commonPushSDLError(L, 1);
+
+	return commonPush(L, "p", MouseCursorName, c);
+}
+
+/*
  * SDL.createColorCursor(s, x, y)
  *
  * Arguments:
@@ -296,6 +319,7 @@ const luaL_Reg MouseFunctions[] = {
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 	{ "captureMouse",		l_captureMouse		},
 #endif
+	{ "createSystemCursor",		l_createSystemCursor	},
 	{ "createColorCursor",		l_createColorCursor	},
 	{ "createCursor",		l_createCursor		},
 	{ "getCursor",			l_getCursor		},
@@ -337,6 +361,25 @@ const CommonObject MouseCursor = {
 	"Cursor",
 	NULL,
 	metamethods
+};
+
+/*
+ * SDL.systemCursor
+ */
+const CommonEnum SystemCursor[] = {
+	{ "Arrow",			SDL_SYSTEM_CURSOR_ARROW		},
+	{ "Ibeam",			SDL_SYSTEM_CURSOR_IBEAM		},
+	{ "Wait",			SDL_SYSTEM_CURSOR_WAIT		},
+	{ "Crosshair",			SDL_SYSTEM_CURSOR_CROSSHAIR	},
+	{ "WaitArrow",			SDL_SYSTEM_CURSOR_WAITARROW	},
+	{ "SizeNWSE",			SDL_SYSTEM_CURSOR_SIZENWSE	},
+	{ "SizeNESW",			SDL_SYSTEM_CURSOR_SIZENESW	},
+	{ "SizeWE",			SDL_SYSTEM_CURSOR_SIZEWE	},
+	{ "SizeNS",			SDL_SYSTEM_CURSOR_SIZENS	},
+	{ "SizeAll",			SDL_SYSTEM_CURSOR_SIZEALL	},
+	{ "No",				SDL_SYSTEM_CURSOR_NO		},
+	{ "Hand",			SDL_SYSTEM_CURSOR_HAND		},
+	{ NULL,				-1				},
 };
 
 /*
