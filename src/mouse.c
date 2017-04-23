@@ -84,8 +84,8 @@ static int
 l_createColorCursor(lua_State *L)
 {
 	SDL_Surface *s	= commonGetAs(L, 1, SurfaceName, SDL_Surface *);
-	int hot_x	= luaL_checkinteger(L, 1);
-	int hot_y	= luaL_checkinteger(L, 2);
+	int hot_x	= luaL_checkinteger(L, 2);
+	int hot_y	= luaL_checkinteger(L, 3);
 	SDL_Cursor *c;
 
 	c = SDL_CreateColorCursor(s, hot_x, hot_y);
