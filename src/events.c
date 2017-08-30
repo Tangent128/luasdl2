@@ -17,6 +17,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <config.h>
+
 #include <common/table.h>
 
 #include "keyboard.h"
@@ -768,7 +770,11 @@ static void
 pushDropFile(lua_State *L, const SDL_Event *ev)
 {
 	tableSetInt(L, -1, "timestamp", ev->drop.timestamp);
+
+#if defined(HAVE_DROPEVENT_WINDOW_ID)
 	tableSetInt(L, -1, "windowID", ev->drop.windowID);
+#endif
+
 	tableSetString(L, -1, "file", ev->drop.file);
 	SDL_free(ev->drop.file);
 }
