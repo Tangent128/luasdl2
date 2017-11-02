@@ -16,7 +16,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-project(tutorials)
+project(tutorials C)
 
 # Option to enable / disable examples installation
 option(WITH_DOCS "Installation of tutorials" On)
