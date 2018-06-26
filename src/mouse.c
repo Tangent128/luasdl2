@@ -400,7 +400,7 @@ const CommonEnum MouseButtons[] = {
 const CommonEnum MouseMask[] = {
 	{ "Left",			SDL_BUTTON_LMASK	},
 	{ "Right",			SDL_BUTTON_RMASK	},
-	{ "Middle",			SDL_BUTTON_RMASK	},
+	{ "Middle",			SDL_BUTTON_MMASK	},
 	{ "X1",				SDL_BUTTON_X1MASK	},
 	{ "X2",				SDL_BUTTON_X2MASK	},
 	{ NULL,				-1			},
