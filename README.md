@@ -5,7 +5,7 @@ Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2, Lua 5.3, and LuaJIT.
 
 The current version is 2.1, compatible with SDL 2.0.1 - 2.0.5.
 
-Lua-SDL2 follows the [SemVer](semver.org) standard with regards to project
+Lua-SDL2 follows the [SemVer](https://semver.org) standard with regards to project
 versioning.
 
 Features
