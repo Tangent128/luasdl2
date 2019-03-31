@@ -53,7 +53,7 @@ channelGiven(unsigned int target, unsigned int current)
 		unsigned long u;
 		long i;
 	} t, c;
-	
+
 	if (target > current)
 		return 0;
 	if (target == current)
@@ -71,8 +71,11 @@ channelFirst(const Channel *c)
 	Variant *v;
 
 	SDL_LockMutex(c->mutex);
-	if (STAILQ_EMPTY(&c->queue))
+	if (STAILQ_EMPTY(&c->queue)){
+		SDL_UnlockMutex(c->mutex);
 		return NULL;
+	}
+
 
 	v = STAILQ_FIRST(&c->queue);
 	SDL_UnlockMutex(c->mutex);
@@ -86,9 +89,11 @@ channelLast(const Channel *c)
 	Variant *v;
 
 	SDL_LockMutex(c->mutex);
-	if (STAILQ_EMPTY(&c->queue))
+	if (STAILQ_EMPTY(&c->queue)){
+		SDL_UnlockMutex(c->mutex);
 		return NULL;
-
+	}
+		
 	v = STAILQ_LAST(&c->queue, variant, link);
 	SDL_UnlockMutex(c->mutex);
 
