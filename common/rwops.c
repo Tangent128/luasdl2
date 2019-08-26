@@ -59,15 +59,15 @@ rw_seek(SDL_RWops *ops, Sint64 offset, int whence)
 }
 
 static size_t
-rw_read(SDL_RWops *ops, void *dst, size_t num, size_t size)
+rw_read(SDL_RWops *ops, void *dst, size_t size, size_t num)
 {
 	Funcs *opsref	= ops->hidden.unknown.data1;
 	lua_State *L	= ops->hidden.unknown.data2;
-	int nread	= 0;
+	int nbytes	= 0;
 
 	lua_rawgeti(L, LUA_REGISTRYINDEX, opsref->read);
-	lua_pushinteger(L, num);
 	lua_pushinteger(L, size);
+	lua_pushinteger(L, num);
 	lua_call(L, 2, 2);
 
 	/* Use the content as a string */
@@ -75,15 +75,15 @@ rw_read(SDL_RWops *ops, void *dst, size_t num, size_t size)
 		const char *data;
 
 		/* Retrieve length or 0 on error or EOF */
-		nread = lua_tointeger(L, -1);
+		nbytes = lua_tointeger(L, -1);
 
-		if (nread != EOF && nread > 0) {
+		if (nbytes != EOF && nbytes > 0) {
 			data = lua_tostring(L, -2);
-			memcpy(dst, data, nread);
+			memcpy(dst, data, nbytes);
 		}
 	}
 
-	return nread;
+	return nbytes / size;
 }
 
 static size_t
