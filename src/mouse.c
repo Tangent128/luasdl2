@@ -215,7 +215,7 @@ l_getMouseState(lua_State *L)
 static int
 l_getRelativeMouseMode(lua_State *L)
 {
-	return commonPush(L, "b", SDL_GetRelativeMouseMode() == 0);
+	return commonPush(L, "b", SDL_GetRelativeMouseMode() == SDL_TRUE);
 }
 
 /*
