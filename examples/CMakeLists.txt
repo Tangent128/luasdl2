@@ -16,7 +16,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-project(examples)
+project(examples C)
 
 # Option to enable / disable examples installation
 option(WITH_DOCS "Installation of documentation and examples" On)
