@@ -16,17 +16,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-find_package(SDL2_net REQUIRED)
-
 set(
 	NET_SOURCES
 	src/net.c
-)
-
-include_directories(
-	"${LuaSDL_SOURCE_DIR}/src"
-	${SDL2_INCLUDE_DIRS}
-	${SDL2_NET_INCLUDE_DIR}
 )
 
 add_library(
@@ -44,8 +36,7 @@ set_target_properties(
 target_link_libraries(
 	net
 	common
-	${SDL2_LIBRARY}
-	${SDL2_NET_LIBRARY}
+	SDL2::net
 )
 
 install(

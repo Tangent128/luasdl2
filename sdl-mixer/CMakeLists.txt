@@ -16,17 +16,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-find_package(SDL2_mixer REQUIRED)
-
 set(
 	MIXER_SOURCES
 	src/mixer.c
-)
-
-include_directories(
-	"${LuaSDL_SOURCE_DIR}/src"
-	${SDL2_INCLUDE_DIRS}
-	${SDL2_MIXER_INCLUDE_DIR}
 )
 
 add_library(
@@ -44,8 +36,7 @@ set_target_properties(
 target_link_libraries(
 	mixer
 	common
-	${SDL2_LIBRARY}
-	${SDL2_MIXER_LIBRARY}
+	SDL2::mixer
 )
 
 install(

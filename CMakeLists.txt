@@ -18,7 +18,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.10)
 project(Lua-SDL2 C)
 
 include(CheckStructHasMember)
@@ -37,6 +37,7 @@ set(VERSION "${BINDING_MAJOR}.${BINDING_MINOR} for SDL ${MAJOR}.${MINOR}.${PATCH
 set(CMAKE_MODULE_PATH "${Lua-SDL2_SOURCE_DIR}/cmake")
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2 COMPONENTS image mixer net ttf)
 
 # Path where to install docs
 set(WITH_DOCSDIR "share/docs/Lua-SDL2"
@@ -172,7 +173,6 @@ set_target_properties(
 target_link_libraries(
 	SDL
 	common
-	${SDL2_LIBRARY}
 )
 
 install(
@@ -186,19 +186,19 @@ option(WITH_MIXER "Enable SDL_mixer" On)
 option(WITH_TTF "Enable SDL_ttf" On)
 option(WITH_NET "Enable SDL_net" On)
 
-if (WITH_IMAGE)
+if (WITH_IMAGE AND TARGET SDL2::image)
 	add_subdirectory(sdl-image)
 endif ()
 
-if (WITH_MIXER)
+if (WITH_MIXER AND TARGET SDL2::mixer)
 	add_subdirectory(sdl-mixer)
 endif ()
 
-if (WITH_TTF)
+if (WITH_TTF AND TARGET SDL2::ttf)
 	add_subdirectory(sdl-ttf)
 endif ()
 
-if (WITH_NET)
+if (WITH_NET AND TARGET SDL2::net)
 	add_subdirectory(sdl-net)
 endif ()
 

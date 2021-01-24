@@ -16,17 +16,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-find_package(SDL2_ttf REQUIRED)
-
 set(
 	TTF_SOURCES
 	src/ttf.c
-)
-
-include_directories(
-	"${LuaSDL_SOURCE_DIR}/src"
-	${SDL2_INCLUDE_DIRS}
-	${SDL2_TTF_INCLUDE_DIR}
 )
 
 add_library(
@@ -49,6 +41,5 @@ install(
 target_link_libraries(
 	ttf
 	common
-	${SDL2_LIBRARY}
-	${SDL2_TTF_LIBRARY}
+	SDL2::ttf
 )

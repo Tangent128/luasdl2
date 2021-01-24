@@ -1,181 +1,115 @@
-# - Locate SDL library
-# This module defines
-#  SDL_LIBRARY, the name of the library to link against
-#  SDL_FOUND, if false, do not try to link to SDL
-#  SDL_INCLUDE_DIR, where to find SDL.h
-#  SDL_VERSION_STRING, human-readable string containing the version of SDL
 #
-# This module responds to the the flag:
-#  SDL_BUILDING_LIBRARY
-#    If this is defined, then no SDL_main will be linked in because
-#    only applications need main().
-#    Otherwise, it is assumed you are building an application and this
-#    module will attempt to locate and set the the proper link flags
-#    as part of the returned SDL_LIBRARY variable.
+# FindSDL2.cmake -- find SDL2 library and addons
 #
-# Don't forget to include SDLmain.h and SDLmain.m your project for the
-# OS X framework based version. (Other versions link to -lSDLmain which
-# this module will try to find on your behalf.) Also for OS X, this
-# module will automatically add the -framework Cocoa on your behalf.
+# Copyright (c) 2020 David Demelier <markand@malikania.fr>
 #
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
 #
-# Additional Note: If you see an empty SDL_LIBRARY_TEMP in your configuration
-# and no SDL_LIBRARY, it means CMake did not find your SDL library
-# (SDL.dll, libsdl.so, SDL.framework, etc).
-# Set SDL_LIBRARY_TEMP to point to your SDL library, and configure again.
-# Similarly, if you see an empty SDLMAIN_LIBRARY, you should set this value
-# as appropriate. These values are used to generate the final SDL_LIBRARY
-# variable, but when these values are unset, SDL_LIBRARY does not get created.
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
+# Find SDL2 library and components, this modules defines:
 #
-# $SDLDIR is an environment variable that would
-# correspond to the ./configure --prefix=$SDLDIR
-# used in building SDL.
-# l.e.galup  9-20-02
+#  SDL2_LIBRARY, the name of the library to link against.
+#  SDL2_MAIN_LIBRARY, for SDL2main (if present).
+#  SDL2_LIBRARIES, alias to SDL2_LIBRARY.
+#  SDL2_FOUND, true if found.
+#  SDL2_INCLUDE_DIR, where to find SDL.h.
 #
-# Modified by Eric Wing.
-# Added code to assist with automated building by using environmental variables
-# and providing a more controlled/consistent search behavior.
-# Added new modifications to recognize OS X frameworks and
-# additional Unix paths (FreeBSD, etc).
-# Also corrected the header search path to follow "proper" SDL guidelines.
-# Added a search for SDLmain which is needed by some platforms.
-# Added a search for threads which is needed by some platforms.
-# Added needed compile switches for MinGW.
+# The following imported targets will be defined:
 #
-# On OSX, this will prefer the Framework version (if found) over others.
-# People will have to manually change the cache values of
-# SDL_LIBRARY to override this selection or set the CMake environment
-# CMAKE_INCLUDE_PATH to modify the search paths.
+# SDL2::SDL2
+# SDL2::SDL2main (if present)
 #
-# Note that the header path has changed from SDL/SDL.h to just SDL.h
-# This needed to change because "proper" SDL convention
-# is #include "SDL.h", not <SDL/SDL.h>. This is done for portability
-# reasons because not all systems place things in SDL/ (see FreeBSD).
-
-#=============================================================================
-# Copyright 2003-2009 Kitware, Inc.
-# Copyright 2012 Benjamin Eikel
+# This module also handle the following official SDL addons:
 #
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
+# - image
+# - mixer
+# - net
+# - ttf
 #
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
-#=============================================================================
-# (To distribute this file outside of CMake, substitute the full
-#  License text for the above reference.)
-
-find_path(SDL2_INCLUDE_DIR SDL.h
-  HINTS
-    ENV SDLDIR
-  PATH_SUFFIXES include/SDL2 include
-)
-
-# On FreeBSD SDL depends on libiconv and SDL_stdinc.h includes iconv.h, which is
-# located in ${LOCALBASE}/include. Append {LOCALBASE}/include to
-# the SDL_INCLUDE_DIR, thus allow to build SDL apps out of box.
-list(APPEND SDL2_INCLUDE_DIR /usr/local/include)
-
-find_library(SDL_LIBRARY_TEMP
-  NAMES SDL2 SDL2-2.0
-  HINTS
-    ENV SDLDIR
-  PATH_SUFFIXES lib
-)
-
-if(NOT SDL_BUILDING_LIBRARY)
-  if(NOT "${SDL2_INCLUDE_DIR}" MATCHES ".framework")
-    # Non-OS X framework versions expect you to also dynamically link to
-    # SDLmain. This is mainly for Windows and OS X. Other (Unix) platforms
-    # seem to provide SDLmain for compatibility even though they don't
-    # necessarily need it.
-    find_library(SDLMAIN2_LIBRARY
-      NAMES SDLmain2 SDLmain2.0
-      HINTS
-        ENV SDLDIR
-      PATH_SUFFIXES lib
-      PATHS
-      /sw
-      /opt/local
-      /opt/csw
-      /opt
-    )
-  endif()
-endif()
-
-# SDL may require threads on your system.
-# The Apple build may not need an explicit flag because one of the
-# frameworks may already provide it.
-# But for non-OSX systems, I will use the CMake Threads package.
-if(NOT APPLE)
-  find_package(Threads)
-endif()
-
-# MinGW needs an additional library, mwindows
-# It's total link flags should look like -lmingw32 -lSDLmain -lSDL -lmwindows
-# (Actually on second look, I think it only needs one of the m* libraries.)
-if(MINGW)
-  set(MINGW32_LIBRARY mingw32 CACHE STRING "mwindows for MinGW")
-endif()
-
-if(SDL_LIBRARY_TEMP)
-  # For SDLmain
-  if(SDLMAIN2_LIBRARY AND NOT SDL_BUILDING_LIBRARY)
-    list(FIND SDL_LIBRARY_TEMP "${SDLMAIN2_LIBRARY}" _SDL_MAIN_INDEX)
-    if(_SDL_MAIN_INDEX EQUAL -1)
-      set(SDL_LIBRARY_TEMP "${SDLMAIN2_LIBRARY}" ${SDL_LIBRARY_TEMP})
-    endif()
-    unset(_SDL_MAIN_INDEX)
-  endif()
-
-  # For OS X, SDL uses Cocoa as a backend so it must link to Cocoa.
-  # CMake doesn't display the -framework Cocoa string in the UI even
-  # though it actually is there if I modify a pre-used variable.
-  # I think it has something to do with the CACHE STRING.
-  # So I use a temporary variable until the end so I can set the
-  # "real" variable in one-shot.
-  if(APPLE)
-    set(SDL_LIBRARY_TEMP ${SDL2_LIBRARY_TEMP} "-framework Cocoa")
-  endif()
-
-  # For threads, as mentioned Apple doesn't need this.
-  # In fact, there seems to be a problem if I used the Threads package
-  # and try using this line, so I'm just skipping it entirely for OS X.
-  if(NOT APPLE)
-    set(SDL_LIBRARY_TEMP ${SDL_LIBRARY_TEMP} ${CMAKE_THREAD_LIBS_INIT})
-  endif()
-
-  # For MinGW library
-  if(MINGW)
-    set(SDL_LIBRARY_TEMP ${MINGW32_LIBRARY} ${SDL_LIBRARY_TEMP})
-  endif()
-
-  # Set the final string here so the GUI reflects the final state.
-  set(SDL2_LIBRARY ${SDL_LIBRARY_TEMP} CACHE STRING "Where the SDL Library can be found")
-  # Set the temp variable to INTERNAL so it is not seen in the CMake GUI
-  set(SDL_LIBRARY_TEMP "${SDL_LIBRARY_TEMP}" CACHE INTERNAL "")
-endif()
-
-if(SDL2_INCLUDE_DIR AND EXISTS "${SDL_INCLUDE_DIR}/SDL_version.h")
-  file(STRINGS "${SDL_INCLUDE_DIR}/SDL_version.h" SDL_VERSION_MAJOR_LINE REGEX "^#define[ \t]+SDL_MAJOR_VERSION[ \t]+[0-9]+$")
-  file(STRINGS "${SDL_INCLUDE_DIR}/SDL_version.h" SDL_VERSION_MINOR_LINE REGEX "^#define[ \t]+SDL_MINOR_VERSION[ \t]+[0-9]+$")
-  file(STRINGS "${SDL_INCLUDE_DIR}/SDL_version.h" SDL_VERSION_PATCH_LINE REGEX "^#define[ \t]+SDL_PATCHLEVEL[ \t]+[0-9]+$")
-  string(REGEX REPLACE "^#define[ \t]+SDL_MAJOR_VERSION[ \t]+([0-9]+)$" "\\1" SDL_VERSION_MAJOR "${SDL_VERSION_MAJOR_LINE}")
-  string(REGEX REPLACE "^#define[ \t]+SDL_MINOR_VERSION[ \t]+([0-9]+)$" "\\1" SDL_VERSION_MINOR "${SDL_VERSION_MINOR_LINE}")
-  string(REGEX REPLACE "^#define[ \t]+SDL_PATCHLEVEL[ \t]+([0-9]+)$" "\\1" SDL_VERSION_PATCH "${SDL_VERSION_PATCH_LINE}")
-  set(SDL2_VERSION_STRING ${SDL_VERSION_MAJOR}.${SDL_VERSION_MINOR}.${SDL_VERSION_PATCH})
-  unset(SDL_VERSION_MAJOR_LINE)
-  unset(SDL_VERSION_MINOR_LINE)
-  unset(SDL_VERSION_PATCH_LINE)
-  unset(SDL_VERSION_MAJOR)
-  unset(SDL_VERSION_MINOR)
-  unset(SDL_VERSION_PATCH)
-endif()
+# And thus, variables SDL2_<C>_LIBRARY, SDL2_<C>_INCLUDE_DIRS and SDL2::<C>
+# imported targets will be defined if they are found.
+#
 
 include(FindPackageHandleStandardArgs)
 
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2
-                                  REQUIRED_VARS SDL2_LIBRARY SDL2_INCLUDE_DIR
-                                  VERSION_VAR SDL2_VERSION_STRING)
+# The official include convention is <SDL.h> not <SDL/SDL.h>.
+find_path(
+	SDL2_INCLUDE_DIR
+	NAMES SDL.h
+	PATH_SUFFIXES include/SDL2 include
+)
+
+find_library(SDL2_LIBRARY NAMES SDL2 libSDL2)
+find_library(SDL2_MAIN_LIBRARY NAMES SDL2main libSDL2main)
+
+# Standard components.
+foreach (c ${SDL2_FIND_COMPONENTS})
+	find_path(
+		SDL2_${c}_INCLUDE_DIR
+		NAMES SDL.h
+		PATH_SUFFIXES include/SDL2 include
+	)
+
+	find_library(
+		SDL2_${c}_LIBRARY
+		NAMES SDL2_${c} libSDL2_${c}
+	)
+
+	if (NOT TARGET SDL2::${c} AND SDL2_${c}_LIBRARY)
+		set(SDL2_${c}_FOUND TRUE)
+		add_library(SDL2::${c} UNKNOWN IMPORTED)
+		set_target_properties(
+			SDL2::${c}
+			PROPERTIES
+				IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+				IMPORTED_LOCATION "${SDL2_${c}_LIBRARY}"
+				INTERFACE_INCLUDE_DIRECTORIES "${SDL2_${c}_INCLUDE_DIRS}"
+		)
+	endif ()
+
+	mark_as_advanced(SDL2_${c}_INCLUDE_DIR SDL2_${c}_LIBRARY)
+endforeach ()
+
+find_package_handle_standard_args(
+	SDL2
+	REQUIRED_VARS SDL2_LIBRARY SDL2_INCLUDE_DIR
+	HANDLE_COMPONENTS
+)
+
+if (SDL2_FOUND)
+	set(SDL2_LIBRARIES ${SDL2_LIBRARY})
+	set(SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIR})
+
+	if (NOT TARGET SDL2::SDL2)
+		add_library(SDL2::SDL2 UNKNOWN IMPORTED)
+		set_target_properties(
+			SDL2::SDL2
+			PROPERTIES
+				IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+				IMPORTED_LOCATION "${SDL2_LIBRARY}"
+				INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}"
+		)
+	endif ()
+
+	if (NOT TARGET SDL2::main AND SDL2_MAIN_LIBRARY)
+		add_library(SDL2::main UNKNOWN IMPORTED)
+		set_target_properties(
+			SDL2::main
+			PROPERTIES
+				IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+				IMPORTED_LOCATION "${SDL2_MAIN_LIBRARY}"
+				INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}"
+		)
+	endif ()
+endif ()
+
+mark_as_advanced(SDL2_INCLUDE_DIR SDL2_LIBRARY)
