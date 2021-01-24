@@ -492,6 +492,7 @@ const CommonEnum EventJoyHat[] = {
 	{ "RightDown",	SDL_HAT_RIGHTDOWN	},
 	{ "Down",	SDL_HAT_DOWN		},
 	{ "LeftDown",	SDL_HAT_LEFTDOWN	},
+	{ "Centered",	SDL_HAT_CENTERED	},
 	{ NULL,		-1			}
 };
 
