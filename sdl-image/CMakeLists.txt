@@ -41,5 +41,5 @@ target_link_libraries(
 
 install(
 	TARGETS image
-	DESTINATION ${LUA_LIBDIR}/SDL
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/lua/${Lua_VERSION}/SDL
 )

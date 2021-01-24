@@ -33,13 +33,13 @@ set_target_properties(
 	PREFIX ""
 )
 
-install(
-	TARGETS ttf
-	DESTINATION ${LUA_LIBDIR}/SDL
-)
-
 target_link_libraries(
 	ttf
 	common
 	SDL2::ttf
+)
+
+install(
+	TARGETS ttf
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/lua/${Lua_VERSION}/SDL
 )

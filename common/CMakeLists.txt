@@ -35,6 +35,13 @@ set(
 	video.h
 )
 
-add_library(common STATIC ${SOURCES})
+add_library(common OBJECT ${SOURCES})
 set_target_properties(common PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 target_link_libraries(common SDL2::SDL2)
+target_include_directories(
+	common
+	PUBLIC
+		${Lua_INCLUDE_DIRS}
+		${LuaJIT_INCLUDE_DIRS}
+		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
+)

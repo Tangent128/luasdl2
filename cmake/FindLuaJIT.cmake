@@ -1,80 +1,79 @@
-# Locate Lua library
-# This module defines
-#  LUAJIT_FOUND, if false, do not try to link to Lua 
-#  LUAJIT_LIBRARIES
-#  LUAJIT_INCLUDE_DIR, where to find lua.h
-#  LUAJIT_VERSION_STRING, the version of Lua found (since CMake 2.8.8)
 #
-# Note that the expected include convention is
-#  #include "lua.h"
-# and not
-#  #include <lua/lua.h>
-# This is because, the lua location is not standardized and may exist
-# in locations other than lua/
+# FindLuaJIT.cmake -- find LuaJIT
+#
+# Copyright (c) 2020 David Demelier <markand@malikania.fr>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+# Find LuaJIT library, this modules defines:
+#
+#  LuaJIT_LIBRARY, the name of the library to link against.
+#  LuaJIT_LIBRARIES, alias to Lua_LIBRARY.
+#  LuaJIT_FOUND, true if found.
+#  LuaJIT_INCLUDE_DIR, where to find lua.h.
+#  LuaJIT_VERSION, the string version in the form x.y
+#  LuaJIT_VERSION_MAJOR, major version (e.g. 5 in Lua 5.3)
+#  LuaJIT_VERSION_MINOR, major version (e.g. 3 in Lua 5.3)
+#
+# The following imported targets will be defined:
+#
+# LuaJIT::LuaJIT
+#
 
-#=============================================================================
-# Copyright 2007-2009 Kitware, Inc.
-#
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
-#=============================================================================
-# (To distribute this file outside of CMake, substitute the full
-#  License text for the above reference.)
+include(FindPackageHandleStandardArgs)
 
-find_path(LUAJIT_INCLUDE_DIR luajit.h
-	HINTS
-	$ENV{LUA_DIR}
-	PATH_SUFFIXES include/luajit-2.0 include
-	PATHS
-	~/Library/Frameworks
-	/Library/Frameworks
-	/sw # Fink
-	/opt/local # DarwinPorts
-	/opt/csw # Blastwave
-	/opt
+find_path(
+	LuaJIT_INCLUDE_DIR
+	NAMES lua.h
+	PATH_SUFFIXES include/luajit-2.0
 )
 
-find_library(LUAJIT_LIBRARY
+find_library(
+	LuaJIT_LIBRARY
 	NAMES luajit luajit-5.1
-	HINTS
-	$ENV{LUA_DIR}
-	PATH_SUFFIXES lib64 lib
-	PATHS
-	~/Library/Frameworks
-	/Library/Frameworks
-	/sw
-	/opt/local
-	/opt/csw
-	/opt
 )
 
-if (LUAJIT_LIBRARY)
-	# include the math library for Unix
-	if (UNIX AND NOT APPLE)
-		find_library(LUAJIT_MATH_LIBRARY m)
-		set(LUAJIT_LIBRARIES "${LUAJIT_LIBRARY};${LUAJIT_MATH_LIBRARY}" CACHE STRING "Lua Libraries")
-	# For Windows and Mac, don't need to explicitly include the math library
-	else ()
-	  set(LUAJIT_LIBRARIES "${LUAJIT_LIBRARY}" CACHE STRING "Lua Libraries")
+if (LuaJIT_INCLUDE_DIR AND EXISTS "${LuaJIT_INCLUDE_DIR}/lua.h")
+	file(STRINGS "${LuaJIT_INCLUDE_DIR}/lua.h" LUA_H REGEX "^#define LUA_VERSION_NUM.*$")
+
+	string(REGEX MATCH "([0-9])[0-9]([0-9])" LuaJIT_VERSION "${LUA_H}")
+	string(REGEX REPLACE "([0-9])[0-9]([0-9])" "\\1.\\2" LuaJIT_VERSION ${LuaJIT_VERSION})
+
+	string(REGEX REPLACE "([0-9])\\.[0-9]" "\\1" LuaJIT_VERSION_MAJOR ${LuaJIT_VERSION})
+	string(REGEX REPLACE "[0-9]\\.([0-9])" "\\1" LuaJIT_VERSION_MINOR ${LuaJIT_VERSION})
+endif ()
+
+find_package_handle_standard_args(
+	LuaJIT
+	REQUIRED_VARS LuaJIT_LIBRARY LuaJIT_INCLUDE_DIR
+	VERSION_VAR LuaJIT_VERSION
+	HANDLE_COMPONENTS
+)
+
+if (LuaJIT_FOUND)
+	set(LuaJIT_INCLUDE_DIRS ${LuaJIT_INCLUDE_DIR})
+	set(LuaJIT_LIBRARIES ${LuaJIT_LIBRARY})
+
+	if (NOT TARGET LuaJIT::LuaJIT)
+		add_library(LuaJIT::LuaJIT UNKNOWN IMPORTED)
+		set_target_properties(
+			LuaJIT::LuaJIT
+			PROPERTIES
+				IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+				IMPORTED_LOCATION "${LuaJIT_LIBRARY}"
+				INTERFACE_INCLUDE_DIRECTORIES "${LuaJIT_INCLUDE_DIRS}"
+		)
 	endif ()
 endif ()
 
-if(LUAJIT_INCLUDE_DIR AND EXISTS "${LUAJIT_INCLUDE_DIR}/lua.h")
-	file(STRINGS "${LUAJIT_INCLUDE_DIR}/lua.h" luajit_version_str REGEX "^#define[ \t]+LUA_RELEASE[ \t]+\"Lua .+\"")
-
-	string(REGEX REPLACE "^#define[ \t]+LUA_RELEASE[ \t]+\"Lua ([^\"]+)\".*" "\\1" LUAJIT_VERSION_STRING "${luajit_version_str}")
-	unset(luajit_version_str)
-endif()
-
-include(FindPackageHandleStandardArgs)
-# handle the QUIETLY and REQUIRED arguments and set LUAJIT_FOUND to TRUE if 
-# all listed variables are TRUE
-find_package_handle_standard_args(LuaJIT
-                                  REQUIRED_VARS LUAJIT_LIBRARIES LUAJIT_INCLUDE_DIR
-                                  VERSION_VAR LUAJIT_VERSION_STRING)
-
-mark_as_advanced(LUAJIT_INCLUDE_DIR LUAJIT_LIBRARIES LUAJIT_LIBRARY LUAJIT_MATH_LIBRARY)
+mark_as_advanced(LuaJIT_INCLUDE_DIR LuaJIT_LIBRARY)
