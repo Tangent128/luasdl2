@@ -909,11 +909,13 @@ typedef struct {
 static SDL_HitTestResult
 hitTestCallback(SDL_Window *win, const SDL_Point *area, CallbackData *cd)
 {
+	CommonUserdata *cu;
 	SDL_HitTestResult ht;
 	int st = lua_gettop(cd->L);
 
 	lua_geti(cd->L, LUA_REGISTRYINDEX, cd->ref);
-	commonPush(cd->L, "p", WindowName, win);
+	cu = commonPushUserdata(cd->L, WindowName, win);
+	cu->mustdelete = 0;
 	videoPushPoint(cd->L, area);
 	lua_pcall(cd->L, 2, 1, 0);
 
