@@ -58,6 +58,20 @@ lua_rawsetp(lua_State *L, int index, void *p)
 
 #endif
 
+#if LUA_VERSION_NUM == 502
+
+int
+lua_geti(lua_State *L, int index, lua_Integer i)
+{
+	index = lua_absindex(L, index);
+	lua_pushinteger(L, i);
+	lua_gettable(L, index);
+
+	return lua_type(L, -1);
+}
+
+#endif
+
 void
 commonBindEnum(lua_State *L,
 		 int tindex,

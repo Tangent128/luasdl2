@@ -54,6 +54,15 @@ lua_rawsetp(lua_State *L, int index, void *key);
 
 #endif
 
+#if LUA_VERSION_NUM == 502
+
+#define lua_getuservalue(L, i) (lua_getuservalue((L), (i)), lua_type((L), -1))
+
+int
+lua_geti(lua_State *L, int index, lua_Integer i);
+
+#endif
+
 #if LUA_VERSION_NUM < 503
 
 #  define lua_dump(l, w, d, s)		lua_dump(l, w, d)

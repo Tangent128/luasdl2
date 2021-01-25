@@ -76,7 +76,6 @@ channelFirst(const Channel *c)
 		return NULL;
 	}
 
-
 	v = STAILQ_FIRST(&c->queue);
 	SDL_UnlockMutex(c->mutex);
 
