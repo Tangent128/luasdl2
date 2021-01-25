@@ -11,8 +11,8 @@ source = {
    url = "git://github.com/Tangent128/luasdl2"
 }
 description = {
-   summary = "Lua-SDL2 is a pure C binding of SDL 2.0 for Lua 5.1, JIT, 5.2, and 5.3",
-   detailed = "Lua-SDL2 is a pure C binding of SDL 2.0 for Lua 5.1, JIT, 5.2, and 5.3",
+   summary = "Lua-SDL2 is a pure C binding of SDL 2.0 for Lua 5.1, JIT, 5.2, 5.3 and 5.4",
+   detailed = "Lua-SDL2 is a pure C binding of SDL 2.0 for Lua 5.1, JIT, 5.2, 5.3 and 5.4",
    homepage = "https://github.com/Tangent128/luasdl2/",
    license = "ISC",
    maintainer = "Joseph Wallace <Tangent128@gmail.com>"
@@ -162,5 +162,3 @@ build = {
       }
    }
 }
-
-

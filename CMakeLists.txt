@@ -40,7 +40,7 @@ set(VERSION "${BINDING_MAJOR}.${BINDING_MINOR} for SDL ${MAJOR}.${MINOR}.${PATCH
 set(WITH_DOCSDIR "share/docs/Lua-SDL2"
     CACHE STRING "Path to install examples")
 set(WITH_LUAVER "5.3"
-	CACHE STRING "Version of Lua to use: 5.3 (default), 5.2, 5.1 or JIT)")
+	CACHE STRING "Version of Lua to use: 5.4 (default), 5.3, 5.2, 5.1 or JIT)")
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2 COMPONENTS image mixer net ttf)
