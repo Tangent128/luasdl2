@@ -1129,6 +1129,9 @@ const CommonEnum WindowFlags[] = {
 	{ "Tooltip",			SDL_WINDOW_TOOLTIP		},
 	{ "PopupMenu",			SDL_WINDOW_POPUP_MENU		},
 #endif
+#if SDL_VERSION_ATLEAST(2, 0, 6)
+ 	{ "Vulkan",			SDL_WINDOW_VULKAN		},
+#endif
 	{ NULL,				-1				}
 };
 
