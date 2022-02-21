@@ -49,6 +49,7 @@
 #include "texture.h"
 #include "timer.h"
 #include "thread.h"
+#include "vulkan.h"
 #include "window.h"
 
 /*
@@ -359,6 +360,9 @@ static const struct {
 
 	/* OpenGL */
 	{ GlFunctions					},
+
+	/* Vulkan */
+	{ VulkanFunctions				},
 	{ NULL						}
 };
 

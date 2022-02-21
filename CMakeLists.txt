@@ -103,6 +103,8 @@ set(
 	src/thread.h
 	src/timer.c
 	src/timer.h
+	src/vulkan.c
+	src/vulkan.h
 	src/window.c
 	src/window.h
 )
