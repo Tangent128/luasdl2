@@ -60,7 +60,6 @@ static int l_vulkan_getInstanceExtensions(lua_State *L)
 static int l_vulkan_createSurface(lua_State *L)
 {
 	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
-	VkInstance instance	= luaL_checkudata(L, 2, "VkInstance");
 	VkInstance instance	= commonGetAs(L, 2, "moonvulkan_instance", VkInstance);
 	VkSurfaceKHR surface;
 
