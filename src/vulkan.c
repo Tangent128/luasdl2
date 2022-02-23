@@ -24,37 +24,29 @@
 
 #include "vulkan.h"
 
-char *repeatStr (char *str, size_t count) {
-    if (count == 0) return NULL;
-    char *ret = malloc (strlen (str) * count + count);
-    if (ret == NULL) return NULL;
-    strcpy (ret, str);
-    while (--count > 0) {
-        strcat (ret, " ");
-        strcat (ret, str);
-    }
-    return ret;
-}
-
 #if SDL_VERSION_ATLEAST(2, 0, 6)
 
 static int l_vulkan_getInstanceExtensions(lua_State *L)
 {
 	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
 	unsigned int pCount;
-	const char *pNames;
+	const char **names;
 
 	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, NULL))
 		return commonPushSDLError(L, 1);
 
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, &pNames))
+	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, names))
 		return commonPushSDLError(L, 1);
 
-	char * temp = repeatStr("s", pCount);
-	char s[100]; //Assumes no more than 100 extensions will be needed
-	strcpy(s, temp);
-	free(temp);
-	return commonPush(L, s, &pNames);
+	lua_newtable(L);
+	if ( (pCount == 0) || names == NULL ) return 1;
+	for (unsigned int i = 0; i < pCount; i++)
+	{
+		lua_pushstring(L, names[i]);
+		lua_rawseti(L, -2, i+1);
+	}
+
+	return 1;
 }
 
 static int l_vulkan_createSurface(lua_State *L)
