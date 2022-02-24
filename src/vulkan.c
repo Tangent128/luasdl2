@@ -30,19 +30,19 @@ static int l_vulkan_getInstanceExtensions(lua_State *L)
 {
 	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
 	unsigned int pCount;
-	const char **names;
+	const char *names;
 
 	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, NULL))
 		return commonPushSDLError(L, 1);
 
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, names))
+	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, &names))
 		return commonPushSDLError(L, 1);
 
 	lua_newtable(L);
 	if ( (pCount == 0) || names == NULL ) return 1;
 	for (unsigned int i = 0; i < pCount; i++)
 	{
-		lua_pushstring(L, names[i]);
+		lua_pushstring(L, *(&names+i));
 		lua_rawseti(L, -2, i+1);
 	}
 
@@ -52,13 +52,15 @@ static int l_vulkan_getInstanceExtensions(lua_State *L)
 static int l_vulkan_createSurface(lua_State *L)
 {
 	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
-	VkInstance instance	= commonGetAs(L, 2, "moonvulkan_instance", VkInstance);
+	VkInstance instance	= (VkInstance)(uintptr_t)luaL_checkinteger(L, 2);
 	VkSurfaceKHR surface;
 
 	if (!SDL_Vulkan_CreateSurface(window, instance, &surface))
 		return commonPushSDLError(L, 1);
-
-	return commonPush(L, "p", surface);
+	
+	lua_pushinteger(L, (uint64_t)surface);
+	
+	return 1;
 }
 
 #endif
