@@ -26,20 +26,19 @@ static int l_vulkan_getInstanceExtensions(lua_State *L)
 {
 	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
 	unsigned int count;
-	const char *names;
-
+	
 	if (!SDL_Vulkan_GetInstanceExtensions(window, &count, NULL))
 		return commonPushSDLError(L, 1);
-
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &count, &names))
+	
+	const char *names[count];
+	if (!SDL_Vulkan_GetInstanceExtensions(window, &count, names))
 		return commonPushSDLError(L, 1);
-
-	const char **np = &names;
+	
 	lua_newtable(L);
-	if ( (count == 0) || np == NULL ) return 1;
+	if ( (count == 0) || names == NULL ) return 1;
 	for (unsigned int i = 0; i < count; i++)
 	{
-		lua_pushstring(L, np[i]);
+		lua_pushstring(L, names[i]);
 		lua_rawseti(L, -2, i+1);
 	}
 
