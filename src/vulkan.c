@@ -16,10 +16,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <common/surface.h>
-#include <common/table.h>
-#include <common/video.h>
-#include <vulkan/vulkan.h>
 #include <SDL2/SDL_vulkan.h>
 
 #include "vulkan.h"
@@ -29,20 +25,21 @@
 static int l_vulkan_getInstanceExtensions(lua_State *L)
 {
 	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
-	unsigned int pCount;
+	unsigned int count;
 	const char *names;
 
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, NULL))
+	if (!SDL_Vulkan_GetInstanceExtensions(window, &count, NULL))
 		return commonPushSDLError(L, 1);
 
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &pCount, &names))
+	if (!SDL_Vulkan_GetInstanceExtensions(window, &count, &names))
 		return commonPushSDLError(L, 1);
 
+	const char **np = &names;
 	lua_newtable(L);
-	if ( (pCount == 0) || names == NULL ) return 1;
-	for (unsigned int i = 0; i < pCount; i++)
+	if ( (count == 0) || np == NULL ) return 1;
+	for (unsigned int i = 0; i < count; i++)
 	{
-		lua_pushstring(L, *(&names+i));
+		lua_pushstring(L, np[i]);
 		lua_rawseti(L, -2, i+1);
 	}
 
