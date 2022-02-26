@@ -23,4 +23,4 @@
 
 extern const luaL_Reg VulkanFunctions[];
 
-#endif /* !_SURFACE_H_ */
+#endif /* !_VULKAN_H_ */
