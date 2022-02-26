@@ -59,12 +59,23 @@ static int l_vulkan_createSurface(lua_State *L)
 	return 1;
 }
 
+static int l_vulkan_getDrawableSize(lua_State *L)
+{
+	SDL_Window *w = commonGetAs(L, 1, WindowName, SDL_Window *);
+	int width, height;
+
+	SDL_Vulkan_GetDrawableSize(w, &width, &height);
+
+	return commonPush(L, "ii", width, height);
+}
+
 #endif
 
 const luaL_Reg VulkanFunctions[] = {
 #if SDL_VERSION_ATLEAST(2, 0, 6)
-	{ "vulkanGetInstanceExtensions",			l_vulkan_getInstanceExtensions		},
-	{ "vulkanCreateSurface",			l_vulkan_createSurface		},
+	{ "vkGetInstanceExtensions",		l_vulkan_getInstanceExtensions		},
+	{ "vkCreateSurface",			l_vulkan_createSurface			},
+	{ "vkGetDrawableSize",			l_vulkan_getDrawableSize		},
 #endif
 	{ NULL,				NULL			}
 };
