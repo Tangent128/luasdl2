@@ -20,7 +20,9 @@
 #include <common/surface.h>
 #include <common/table.h>
 #include <common/video.h>
+#if SDL_VERSION_ATLEAST(2, 0, 6)
 #include <SDL_vulkan.h>
+#endif
 
 #include "window.h"
 
@@ -1000,7 +1002,7 @@ static int l_window_vkCreateSurface(lua_State *L)
 	if (!SDL_Vulkan_CreateSurface(window, instance, &surface))
 		return commonPushSDLError(L, 1);
 	
-	lua_pushinteger(L, (uint64_t)surface);
+	lua_pushinteger(L, (lua_Integer)surface);
 	
 	return 1;
 }

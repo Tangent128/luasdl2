@@ -16,11 +16,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <SDL_vulkan.h>
-
 #include "vulkan.h"
 
 #if SDL_VERSION_ATLEAST(2, 0, 6)
+#include <SDL_vulkan.h>
 
 static int l_vulkan_getInstanceExtensions(lua_State *L)
 {
