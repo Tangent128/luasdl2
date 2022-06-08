@@ -100,7 +100,8 @@ build = {
             "src/texture.c",
             "src/thread.c",
             "src/timer.c",
-            "src/window.c"
+            "src/window.c",
+            "src/vulkan.c"
          ),
       },
       ["SDL.image"] = {
