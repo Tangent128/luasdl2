@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <SDL2/SDL_vulkan.h>
+#include <SDL_vulkan.h>
 
 #include "vulkan.h"
 
@@ -35,7 +35,7 @@ static int l_vulkan_getInstanceExtensions(lua_State *L)
 		return commonPushSDLError(L, 1);
 	
 	lua_newtable(L);
-	if ( (count == 0) || names == NULL ) return 1;
+	if ( (count == 0) || names[0] == NULL ) return 1;
 	for (unsigned int i = 0; i < count; i++)
 	{
 		lua_pushstring(L, names[i]);
@@ -45,37 +45,11 @@ static int l_vulkan_getInstanceExtensions(lua_State *L)
 	return 1;
 }
 
-static int l_vulkan_createSurface(lua_State *L)
-{
-	SDL_Window *window	= commonGetAs(L, 1, "Window", SDL_Window *);
-	VkInstance instance	= (VkInstance)(uintptr_t)luaL_checkinteger(L, 2);
-	VkSurfaceKHR surface;
-
-	if (!SDL_Vulkan_CreateSurface(window, instance, &surface))
-		return commonPushSDLError(L, 1);
-	
-	lua_pushinteger(L, (uint64_t)surface);
-	
-	return 1;
-}
-
-static int l_vulkan_getDrawableSize(lua_State *L)
-{
-	SDL_Window *w = commonGetAs(L, 1, WindowName, SDL_Window *);
-	int width, height;
-
-	SDL_Vulkan_GetDrawableSize(w, &width, &height);
-
-	return commonPush(L, "ii", width, height);
-}
-
 #endif
 
 const luaL_Reg VulkanFunctions[] = {
 #if SDL_VERSION_ATLEAST(2, 0, 6)
 	{ "vkGetInstanceExtensions",		l_vulkan_getInstanceExtensions		},
-	{ "vkCreateSurface",			l_vulkan_createSurface			},
-	{ "vkGetDrawableSize",			l_vulkan_getDrawableSize		},
 #endif
 	{ NULL,				NULL			}
 };
