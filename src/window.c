@@ -20,6 +20,7 @@
 #include <common/surface.h>
 #include <common/table.h>
 #include <common/video.h>
+#include <SDL_vulkan.h>
 
 #include "window.h"
 
@@ -988,6 +989,34 @@ l_window_setHitTest(lua_State *L)
 
 #endif
 
+#if SDL_VERSION_ATLEAST(2, 0, 6)
+
+static int l_window_vkCreateSurface(lua_State *L)
+{
+	SDL_Window *window	= commonGetAs(L, 1, WindowName, SDL_Window *);
+	VkInstance instance	= (VkInstance)(uintptr_t)luaL_checkinteger(L, 2);
+	VkSurfaceKHR surface;
+
+	if (!SDL_Vulkan_CreateSurface(window, instance, &surface))
+		return commonPushSDLError(L, 1);
+	
+	lua_pushinteger(L, (uint64_t)surface);
+	
+	return 1;
+}
+
+static int l_window_vkGetDrawableSize(lua_State *L)
+{
+	SDL_Window *w = commonGetAs(L, 1, WindowName, SDL_Window *);
+	int width, height;
+
+	SDL_Vulkan_GetDrawableSize(w, &width, &height);
+
+	return commonPush(L, "ii", width, height);
+}
+
+#endif
+
 /* --------------------------------------------------------
  * Window object metamethods
  * -------------------------------------------------------- */
@@ -1083,6 +1112,10 @@ static const luaL_Reg WindowMethods[] = {
 	{ "warpMouse",		l_window_warpMouse		},
 #if SDL_VERSION_ATLEAST(2, 0, 4) && LUA_VERSION_NUM >= 502
 	{ "setHitTest",		l_window_setHitTest		},
+#endif
+#if SDL_VERSION_ATLEAST(2, 0, 6)
+	{ "vkCreateSurface",	l_window_vkCreateSurface	},
+	{ "vkGetDrawableSize",	l_window_vkGetDrawableSize	},
 #endif
 	{ NULL,			NULL				}
 };
