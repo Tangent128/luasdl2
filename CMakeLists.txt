@@ -4,6 +4,7 @@
 # Copyright (c) 2013, 2014 David Demelier <markand@malikania.fr>
 # Copyright (c) 2014, 2015 Joseph Wallace <tangent128@gmail.com>
 # Copyright (c) 2017 Webster Sheets <webster@web-eworks.com>
+# Copyright (c) 2022 Fox <cosmo8072@gmail.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -39,7 +40,7 @@ set(VERSION "${BINDING_MAJOR}.${BINDING_MINOR} for SDL ${MAJOR}.${MINOR}.${PATCH
 
 set(WITH_DOCSDIR "share/docs/Lua-SDL2"
     CACHE STRING "Path to install examples")
-set(WITH_LUAVER "5.3"
+set(WITH_LUAVER "5.4"
 	CACHE STRING "Version of Lua to use: 5.4 (default), 5.3, 5.2, 5.1 or JIT)")
 
 find_package(SDL2 REQUIRED)
