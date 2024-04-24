@@ -30,7 +30,7 @@ if not rdr then
 	error(err)
 end
 
-local img, ret = image.load("Lua-SDL2.png")
+local img, err = image.load("Lua-SDL2.png")
 if not img then
 	error(err)
 end
